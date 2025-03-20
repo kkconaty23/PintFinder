@@ -11,8 +11,9 @@ public class Login extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        Scene scene = new Scene(fxmlLoader.load(), 600, 475);
+        stage.setTitle("PintFinder's Login Page!");
+//        stage.getIcons().add(new Image("file:@../../../img/PintFinder_Logo.png"));
         stage.setScene(scene);
         stage.show();
     }
