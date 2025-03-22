@@ -8,4 +8,4 @@
 /dataSources.local.xml
 
 # Ignore key.json file
-key.json
+src/main/resources/key.json
