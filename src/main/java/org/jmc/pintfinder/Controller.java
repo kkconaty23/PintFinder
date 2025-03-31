@@ -18,7 +18,7 @@ import java.net.URL;
 
 public class Controller {
     @FXML
-    public Button createAcctBtn;
+    public  Button createAcctBtn;
 
     @FXML
     private Label welcomeText;
