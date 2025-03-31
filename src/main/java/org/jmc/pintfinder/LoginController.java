@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.database.*;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,7 +54,7 @@ public class LoginController {
 
     /**
      * added a create account button allows a new window to open where the user can be added to the firebase
-     *
+     * stores their name, email, and password
      * @param event
      */
     @FXML
@@ -84,11 +85,11 @@ public class LoginController {
             // Create a user object
             Map<String, Object> userData = new HashMap<>();
             userData.put("email", email);
-            userData.put("password", password);  // In production, NEVER store plaintext passwords
+            userData.put("password", password);
             userData.put("firstName", fname);
             userData.put("lastName", lname);
 
-            databaseReference.child(userRecord.getUid()).setValueAsync(userData);
+            databaseReference.child(userRecord.getUid()).setValueAsync(userData);// storing user data into the database
 
             // Show success alert
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -107,6 +108,10 @@ public class LoginController {
         }
     }
 
+    /**
+     * method for transferring a registered user from the login page to the profile page
+     * @param actionEvent
+     */
     public void signInBtnClick(ActionEvent actionEvent) {
         String email = emailID.getText();
         String password = passwordID.getText();
@@ -132,22 +137,23 @@ public class LoginController {
                         if (storedPassword.equals(password)) {
                             System.out.println("User signed in successfully!");
 
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
-                            Stage stage = (Stage) emailID.getScene().getWindow();
-                            Scene scene = null;
-                            try {
-                                scene = new Scene(loader.load());
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
+                            // Use Platform.runLater to ensure UI changes are on the JavaFX Application Thread
+                            Platform.runLater(() -> {
+                                try {
+                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
+                                    Stage stage = (Stage) emailID.getScene().getWindow();
+                                    Scene scene = new Scene(loader.load());
 
-                            // Set the scene and show the homepage
-                            stage.setScene(scene);
-                            stage.show();
-                            System.out.println("loading profile");
+                                    // Set the scene and show the profile page
+                                    stage.setScene(scene);
+                                    stage.show();
+                                    System.out.println("Loading profile");
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    warningLabel.setText("Error loading profile.");
+                                }
+                            });
 
-                            // Redirect to homepage after successful authentication
-                            redirectToHomePage();
                         } else {
                             // Incorrect password
                             warningLabel.setText("Invalid password.");
@@ -166,26 +172,9 @@ public class LoginController {
         });
     }
 
-    // Method to redirect to the homepage
-    private void redirectToHomePage() {
-        try {
-            // Load the homepage FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
-            Stage stage = (Stage) emailID.getScene().getWindow();
-            Scene scene = new Scene(loader.load());
-
-            // Set the scene and show the homepage
-            stage.setScene(scene);
-            stage.show();
-            System.out.println("loading profile");
-        } catch (IOException e) {
-            e.printStackTrace();
-            warningLabel.setText("Error loading homepage.");
-        }
-    }
 
     /**
-     * registers the users email and password and puts them into firebase
+     * loads the create account page
      * @param event
      * @throws IOException
      */
