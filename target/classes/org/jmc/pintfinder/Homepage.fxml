@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane prefHeight="732.0" prefWidth="1083.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.Controller">
+   <children>
+      <WebView fx:id="mapView" layoutX="464.0" layoutY="183.0" prefHeight="298.0" prefWidth="470.0" />
+   </children>
+</AnchorPane>

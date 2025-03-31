@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>MAP</title>
+    <style>
+        html, body, #map {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .emoji-icon {
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 50%;
+            font-size: 28px;
+            line-height: 32px;
+            text-align: center;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Initialize Map
+        const map = L.map('map').setView([40.7528 , -73.4265], 13);
+
+        // Add OpenStreetMap tile
+        L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add Default Marker
+        L.marker([40.7528 , -73.4265]).addTo(map).bindPopup('Farmingdale State College').openPopup();
+
+        //Custom Markers
+        const emojiIcon = L.divIcon({
+            html: "🍺",
+            className: "emoji-icon",
+            iconSize: [32, 32]
+        });
+
+        L.marker([40.7481, -73.4290], { icon: emojiIcon })
+            .addTo(map)
+            .bindPopup("Changing Times Pub! 🍻");
+
+    </script>
+</body>
+</html>
