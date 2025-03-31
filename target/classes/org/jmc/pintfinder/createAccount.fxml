@@ -1,29 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-  <children>
-      <ImageView fitHeight="310.0" fitWidth="743.0" pickOnBounds="true" preserveRatio="true" translateX="160.0" translateY="55.0" GridPane.columnIndex="1">
+<AnchorPane prefHeight="499.0" prefWidth="369.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" >
+   <children>
+      <ImageView fitHeight="125.0" fitWidth="340.0" layoutX="15.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../img/pintFinderNameOnWoodBoard.png" />
-         </image></ImageView>
-      <ImageView fitHeight="190.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" translateY="47.0" GridPane.columnIndex="1">
-
+         </image>
+      </ImageView>
+      <ImageView fitHeight="190.0" fitWidth="200.0" layoutX="90.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../img/pintFindersLady.png" />
          </image>
@@ -70,4 +60,3 @@
       </AnchorPane>
    </children>
 </AnchorPane>
-
