@@ -45,7 +45,12 @@
          <font>
             <Font size="24.0" />
          </font></Label>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="360.0" text="USER NAME HERE" textAlignment="CENTER" textFill="WHITE" translateY="65.0" underline="true">
+      <ImageView fitHeight="78.0" fitWidth="273.0" pickOnBounds="true" preserveRatio="true" translateX="44.0" translateY="60.0">
+         <image>
+            <Image url="@../../../img/blankWoodenSign01.png" />
+         </image>
+      </ImageView>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="360.0" text="USER NAME HERE" textAlignment="CENTER" textFill="WHITE" translateY="52.0" underline="true">
          <font>
             <Font size="24.0" />
          </font>

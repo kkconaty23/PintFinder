@@ -3,6 +3,7 @@ package org.jmc.pintfinder;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.InputStream;
@@ -33,9 +34,11 @@ public class Login extends Application {
         initializeFirebase(); // Initialize Firebase before loading the UI
 
         FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 475);
+        Scene scene = new Scene(fxmlLoader.load(), 397, 400);
+        stage.setResizable(false);
         stage.setTitle("PintFinder's Login Page!");
         stage.setScene(scene);
+        stage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));
         stage.show();
     }
 
