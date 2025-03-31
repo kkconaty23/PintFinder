@@ -31,7 +31,7 @@ public class Application extends javafx.application.Application {
         initializeFirebase(); // Initialize Firebase before loading the UI
 
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("/org/jmc/pintfinder/Homepage.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 730b);
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 730);
         stage.setTitle("PintFinder's Login Page!");
         stage.setScene(scene);
         stage.show();
