@@ -1,5 +1,6 @@
 package org.jmc.pintfinder;
 
+import com.google.firebase.database.FirebaseDatabase;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -56,10 +57,12 @@ public class Login extends Application {
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .setDatabaseUrl("https://pintfinder-d3cb1-default-rtdb.firebaseio.com/")
                 .build();
 
         if (FirebaseApp.getApps().isEmpty()) {
             FirebaseApp.initializeApp(options);
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
         }
 
         fstore = FirestoreClient.getFirestore();
