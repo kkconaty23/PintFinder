@@ -2,11 +2,12 @@
 
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="499.0" prefWidth="369.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" >
+<AnchorPane prefHeight="499.0" prefWidth="369.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fitHeight="125.0" fitWidth="340.0" layoutX="15.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -57,6 +58,9 @@
             </Button>
             <Separator layoutX="18.0" layoutY="318.0" prefWidth="200.0" />
          </children>
+         <effect>
+            <InnerShadow />
+         </effect>
       </AnchorPane>
    </children>
 </AnchorPane>

@@ -1,0 +1,10 @@
+/*.web-view> .viewport{*/
+/*    -fx-background-radius: 15px;*/
+/*    -fx-border-radius: 15px;*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-overflow: hidden;*/
+/*}*/
+.web-view> .viewport {
+    -fx-border-color: #ff0000;
+    -fx-border-width: 20px;
+}

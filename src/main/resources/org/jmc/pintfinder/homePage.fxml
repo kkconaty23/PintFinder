@@ -1,10 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.web.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.HomePage">
+<AnchorPane prefHeight="732.0" prefWidth="1080.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.Controller">
    <children>
-      <WebView id="mapSpot" layoutX="39.0" layoutY="87.0" prefHeight="261.0" prefWidth="284.0" />
+      <Group accessibleRole="BUTTON" layoutX="14.0" layoutY="14.0">
+         <children>
+            <ImageView fitHeight="81.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../img/blankWoodenSign04.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="12.0" layoutY="26.0" text="Bar of the Day" textFill="#3d4328">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Group>
+      <AnchorPane layoutX="372.0" layoutY="232.0" prefHeight="500.0" prefWidth="708.0" style="-fx-border-width: 4px 0px 0px 4px; -fx-border-color: #000000 transparent transparent #000000; -fx-border-radius: 0px 0px 0px 0px;">
+         <children>
+            <WebView fx:id="mapView" layoutX="12.0" layoutY="12.0" prefHeight="500.0" prefWidth="708.0" stylesheets="@../../../css/homePage.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+         </children>
+      </AnchorPane>
+      <Group accessibleRole="BUTTON" layoutX="307.0" layoutY="14.0">
+         <children>
+            <ImageView fitHeight="81.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true" style="im: \@..\..\..\img\blankWoodenSign03.png;">
+               <image>
+                  <Image url="@../../../img/blankWoodenSign04.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="10.0" layoutY="26.0" text="Bars Near You" textFill="#3d4328">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Group>
+      <Group accessibleRole="BUTTON" layoutX="632.0" layoutY="14.0">
+         <children>
+            <ImageView fitHeight="81.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../img/blankWoodenSign04.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="41.0" layoutY="26.0" text="????????" textFill="#3d4328">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Group>
+      <Group accessibleRole="BUTTON" layoutX="924.0" layoutY="14.0">
+         <children>
+            <ImageView fitHeight="81.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../img/blankWoodenSign04.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="38.0" layoutY="26.0" text="Account" textFill="#3d4328">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Group>
+      <ImageView fitHeight="96.0" fitWidth="83.0" layoutX="997.0" layoutY="649.0" pickOnBounds="true" preserveRatio="true" translateX="20.0">
+         <image>
+            <Image url="@../../../img/PintFinder_Logo.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="58.0" fitWidth="226.0" layoutX="46.0" layoutY="159.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../../img/blankWoodenSign02.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="125.0" layoutY="175.0" text="Reviews" textFill="#3d4328">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
