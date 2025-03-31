@@ -26,16 +26,16 @@
       <AnchorPane layoutX="93.0" layoutY="157.0" prefHeight="200.0" prefWidth="212.0" style="-fx-background-color: #ffffff; -fx-background-radius: 15px;">
          <children>
             <Label layoutX="12.0" layoutY="31.0" text="Email:" />
-            <TextField layoutX="12.0" layoutY="48.0" prefHeight="25.0" prefWidth="190.0" />
+            <TextField fx:id="emailID" layoutX="12.0" layoutY="48.0" prefHeight="25.0" prefWidth="190.0" />
             <Label layoutX="12.0" layoutY="76.0" text="Password:" />
-            <PasswordField layoutX="12.0" layoutY="93.0" prefHeight="25.0" prefWidth="190.0" />
+            <PasswordField fx:id="passwordID" layoutX="12.0" layoutY="93.0" prefHeight="25.0" prefWidth="190.0" />
             <Separator layoutX="28.0" layoutY="163.0" prefHeight="12.0" prefWidth="144.0" />
             <Label layoutX="73.0" layoutY="1.0" text="Sign In">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button layoutX="33.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="136.0" style="-fx-background-color: #899c66;" text="Sign In">
+            <Button fx:id="signInBtn" layoutX="33.0" layoutY="132.0" mnemonicParsing="false" onAction="#signInBtnClick" prefHeight="25.0" prefWidth="136.0" style="-fx-background-color: #899c66;" text="Sign In">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>

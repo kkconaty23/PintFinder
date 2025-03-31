@@ -1,9 +1,9 @@
 package org.jmc.pintfinder;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,6 +44,12 @@ public class LoginController {
     @FXML
     private Button makeAcctBtn;
 
+    @FXML
+    private TextField firstName;
+
+    @FXML
+    private TextField lastName;
+
 
     /**
      * added a create account button allows a new window to open where the user can be added to the firebase
@@ -54,6 +60,8 @@ public class LoginController {
     private void createAcctBtnClick(ActionEvent event) {
         String email = emailID.getText();
         String password = passwordID.getText();
+        String fname = firstName.getText();
+        String lname = lastName.getText();
 
         if (!checkBox.isSelected()) {
             warningLabel.setText("Must Answer");
@@ -66,6 +74,7 @@ public class LoginController {
                     .setEmail(email)
                     .setPassword(password);
 
+
             UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
             System.out.println("User created successfully: " + userRecord.getUid());
 
@@ -76,6 +85,8 @@ public class LoginController {
             Map<String, Object> userData = new HashMap<>();
             userData.put("email", email);
             userData.put("password", password);  // In production, NEVER store plaintext passwords
+            userData.put("firstName", fname);
+            userData.put("lastName", lname);
 
             databaseReference.child(userRecord.getUid()).setValueAsync(userData);
 
@@ -97,8 +108,80 @@ public class LoginController {
     }
 
     public void signInBtnClick(ActionEvent actionEvent) {
-        //once we make the home page and profile pages allow this to send the user to their homepage.
+        String email = emailID.getText();
+        String password = passwordID.getText();
 
+        if (email.isEmpty() || password.isEmpty()) {
+            warningLabel.setText("Please enter both email and password.");
+            return;
+        }
+
+        // Reference to the "users" node in the database
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+
+        // Query the database to find the user by email
+        usersRef.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Get the user's data
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        String storedPassword = userSnapshot.child("password").getValue(String.class);
+
+                        // Check if the entered password matches the stored password (ensure password is hashed)
+                        if (storedPassword.equals(password)) {
+                            System.out.println("User signed in successfully!");
+
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
+                            Stage stage = (Stage) emailID.getScene().getWindow();
+                            Scene scene = null;
+                            try {
+                                scene = new Scene(loader.load());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                            // Set the scene and show the homepage
+                            stage.setScene(scene);
+                            stage.show();
+                            System.out.println("loading profile");
+
+                            // Redirect to homepage after successful authentication
+                            redirectToHomePage();
+                        } else {
+                            // Incorrect password
+                            warningLabel.setText("Invalid password.");
+                        }
+                    }
+                } else {
+                    // User not found
+                    warningLabel.setText("User not found.");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                warningLabel.setText("Error querying database: " + databaseError.getMessage());
+            }
+        });
+    }
+
+    // Method to redirect to the homepage
+    private void redirectToHomePage() {
+        try {
+            // Load the homepage FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
+            Stage stage = (Stage) emailID.getScene().getWindow();
+            Scene scene = new Scene(loader.load());
+
+            // Set the scene and show the homepage
+            stage.setScene(scene);
+            stage.show();
+            System.out.println("loading profile");
+        } catch (IOException e) {
+            e.printStackTrace();
+            warningLabel.setText("Error loading homepage.");
+        }
     }
 
     /**
