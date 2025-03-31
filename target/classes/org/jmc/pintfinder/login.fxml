@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -29,16 +30,25 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button layoutX="33.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="136.0" style="-fx-background-color: #899c66;" text="Sign In" underline="true" />
-            <Button layoutX="10.0" layoutY="170.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Forgot Passowrd?" underline="true">
-               <font>
-                  <Font size="10.0" />
-               </font></Button>
-            <Separator layoutX="96.0" layoutY="175.0" orientation="VERTICAL" prefHeight="12.0" prefWidth="15.0" />
-            <Button layoutX="157.0" layoutY="170.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="55.0" style="-fx-background-color: transparent;" text="Sign Up" underline="true">
+            <Button layoutX="33.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="136.0" style="-fx-background-color: #899c66;" text="Sign In">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button layoutX="10.0" layoutY="170.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Forgot Passowrd?" textFill="#899c66" underline="true">
                <font>
                   <Font size="10.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Separator layoutX="96.0" layoutY="175.0" orientation="VERTICAL" prefHeight="12.0" prefWidth="15.0" />
+            <Button layoutX="157.0" layoutY="170.0" mnemonicParsing="false" onAction="#makeActBtnClick" prefHeight="21.0" prefWidth="55.0" style="-fx-background-color: transparent;" text="Sign Up" textFill="#899c66" underline="true">
+               <font>
+                  <Font size="10.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Button>
             <Label layoutX="107.0" layoutY="173.0" text="No Account?">
                <font>
