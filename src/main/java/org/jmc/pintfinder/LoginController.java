@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -38,11 +39,38 @@ public class LoginController {
     private Label warningLabel;
 
 
+    @FXML
+    void moveToCreateAccountPage(ActionEvent event) {
+ try {
+
+ FXMLLoader fxmlCreateAccountLoader = new FXMLLoader(Login.class.getResource("createAccount.fxml"));
+
+ Scene createAccountScene = new Scene(fxmlCreateAccountLoader.load(), 397, 600);
+
+ Stage createAccountStage = new Stage();
+ createAccountStage.setTitle("Create Account Page");
+ createAccountStage.setScene(createAccountScene);
+ createAccountStage.show();
+
+
+ Stage currentStage = (Stage) createAcctBtn.getScene().getWindow();
+ currentStage.close();
+ } catch (Exception e) {
+ e.printStackTrace();
+ Alert alert = new Alert(Alert.AlertType.ERROR);
+ alert.setTitle("Error");
+ alert.setHeaderText("Failed to load Create Account Page");
+ alert.setContentText("An error occurred while trying to load the Create Account page.");
+ alert.showAndWait();
+ }}
+
+
     /**
      * added a create account button allows a new window to open where the user can be added to the firebase
      *
      * @param event
      */
+    /**
     @FXML
     private void createAcctBtnClick(ActionEvent event) {//when a user creates account it makes them account that links to FB
 
@@ -71,7 +99,7 @@ public class LoginController {
             System.out.println("Error creating user: " + e.getMessage());
         }
     }
-
+*/
     public void signInBtnClick(ActionEvent actionEvent) {
         //once we make the home page and profile pages allow this to send the user to their homepage.
 
