@@ -1,0 +1,93 @@
+Index: target/classes/org/jmc/pintfinder/login.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.scene.control.Button?>\r\n<?import javafx.scene.control.CheckBox?>\r\n<?import javafx.scene.control.Label?>\r\n<?import javafx.scene.control.PasswordField?>\r\n<?import javafx.scene.control.TextField?>\r\n<?import javafx.scene.image.Image?>\r\n<?import javafx.scene.image.ImageView?>\r\n<?import javafx.scene.layout.ColumnConstraints?>\r\n<?import javafx.scene.layout.GridPane?>\r\n<?import javafx.scene.layout.RowConstraints?>\r\n<?import javafx.scene.shape.Rectangle?>\r\n\r\n<GridPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"475.0\" prefWidth=\"600.0\" style=\"-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);\" xmlns=\"http://javafx.com/javafx/23.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"org.jmc.pintfinder.LoginController\">\r\n  <columnConstraints>\r\n    <ColumnConstraints hgrow=\"SOMETIMES\" minWidth=\"10.0\" prefWidth=\"100.0\" />\r\n    <ColumnConstraints halignment=\"CENTER\" hgrow=\"SOMETIMES\" minWidth=\"10.0\" prefWidth=\"100.0\" />\r\n    <ColumnConstraints hgrow=\"SOMETIMES\" minWidth=\"10.0\" prefWidth=\"100.0\" />\r\n  </columnConstraints>\r\n  <rowConstraints>\r\n    <RowConstraints minHeight=\"10.0\" prefHeight=\"30.0\" vgrow=\"SOMETIMES\" />\r\n    <RowConstraints minHeight=\"10.0\" prefHeight=\"30.0\" vgrow=\"SOMETIMES\" />\r\n    <RowConstraints minHeight=\"10.0\" prefHeight=\"30.0\" vgrow=\"SOMETIMES\" />\r\n  </rowConstraints>\r\n  <children>\r\n      <ImageView fitHeight=\"190.0\" fitWidth=\"200.0\" pickOnBounds=\"true\" preserveRatio=\"true\" translateY=\"47.0\" GridPane.columnIndex=\"1\">\r\n         <image>\r\n            <Image url=\"@../../../img/pintFindersLady.png\" />\r\n         </image>\r\n      </ImageView>\r\n    <Rectangle arcHeight=\"5.0\" arcWidth=\"5.0\" fill=\"WHITE\" height=\"217.0\" stroke=\"BLACK\" strokeType=\"INSIDE\" translateY=\"45.0\" translateZ=\"-10.0\" width=\"236.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"1\" />\r\n    <CheckBox alignment=\"CENTER\" contentDisplay=\"CENTER\" mnemonicParsing=\"false\" text=\"I am over 21\" textAlignment=\"CENTER\" translateY=\"25.0\" translateZ=\"1.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"2\" />\r\n    <TextField fx:id=\"emailID\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"1\" />\r\n    <PasswordField fx:id=\"passwordID\" layoutY=\"100.0\" translateY=\"50.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"1\" />\r\n    <Label text=\"Email:\" translateX=\"-80.0\" translateY=\"-25.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"1\" />\r\n    <Label text=\"Password:\" translateX=\"-70.0\" translateY=\"25.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"1\" />\r\n    <Button fx:id=\"signInBtn\" mnemonicParsing=\"false\" onAction=\"#signInBtnClick\" prefHeight=\"25.0\" prefWidth=\"110.0\" style=\"-fx-background-color: #000000;\" text=\"Sign In\" textFill=\"WHITE\" translateY=\"-45.0\" underline=\"true\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"2\" />\r\n    <Button fx:id=\"forgotBtn\" mnemonicParsing=\"false\" prefHeight=\"25.0\" prefWidth=\"118.0\" style=\"-fx-background-color: transparent;\" text=\"Forgot Password?\" translateY=\"-15.0\" underline=\"true\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"2\" />\r\n      <ImageView fitHeight=\"81.0\" fitWidth=\"77.0\" pickOnBounds=\"true\" preserveRatio=\"true\" translateX=\"115.0\" translateY=\"30.0\" GridPane.columnIndex=\"2\" GridPane.rowIndex=\"2\">\r\n         <image>\r\n            <Image url=\"@../../../img/PintFinder_Logo.png\" />\r\n         </image>\r\n      </ImageView>\r\n      <Button fx:id=\"makeAcctBtn\" layoutX=\"251.0\" layoutY=\"394.0\" mnemonicParsing=\"false\" onAction=\"#makeActBtnClick\" prefHeight=\"25.0\" prefWidth=\"174.0\" style=\"-fx-background-color: transparent;\" text=\"Create an Account\" underline=\"true\" GridPane.rowIndex=\"2\" />\r\n  </children>\r\n</GridPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/target/classes/org/jmc/pintfinder/login.fxml b/target/classes/org/jmc/pintfinder/login.fxml
+--- a/target/classes/org/jmc/pintfinder/login.fxml	(revision 5b0d52ab18eac012a6bbfd74c9c7b08eed61b16f)
++++ b/target/classes/org/jmc/pintfinder/login.fxml	(date 1743277530658)
+@@ -1,18 +1,11 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ 
+-<?import javafx.scene.control.Button?>
+-<?import javafx.scene.control.CheckBox?>
+-<?import javafx.scene.control.Label?>
+-<?import javafx.scene.control.PasswordField?>
+-<?import javafx.scene.control.TextField?>
+-<?import javafx.scene.image.Image?>
+-<?import javafx.scene.image.ImageView?>
+-<?import javafx.scene.layout.ColumnConstraints?>
+-<?import javafx.scene.layout.GridPane?>
+-<?import javafx.scene.layout.RowConstraints?>
+-<?import javafx.scene.shape.Rectangle?>
++<?import javafx.scene.control.*?>
++<?import javafx.scene.image.*?>
++<?import javafx.scene.layout.*?>
++<?import javafx.scene.shape.*?>
+ 
+-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.LoginController">
++<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+   <columnConstraints>
+     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+@@ -24,24 +17,27 @@
+     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
++      <ImageView fitHeight="310.0" fitWidth="743.0" pickOnBounds="true" preserveRatio="true" translateX="160.0" translateY="55.0" GridPane.columnIndex="1">
++         <image>
++            <Image url="@../../../img/pintFinderNameOnWoodBoard.png" />
++         </image>
++      </ImageView>
+       <ImageView fitHeight="190.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" translateY="47.0" GridPane.columnIndex="1">
+          <image>
+             <Image url="@../../../img/pintFindersLady.png" />
+          </image>
+       </ImageView>
+     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="217.0" stroke="BLACK" strokeType="INSIDE" translateY="45.0" translateZ="-10.0" width="236.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+-    <CheckBox alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="I am over 21" textAlignment="CENTER" translateY="25.0" translateZ="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+-    <TextField fx:id="emailID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+-    <PasswordField fx:id="passwordID" layoutY="100.0" translateY="50.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
++    <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
++    <PasswordField layoutY="100.0" translateY="50.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+     <Label text="Email:" translateX="-80.0" translateY="-25.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+     <Label text="Password:" translateX="-70.0" translateY="25.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+-    <Button fx:id="signInBtn" mnemonicParsing="false" onAction="#signInBtnClick" prefHeight="25.0" prefWidth="110.0" style="-fx-background-color: #000000;" text="Sign In" textFill="WHITE" translateY="-45.0" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+-    <Button fx:id="forgotBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" style="-fx-background-color: transparent;" text="Forgot Password?" translateY="-15.0" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+-      <ImageView fitHeight="81.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true" translateX="115.0" translateY="30.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
++    <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" style="-fx-background-color: #000000;" text="Sign In" textFill="WHITE" translateY="-65.0" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
++    <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" style="-fx-background-color: transparent;" text="Forgot Password?" translateY="-35.0" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
++      <ImageView fitHeight="105.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" translateX="115.0" translateY="30.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+          <image>
+             <Image url="@../../../img/PintFinder_Logo.png" />
+          </image>
+       </ImageView>
+-      <Button fx:id="makeAcctBtn" layoutX="251.0" layoutY="394.0" mnemonicParsing="false" onAction="#makeActBtnClick" prefHeight="25.0" prefWidth="174.0" style="-fx-background-color: transparent;" text="Create an Account" underline="true" GridPane.rowIndex="2" />
+   </children>
+ </GridPane>
+Index: src/main/java/org/jmc/pintfinder/Homepage.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/jmc/pintfinder/Homepage.fxml b/src/main/java/org/jmc/pintfinder/Homepage.fxml
+new file mode 100644
+--- /dev/null	(date 1743277765984)
++++ b/src/main/java/org/jmc/pintfinder/Homepage.fxml	(date 1743277765984)
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="UTF-8"?>
++
++<?import java.lang.*?>
++<?import java.util.*?>
++<?import javafx.scene.*?>
++<?import javafx.scene.control.*?>
++<?import javafx.scene.layout.*?>
++
++<AnchorPane xmlns="http://javafx.com/javafx"
++            xmlns:fx="http://javafx.com/fxml"
++            fx:controller="org.jmc.pintfinder.Homepage"
++            prefHeight="400.0" prefWidth="600.0">
++
++</AnchorPane>

@@ -10,6 +10,9 @@ module org.jmc.pintfinder {
     requires google.cloud.firestore;
     requires com.google.api.apicommon;
     requires com.google.auth;
+    requires javafx.web;
+    requires javafx.media;
+
 
     opens org.jmc.pintfinder to javafx.fxml;
     exports org.jmc.pintfinder;
