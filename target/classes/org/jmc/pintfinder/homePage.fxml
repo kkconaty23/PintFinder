@@ -1,142 +1,153 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.web.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
 
-<AnchorPane prefHeight="732.0" prefWidth="1080.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" stylesheets="@../../../css/homePage.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.Controller">
+<AnchorPane prefHeight="732.0" prefWidth="1080.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" stylesheets="@../../../css/homePage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.Controller">
    <children>
-      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="986.0" layoutY="-33.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
-         <image>
-            <Image url="@../../../img/chain.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="889.0" layoutY="-19.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
-         <image>
-            <Image url="@../../../img/chain.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="371.0" layoutY="-31.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
-         <image>
-            <Image url="@../../../img/chain.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="274.0" layoutY="-17.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
-         <image>
-            <Image url="@../../../img/chain.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="694.0" layoutY="-26.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
-         <image>
-            <Image url="@../../../img/chain.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="597.0" layoutY="-12.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
-         <image>
-            <Image url="@../../../img/chain.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="78.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
-         <image>
-            <Image url="@../../../img/chain.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-19.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
-         <image>
-            <Image url="@../../../img/chain.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="78.0" layoutY="-47.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
-         <image>
-            <Image url="@../../../img/chain.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-19.0" layoutY="-33.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
-         <image>
-            <Image url="@../../../img/chain.png" />
-         </image>
-      </ImageView>
-      <Pane id="barOfDay" layoutX="14.0" layoutY="35.0">
+      <Pane id="barOfDay" layoutX="35.0" layoutY="-142.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="329.0" prefWidth="237.0">
          <children>
-            <ImageView fitHeight="81.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="66.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+               <image>
+                  <Image url="@../../../img/chain.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-23.0" layoutY="205.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+               <image>
+                  <Image url="@../../../img/chain.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-27.0" layoutY="142.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+               <image>
+                  <Image url="@../../../img/chain.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="59.0" layoutY="142.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+               <image>
+                  <Image url="@../../../img/chain.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="81.0" fitWidth="145.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
             </ImageView>
-            <Label layoutX="12.0" layoutY="26.0" text="Bar of the Day" textFill="#3d4328">
+            <Label id="barOfDayLabel" layoutX="12.0" layoutY="218.0" text="Bar of the Day" textFill="#3d4328">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="58.0" fitWidth="226.0" layoutX="-27.0" layoutY="322.0" pickOnBounds="true" rotate="11.7">
+               <image>
+                  <Image url="@../../../img/blankWoodenSign02.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="51.0" layoutY="337.0" rotate="11.7" text="Reviews" textFill="#3d4328">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
          </children>
+         <effect>
+            <DropShadow height="35.66" radius="13.665" spread="0.28" />
+         </effect>
       </Pane>
       <AnchorPane layoutX="372.0" layoutY="232.0" prefHeight="500.0" prefWidth="708.0" style="-fx-border-width: 4px 0px 0px 4px; -fx-border-color: #000000 transparent transparent #000000; -fx-border-radius: 0px 0px 0px 0px;">
          <children>
             <WebView fx:id="mapView" layoutX="12.0" layoutY="12.0" prefHeight="500.0" prefWidth="708.0" stylesheets="@../../../css/homePage.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
-      <Pane id="barNearYou" layoutX="307.0" layoutY="35.0">
+      <Pane id="barNearYou" layoutX="311.0" layoutY="-113.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="240.0" prefWidth="159.0">
          <children>
-            <ImageView fitHeight="81.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true" style="im: \@..\..\..\img\blankWoodenSign03.png;">
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-14.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+               <image>
+                  <Image url="@../../../img/chain.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="79.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+               <image>
+                  <Image url="@../../../img/chain.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="81.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true" >
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
             </ImageView>
-            <Label layoutX="10.0" layoutY="26.0" text="Bars Near You" textFill="#3d4328">
+            <Label layoutX="24.0" layoutY="173.0" text="Bars Near You" textFill="#3d4328">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
          </children>
-      </Pane>
-      <Pane id="topRatedBars" layoutX="632.0" layoutY="35.0">
-         <children>
-            <ImageView fitHeight="78.0" fitWidth="189.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../img/blankWoodenSign04.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="8.0" layoutY="26.0" text="Top Rated Bars" textFill="#3d4328">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-         </children>
-      </Pane>
-      <Pane id="account" layoutX="924.0" layoutY="35.0">
-         <children>
-            <ImageView fitHeight="81.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../img/blankWoodenSign04.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="38.0" layoutY="26.0" text="Account" textFill="#3d4328">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-         </children>
-      </Pane>
-      <Pane layoutX="-7.0" layoutY="157.0" rotate="9.0">
-         <children>
-            <ImageView fitHeight="58.0" fitWidth="226.0" pickOnBounds="true">
-               <image>
-                  <Image url="@../../../img/blankWoodenSign02.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="78.0" layoutY="15.0" text="Reviews" textFill="#3d4328">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-         </children>
+         <effect>
+            <DropShadow height="35.66" radius="13.665" spread="0.28" />
+         </effect>
       </Pane>
       <ImageView fitHeight="96.0" fitWidth="83.0" layoutX="997.0" layoutY="649.0" pickOnBounds="true" preserveRatio="true" translateX="20.0">
          <image>
             <Image url="@../../../img/PintFinder_Logo.png" />
          </image>
       </ImageView>
+      <Pane id="barNearYou" layoutX="620.0" layoutY="-106.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="240.0" prefWidth="159.0">
+         <children>
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-14.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+               <image>
+                  <Image url="@../../../img/chain.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="79.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+               <image>
+                  <Image url="@../../../img/chain.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true" >
+               <image>
+                  <Image url="@../../../img/blankWoodenSign04.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="22.0" layoutY="173.0" text="Top Rated Bars" textFill="#3d4328">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+         <effect>
+            <DropShadow height="35.66" radius="13.665" spread="0.28" />
+         </effect>
+      </Pane>
+      <Pane id="barNearYou" layoutX="907.0" layoutY="-96.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="240.0" prefWidth="159.0">
+         <children>
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-14.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+               <image>
+                  <Image url="@../../../img/chain.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="79.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+               <image>
+                  <Image url="@../../../img/chain.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../img/blankWoodenSign04.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="45.0" layoutY="173.0" text="Account" textFill="#3d4328">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+         <effect>
+            <DropShadow height="35.66" radius="13.665" spread="0.28" />
+         </effect>
+      </Pane>
    </children>
 </AnchorPane>
