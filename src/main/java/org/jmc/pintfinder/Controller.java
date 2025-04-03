@@ -88,6 +88,14 @@ public class Controller {
         timeline.setAutoReverse(true);
 
         rotate = new RotateTransition(Duration.seconds(.85), pane);
+        rotate.setFromAngle(0);
+        rotate.setToAngle(-25);
+        rotate.setCycleCount(1);
+        rotate.setAxis(X_AXIS);
+        rotate.setInterpolator(Interpolator.LINEAR);
+        rotate.play();
+
+        rotate = new RotateTransition(Duration.seconds(.85), pane);
         rotate.setFromAngle(-25);
         rotate.setToAngle(35);
         rotate.setAxis(X_AXIS);
@@ -102,7 +110,7 @@ public class Controller {
     public void signAnimationEnd(MouseEvent event) {
         rotate.stop();
         timeline.stop();
-        rotate = new RotateTransition(Duration.seconds(1), (Pane)event.getSource());
+        rotate = new RotateTransition(Duration.seconds(.85), (Pane)event.getSource());
         rotate.setAxis(X_AXIS);
         rotate.setToAngle(0);
         rotate.setCycleCount(1);

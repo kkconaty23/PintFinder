@@ -75,7 +75,7 @@
                   <Image url="@../../../img/chain.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="81.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true" style="im: @..\..\..\img\blankWoodenSign03.png;">
+            <ImageView fitHeight="81.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true" >
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
@@ -107,7 +107,7 @@
                   <Image url="@../../../img/chain.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true" style="im: @..\..\..\img\blankWoodenSign03.png;">
+            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true" >
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
@@ -134,7 +134,7 @@
                   <Image url="@../../../img/chain.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true" style="im: @..\..\..\img\blankWoodenSign03.png;">
+            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
