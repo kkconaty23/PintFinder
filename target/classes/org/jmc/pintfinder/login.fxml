@@ -2,6 +2,7 @@
 
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -55,7 +56,10 @@
                   <Font size="10.0" />
                </font>
             </Label>
-         </children></AnchorPane>
+         </children>
+         <effect>
+            <InnerShadow />
+         </effect></AnchorPane>
       <ImageView fitHeight="105.0" fitWidth="130.0" layoutX="292.0" layoutY="295.0" pickOnBounds="true" preserveRatio="true" translateX="20.0">
          <image>
             <Image url="@../../../img/PintFinder_Logo.png" />

@@ -1,3 +1,9 @@
-.web-view {
-    -fx-background-color: transparent;
-}
+/*.web-view {*/
+/*    -fx-background-color: transparent;*/
+/*}*/
+
+/*#barOfDay:hover, #barNearYou:hover, #topRatedBars:hover, #account:hover{*/
+/*    !*-fx-effect: color-adjust(-.5, 0, 0, 0);*!*/
+/*    -fx-border-color: #ff0000;*/
+/*    -fx-border-width: 2px;*/
+/*}*/

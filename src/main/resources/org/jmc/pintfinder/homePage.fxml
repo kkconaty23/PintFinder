@@ -1,15 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.web.*?>
 
-<AnchorPane prefHeight="732.0" prefWidth="1080.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.Controller">
+<AnchorPane prefHeight="732.0" prefWidth="1080.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" stylesheets="@../../../css/homePage.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.Controller">
    <children>
-      <Group accessibleRole="BUTTON" layoutX="14.0" layoutY="14.0">
+      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="986.0" layoutY="-33.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+         <image>
+            <Image url="@../../../img/chain.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="889.0" layoutY="-19.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+         <image>
+            <Image url="@../../../img/chain.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="371.0" layoutY="-31.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+         <image>
+            <Image url="@../../../img/chain.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="274.0" layoutY="-17.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+         <image>
+            <Image url="@../../../img/chain.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="694.0" layoutY="-26.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+         <image>
+            <Image url="@../../../img/chain.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="597.0" layoutY="-12.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+         <image>
+            <Image url="@../../../img/chain.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="78.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+         <image>
+            <Image url="@../../../img/chain.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-19.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+         <image>
+            <Image url="@../../../img/chain.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="78.0" layoutY="-47.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+         <image>
+            <Image url="@../../../img/chain.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-19.0" layoutY="-33.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+         <image>
+            <Image url="@../../../img/chain.png" />
+         </image>
+      </ImageView>
+      <Pane id="barOfDay" layoutX="14.0" layoutY="35.0">
          <children>
             <ImageView fitHeight="81.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -22,16 +71,13 @@
                </font>
             </Label>
          </children>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Group>
+      </Pane>
       <AnchorPane layoutX="372.0" layoutY="232.0" prefHeight="500.0" prefWidth="708.0" style="-fx-border-width: 4px 0px 0px 4px; -fx-border-color: #000000 transparent transparent #000000; -fx-border-radius: 0px 0px 0px 0px;">
          <children>
             <WebView fx:id="mapView" layoutX="12.0" layoutY="12.0" prefHeight="500.0" prefWidth="708.0" stylesheets="@../../../css/homePage.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
-      <Group accessibleRole="BUTTON" layoutX="307.0" layoutY="14.0">
+      <Pane id="barNearYou" layoutX="307.0" layoutY="35.0">
          <children>
             <ImageView fitHeight="81.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true" style="im: \@..\..\..\img\blankWoodenSign03.png;">
                <image>
@@ -44,28 +90,22 @@
                </font>
             </Label>
          </children>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Group>
-      <Group accessibleRole="BUTTON" layoutX="632.0" layoutY="14.0">
+      </Pane>
+      <Pane id="topRatedBars" layoutX="632.0" layoutY="35.0">
          <children>
-            <ImageView fitHeight="81.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="78.0" fitWidth="189.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
             </ImageView>
-            <Label layoutX="41.0" layoutY="26.0" text="????????" textFill="#3d4328">
+            <Label layoutX="8.0" layoutY="26.0" text="Top Rated Bars" textFill="#3d4328">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
          </children>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Group>
-      <Group accessibleRole="BUTTON" layoutX="924.0" layoutY="14.0">
+      </Pane>
+      <Pane id="account" layoutX="924.0" layoutY="35.0">
          <children>
             <ImageView fitHeight="81.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -78,24 +118,25 @@
                </font>
             </Label>
          </children>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Group>
+      </Pane>
+      <Pane layoutX="-7.0" layoutY="157.0" rotate="9.0">
+         <children>
+            <ImageView fitHeight="58.0" fitWidth="226.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../../img/blankWoodenSign02.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="78.0" layoutY="15.0" text="Reviews" textFill="#3d4328">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
       <ImageView fitHeight="96.0" fitWidth="83.0" layoutX="997.0" layoutY="649.0" pickOnBounds="true" preserveRatio="true" translateX="20.0">
          <image>
             <Image url="@../../../img/PintFinder_Logo.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="58.0" fitWidth="226.0" layoutX="46.0" layoutY="159.0" pickOnBounds="true">
-         <image>
-            <Image url="@../../../img/blankWoodenSign02.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="125.0" layoutY="175.0" text="Reviews" textFill="#3d4328">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Label>
    </children>
 </AnchorPane>
