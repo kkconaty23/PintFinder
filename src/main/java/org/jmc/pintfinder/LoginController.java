@@ -100,8 +100,21 @@ public class LoginController {
         }
     }
 */
-    public void signInBtnClick(ActionEvent actionEvent) {
+    public void signInBtnClick(ActionEvent actionEvent) throws IOException {
         //once we make the home page and profile pages allow this to send the user to their homepage.
+
+        FXMLLoader fxmlhomePageLoader = new FXMLLoader(Login.class.getResource("homePage.fxml"));
+
+        Scene HomePageScene = new Scene(fxmlhomePageLoader.load(),1200, 740);
+
+        Stage HomePageStage = new Stage();
+        HomePageStage.setTitle("Home Page");
+        HomePageStage.setScene(HomePageScene);
+        HomePageStage.show();
+
+
+        Stage currentStage = (Stage) signInBtn.getScene().getWindow();
+        currentStage.close();
 
     }
 
