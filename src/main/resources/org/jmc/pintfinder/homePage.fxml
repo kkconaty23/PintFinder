@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
@@ -75,7 +76,7 @@
                   <Image url="@../../../img/chain.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="81.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true" >
+            <ImageView fitHeight="81.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
@@ -107,7 +108,7 @@
                   <Image url="@../../../img/chain.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true" >
+            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
@@ -134,15 +135,21 @@
                   <Image url="@../../../img/chain.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" onMouseClicked="#bringToAccount" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
-            <Label layoutX="45.0" layoutY="173.0" text="Account" textFill="#3d4328">
+            <Label fx:id="accountbtn" layoutX="45.0" layoutY="173.0" onMousePressed="#bringToAccount" text="Account" textFill="#3d4328">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Label>
          </children>
          <effect>
