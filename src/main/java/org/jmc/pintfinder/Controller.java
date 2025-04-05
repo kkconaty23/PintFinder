@@ -50,11 +50,17 @@ public class Controller {
     @FXML
     private WebView mapView;
 
+//    for animation
     @FXML
     private RotateTransition rotate;
 
+//    for animation
     @FXML
     private Timeline timeline;
+
+//    for animation
+    @FXML
+    private DropShadow shadow;
 
     @FXML
     public void initialize() {
@@ -79,9 +85,12 @@ public class Controller {
         rotate.setInterpolator(Interpolator.LINEAR);
         rotate.play();
 
-        DropShadow shadow = new DropShadow();
-        shadow.setRadius(10);
-        shadow.setHeight(36);
+        shadow = new DropShadow();
+        shadow.setWidth(21);
+        shadow.setHeight(35.66);
+        shadow.setRadius(13.67);
+        shadow.setOffsetX(5);
+        shadow.setSpread(0.28);
         pane.setEffect(shadow);
 
         timeline = new Timeline(
@@ -107,15 +116,29 @@ public class Controller {
         timeline.play();
         rotate.play();
     }
-
+    @FXML
     public void signAnimationEnd(MouseEvent event) {
+        Pane pane = (Pane) event.getSource();
+
         rotate.stop();
         timeline.stop();
-        rotate = new RotateTransition(Duration.seconds(.85), (Pane)event.getSource());
+        rotate = new RotateTransition(Duration.seconds(.85), pane);
         rotate.setAxis(X_AXIS);
         rotate.setToAngle(0);
         rotate.setCycleCount(1);
+
+        timeline = new Timeline(
+                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.widthProperty(), 21)),
+                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.heightProperty(), 35.66)),
+                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.radiusProperty(), 13.67)),
+                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.offsetXProperty(), 5)),
+                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.spreadProperty(), .28))
+        );
+        timeline.setCycleCount(1);
+
+        timeline.play();
         rotate.play();
+
     }
 
     /**

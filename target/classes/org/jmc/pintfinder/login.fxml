@@ -34,7 +34,17 @@
             <Button layoutX="33.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="136.0" text="Sign In">
                <cursor>
                   <Cursor fx:constant="HAND" />
-               </cursor></Button>
+               </cursor>
+               <effect>
+                  <Lighting diffuseConstant="1.05" surfaceScale="1.84">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant azimuth="140.7" elevation="68.55" />
+                     </light>
+                  </Lighting>
+               </effect></Button>
             <Button layoutX="10.0" layoutY="170.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Forgot Passowrd?" textFill="#899c66" underline="true">
                <font>
                   <Font size="10.0" />
@@ -58,7 +68,14 @@
             </Label>
          </children>
          <effect>
-            <InnerShadow choke="0.15" height="10.0" radius="10.75" width="35.0" />
+            <Lighting diffuseConstant="1.05" surfaceScale="3.68">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant azimuth="140.17" elevation="61.55" />
+               </light>
+            </Lighting>
          </effect></AnchorPane>
       <ImageView fitHeight="105.0" fitWidth="130.0" layoutX="292.0" layoutY="295.0" pickOnBounds="true" preserveRatio="true" translateX="20.0">
          <image>

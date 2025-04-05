@@ -13,4 +13,7 @@
     -fx-background-color:  #899c66;
 }
 
+.image-view {
+    -fx-effect: dropshadow(three-pass-box, rgb(0,0,0), 10, 0, 5, 0);
+}
 

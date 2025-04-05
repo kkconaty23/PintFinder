@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="499.0" prefWidth="369.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" stylesheets="@../../../css/signInAndSignUp.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.CreateAccountController">
+<AnchorPane prefHeight="564.0" prefWidth="369.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" stylesheets="@../../../css/signInAndSignUp.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.CreateAccountController">
 
    <children>
       <ImageView fitHeight="125.0" fitWidth="340.0" layoutX="15.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
@@ -49,7 +49,17 @@
             <Button id="test" fx:id="signUpBtn" layoutX="46.0" layoutY="282.0" mnemonicParsing="false" onAction="#createAcctBtnClick" prefHeight="27.0" prefWidth="144.0" text="Sign Up">
                <cursor>
                   <Cursor fx:constant="HAND" />
-               </cursor></Button>
+               </cursor>
+               <effect>
+                  <Lighting diffuseConstant="1.05" surfaceScale="1.84">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant azimuth="140.17" elevation="61.55" />
+                     </light>
+                  </Lighting>
+               </effect></Button>
             <Label layoutX="64.0" layoutY="322.0" text="Have Account?">
                <font>
                   <Font size="10.0" />
@@ -66,7 +76,14 @@
             <Separator layoutX="18.0" layoutY="318.0" prefWidth="200.0" />
          </children>
          <effect>
-            <InnerShadow choke="0.15" height="10.0" radius="9.5" width="30.0" />
+            <Lighting diffuseConstant="1.05" specularConstant="0.0" surfaceScale="3.68">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant azimuth="140.17" elevation="61.55" />
+               </light>
+            </Lighting>
          </effect>
       </AnchorPane>
    </children>
