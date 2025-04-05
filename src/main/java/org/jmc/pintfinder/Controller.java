@@ -70,6 +70,15 @@ public class Controller {
     @FXML
     public void signAnimationStart(MouseEvent event) {
         Pane pane = (Pane) event.getSource();
+
+        rotate = new RotateTransition(Duration.seconds(.85), pane);
+        rotate.setFromAngle(pane.getRotate());
+        rotate.setToAngle(-25);
+        rotate.setCycleCount(1);
+        rotate.setAxis(X_AXIS);
+        rotate.setInterpolator(Interpolator.LINEAR);
+        rotate.play();
+
         DropShadow shadow = new DropShadow();
         shadow.setRadius(10);
         shadow.setHeight(36);
@@ -86,14 +95,6 @@ public class Controller {
         );
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.setAutoReverse(true);
-
-        rotate = new RotateTransition(Duration.seconds(.85), pane);
-        rotate.setFromAngle(0);
-        rotate.setToAngle(-25);
-        rotate.setCycleCount(1);
-        rotate.setAxis(X_AXIS);
-        rotate.setInterpolator(Interpolator.LINEAR);
-        rotate.play();
 
         rotate = new RotateTransition(Duration.seconds(.85), pane);
         rotate.setFromAngle(-25);

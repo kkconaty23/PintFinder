@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.web.WebView?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
 
-<AnchorPane prefHeight="732.0" prefWidth="1080.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" stylesheets="@../../../css/homePage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.Controller">
+<AnchorPane prefHeight="732.0" prefWidth="1080.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" stylesheets="@../../../css/homePage.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.Controller">
    <children>
       <Pane id="barOfDay" layoutX="35.0" layoutY="-142.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="329.0" prefWidth="237.0">
          <children>
@@ -75,7 +73,7 @@
                   <Image url="@../../../img/chain.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="81.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true" >
+            <ImageView fitHeight="81.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
@@ -95,24 +93,24 @@
             <Image url="@../../../img/PintFinder_Logo.png" />
          </image>
       </ImageView>
-      <Pane id="barNearYou" layoutX="620.0" layoutY="-106.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="240.0" prefWidth="159.0">
+      <Pane id="barNearYou" layoutX="620.0" layoutY="-117.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="251.0" prefWidth="159.0">
          <children>
-            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-14.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-14.0" layoutY="117.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
                <image>
                   <Image url="@../../../img/chain.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="79.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="79.0" layoutY="117.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
                <image>
                   <Image url="@../../../img/chain.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true" >
+            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
             </ImageView>
-            <Label layoutX="22.0" layoutY="173.0" text="Top Rated Bars" textFill="#3d4328">
+            <Label layoutX="22.0" layoutY="188.0" text="Top Rated Bars" textFill="#3d4328">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -122,24 +120,24 @@
             <DropShadow height="35.66" radius="13.665" spread="0.28" />
          </effect>
       </Pane>
-      <Pane id="barNearYou" layoutX="907.0" layoutY="-96.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="240.0" prefWidth="159.0">
+      <Pane id="barNearYou" layoutX="907.0" layoutY="-139.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="283.0" prefWidth="159.0">
          <children>
-            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-14.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-14.0" layoutY="149.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
                <image>
                   <Image url="@../../../img/chain.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="79.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
+            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="79.0" layoutY="149.0" pickOnBounds="true" preserveRatio="true" rotate="-48.0">
                <image>
                   <Image url="@../../../img/chain.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="14.0" layoutY="194.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
             </ImageView>
-            <Label layoutX="45.0" layoutY="173.0" text="Account" textFill="#3d4328">
+            <Label layoutX="45.0" layoutY="220.0" text="Account" textFill="#3d4328">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>

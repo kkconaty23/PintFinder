@@ -1,0 +1,16 @@
+.check-box .box {
+    -fx-background-color:  #899c66;
+    -fx-border-radius:15px;
+}
+
+.text-field:hover, .text-field:selected, .text-field:focused{
+    -fx-background-color: null;
+    -fx-border-color: #bd9e24;
+    -fx-border-radius: 4px;
+}
+
+.button{
+    -fx-background-color:  #899c66;
+}
+
+
