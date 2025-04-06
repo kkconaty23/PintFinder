@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="397.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.SplashController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="105.0" layoutX="7.0" layoutY="295.0" stroke="BLACK" strokeType="INSIDE" width="398.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="105.0" layoutY="298.0" stroke="BLACK" strokeType="INSIDE" width="420.0">
          <fill>
             <LinearGradient endX="1.0" endY="1.0">
                <stops>
@@ -52,6 +52,6 @@
             <Image url="@../../../img/PintFinder_Logo.png" />
          </image>
       </ImageView>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#964b00" height="37.0" layoutY="270.0" stroke="BLACK" strokeType="INSIDE" width="412.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#964b00" height="37.0" layoutY="269.0" stroke="BLACK" strokeType="INSIDE" width="420.0" />
    </children>
 </AnchorPane>

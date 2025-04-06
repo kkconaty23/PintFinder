@@ -31,7 +31,7 @@ public class SplashPageTest extends javafx.application.Application {
         initializeFirebase(); // Initialize Firebase before loading the UI
 
         FXMLLoader fxmlLoader = new FXMLLoader(SplashPageTest.class.getResource("/org/jmc/pintfinder/splashPage.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(),400, 410);
+        Scene scene = new Scene(fxmlLoader.load(),420, 400);
         stage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
         stage.setTitle("PintFinder's Home Page!");
         stage.setScene(scene);
