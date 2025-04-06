@@ -1,5 +1,6 @@
 package org.jmc.pintfinder;
 
+import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,12 +31,12 @@ public class SplashController {
         sign.setVisible(true);
         sign.setOpacity(1);
         tt2.setToY(0);
-        TranslateTransition tt2 = new TranslateTransition(Duration.seconds(2),sign);
-       tt2.setFromY(-200);
-       tt2.setToY(0);
-       tt2.setCycleCount(1);
-       tt2.setAutoReverse(false);
-       tt2.play();
+        TranslateTransition tt2 = new TranslateTransition(Duration.seconds(2), sign);
+        tt2.setFromY(-200);
+        tt2.setToY(0);
+        tt2.setCycleCount(1);
+        tt2.setAutoReverse(false);
+        tt2.play();
 
         pint1.setVisible(true);
         pint1.setOpacity(1.0);
@@ -52,8 +53,31 @@ public class SplashController {
 
         tt1.play();
 
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));  // Duration should match the animation duration
+        pause.setOnFinished(event -> {
+            try {
+
+                FXMLLoader fxmlLoginLoader = new FXMLLoader(Login.class.getResource("login.fxml"));
+
+                Scene LoginScene = new Scene(fxmlLoginLoader.load(), 397, 400);
+
+                Stage LoginStage = new Stage();
+                LoginStage.setTitle("Login Page");
+                LoginStage.setScene(LoginScene);
+                LoginStage.show();
 
 
+                Stage currentStage = (Stage) pint1.getScene().getWindow();
+                currentStage.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Failed to load Login Page");
+                alert.setContentText("An error occurred while trying to load the Login page.");
+                alert.showAndWait();
+            }
+        }); pause.play();
     }}
 
 
