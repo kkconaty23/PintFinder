@@ -29,7 +29,7 @@
             </LinearGradient>
          </fill>
       </Rectangle>
-      <ImageView fitHeight="148.0" fitWidth="368.0" layoutX="15.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="sign" fitHeight="148.0" fitWidth="368.0" layoutX="15.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../img/pintFinderNameOnWoodBoard.png" />
          </image>

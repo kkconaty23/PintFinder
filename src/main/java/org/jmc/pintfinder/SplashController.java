@@ -24,10 +24,18 @@ public class SplashController {
         @FXML
         private ImageView pint2;
     TranslateTransition tt1 = new TranslateTransition(Duration.seconds(2),pint1);
-        TranslateTransition tt2 = new TranslateTransition(Duration.seconds(5),pint2);
+        TranslateTransition tt2 = new TranslateTransition(Duration.seconds(2),sign);
     public void initialize() {
 
-
+        sign.setVisible(true);
+        sign.setOpacity(1);
+        tt2.setToY(0);
+        TranslateTransition tt2 = new TranslateTransition(Duration.seconds(2),sign);
+       tt2.setFromY(-200);
+       tt2.setToY(0);
+       tt2.setCycleCount(1);
+       tt2.setAutoReverse(false);
+       tt2.play();
 
         pint1.setVisible(true);
         pint1.setOpacity(1.0);
