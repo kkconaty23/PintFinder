@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="397.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.LoginController">
+<AnchorPane prefHeight="400.0" prefWidth="397.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" stylesheets="@../../../css/signInAndSignUp.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.LoginController">
    <children>
       <ImageView fitHeight="148.0" fitWidth="368.0" layoutX="15.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -26,19 +22,29 @@
       <AnchorPane layoutX="93.0" layoutY="157.0" prefHeight="200.0" prefWidth="212.0" style="-fx-background-color: #ffffff; -fx-background-radius: 15px;">
          <children>
             <Label layoutX="12.0" layoutY="31.0" text="Email:" />
-            <TextField fx:id="emailID" layoutX="12.0" layoutY="48.0" prefHeight="25.0" prefWidth="190.0" />
+            <TextField layoutX="12.0" layoutY="48.0" prefHeight="25.0" prefWidth="190.0" promptText="example@email.com" />
             <Label layoutX="12.0" layoutY="76.0" text="Password:" />
-            <PasswordField fx:id="passwordID" layoutX="12.0" layoutY="93.0" prefHeight="25.0" prefWidth="190.0" />
+            <PasswordField layoutX="12.0" layoutY="93.0" prefHeight="25.0" prefWidth="190.0" />
             <Separator layoutX="28.0" layoutY="163.0" prefHeight="12.0" prefWidth="144.0" />
             <Label layoutX="73.0" layoutY="1.0" text="Sign In">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button fx:id="signInBtn" layoutX="33.0" layoutY="132.0" mnemonicParsing="false" onAction="#signInBtnClick" prefHeight="25.0" prefWidth="136.0" style="-fx-background-color: #899c66;" text="Sign In">
+            <Button layoutX="33.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="136.0" text="Sign In">
                <cursor>
                   <Cursor fx:constant="HAND" />
-               </cursor></Button>
+               </cursor>
+               <effect>
+                  <Lighting diffuseConstant="1.05" surfaceScale="1.84">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant azimuth="140.7" elevation="68.55" />
+                     </light>
+                  </Lighting>
+               </effect></Button>
             <Button layoutX="10.0" layoutY="170.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Forgot Passowrd?" textFill="#899c66" underline="true">
                <font>
                   <Font size="10.0" />
@@ -47,7 +53,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
             <Separator layoutX="96.0" layoutY="175.0" orientation="VERTICAL" prefHeight="12.0" prefWidth="15.0" />
-            <Button fx:id="makeAcctBtn" layoutX="157.0" layoutY="170.0" mnemonicParsing="false" onAction="#makeActBtnClick" prefHeight="21.0" prefWidth="55.0" style="-fx-background-color: transparent;" text="Sign Up" textFill="#899c66" underline="true">
+            <Button fx:id="createAcctBtn" layoutX="157.0" layoutY="170.0" mnemonicParsing="false" onAction="#moveToCreateAccountPage" prefHeight="21.0" prefWidth="55.0" style="-fx-background-color: transparent;" text="Sign Up" textFill="#899c66" underline="true">
                <font>
                   <Font size="10.0" />
                </font>
@@ -60,7 +66,17 @@
                   <Font size="10.0" />
                </font>
             </Label>
-         </children></AnchorPane>
+         </children>
+         <effect>
+            <Lighting diffuseConstant="1.05" surfaceScale="3.68">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant azimuth="140.17" elevation="61.55" />
+               </light>
+            </Lighting>
+         </effect></AnchorPane>
       <ImageView fitHeight="105.0" fitWidth="130.0" layoutX="292.0" layoutY="295.0" pickOnBounds="true" preserveRatio="true" translateX="20.0">
          <image>
             <Image url="@../../../img/PintFinder_Logo.png" />

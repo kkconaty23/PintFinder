@@ -2,19 +2,25 @@ package org.jmc.pintfinder;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.Axis;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.web.WebView;
-import javafx.scene.web.WebEngine;
+import javafx.util.Duration;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+
+import static javafx.scene.transform.Rotate.X_AXIS;
 
 public class Controller {
     @FXML
@@ -44,6 +50,17 @@ public class Controller {
     @FXML
     private WebView mapView;
 
+//    for animation
+    @FXML
+    private RotateTransition rotate;
+
+//    for animation
+    @FXML
+    private Timeline timeline;
+
+//    for animation
+    @FXML
+    private DropShadow shadow;
 
     @FXML
     public void initialize() {
@@ -55,6 +72,75 @@ public class Controller {
             System.out.println(" map.html not found in resources!");
         }
     }
+
+    @FXML
+    public void signAnimationStart(MouseEvent event) {
+        Pane pane = (Pane) event.getSource();
+
+        rotate = new RotateTransition(Duration.seconds(.85), pane);
+        rotate.setFromAngle(pane.getRotate());
+        rotate.setToAngle(-25);
+        rotate.setCycleCount(1);
+        rotate.setAxis(X_AXIS);
+        rotate.setInterpolator(Interpolator.LINEAR);
+        rotate.play();
+
+        shadow = new DropShadow();
+        shadow.setWidth(21);
+        shadow.setHeight(35.66);
+        shadow.setRadius(13.67);
+        shadow.setOffsetX(5);
+        shadow.setSpread(0.28);
+        pane.setEffect(shadow);
+
+        timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(shadow.radiusProperty(), 10)),
+                new KeyFrame(Duration.ZERO, new KeyValue(shadow.heightProperty(), 36)),
+                new KeyFrame(Duration.seconds(0.85), new KeyValue(shadow.radiusProperty(), 45)),
+                new KeyFrame(Duration.seconds(0.85), new KeyValue(shadow.heightProperty(), 69)),
+                new KeyFrame(Duration.seconds(0.85), new KeyValue(shadow.radiusProperty(), 5)),
+                new KeyFrame(Duration.seconds(0.85), new KeyValue(shadow.heightProperty(), 15))
+
+        );
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.setAutoReverse(true);
+
+        rotate = new RotateTransition(Duration.seconds(.85), pane);
+        rotate.setFromAngle(-25);
+        rotate.setToAngle(35);
+        rotate.setAxis(X_AXIS);
+        rotate.setCycleCount(Animation.INDEFINITE);
+        rotate.setAutoReverse(true);
+        rotate.setInterpolator(Interpolator.EASE_BOTH);
+
+        timeline.play();
+        rotate.play();
+    }
+    @FXML
+    public void signAnimationEnd(MouseEvent event) {
+        Pane pane = (Pane) event.getSource();
+
+        rotate.stop();
+        timeline.stop();
+        rotate = new RotateTransition(Duration.seconds(.85), pane);
+        rotate.setAxis(X_AXIS);
+        rotate.setToAngle(0);
+        rotate.setCycleCount(1);
+
+        timeline = new Timeline(
+                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.widthProperty(), 21)),
+                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.heightProperty(), 35.66)),
+                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.radiusProperty(), 13.67)),
+                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.offsetXProperty(), 5)),
+                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.spreadProperty(), .28))
+        );
+        timeline.setCycleCount(1);
+
+        timeline.play();
+        rotate.play();
+
+    }
+
     /**
      * added a create account button allows a new window to open where the user can be added to the firebase
      *
