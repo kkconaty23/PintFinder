@@ -27,6 +27,9 @@ public class Controller {
     public  Button createAcctBtn;
 
     @FXML
+    private Label accountbtn;
+
+    @FXML
     private Label welcomeText;
 
     @FXML
@@ -50,17 +53,11 @@ public class Controller {
     @FXML
     private WebView mapView;
 
-//    for animation
     @FXML
     private RotateTransition rotate;
 
-//    for animation
     @FXML
     private Timeline timeline;
-
-//    for animation
-    @FXML
-    private DropShadow shadow;
 
     @FXML
     public void initialize() {
@@ -76,21 +73,9 @@ public class Controller {
     @FXML
     public void signAnimationStart(MouseEvent event) {
         Pane pane = (Pane) event.getSource();
-
-        rotate = new RotateTransition(Duration.seconds(.85), pane);
-        rotate.setFromAngle(pane.getRotate());
-        rotate.setToAngle(-25);
-        rotate.setCycleCount(1);
-        rotate.setAxis(X_AXIS);
-        rotate.setInterpolator(Interpolator.LINEAR);
-        rotate.play();
-
-        shadow = new DropShadow();
-        shadow.setWidth(21);
-        shadow.setHeight(35.66);
-        shadow.setRadius(13.67);
-        shadow.setOffsetX(5);
-        shadow.setSpread(0.28);
+        DropShadow shadow = new DropShadow();
+        shadow.setRadius(10);
+        shadow.setHeight(36);
         pane.setEffect(shadow);
 
         timeline = new Timeline(
@@ -106,6 +91,14 @@ public class Controller {
         timeline.setAutoReverse(true);
 
         rotate = new RotateTransition(Duration.seconds(.85), pane);
+        rotate.setFromAngle(0);
+        rotate.setToAngle(-25);
+        rotate.setCycleCount(1);
+        rotate.setAxis(X_AXIS);
+        rotate.setInterpolator(Interpolator.LINEAR);
+        rotate.play();
+
+        rotate = new RotateTransition(Duration.seconds(.85), pane);
         rotate.setFromAngle(-25);
         rotate.setToAngle(35);
         rotate.setAxis(X_AXIS);
@@ -116,30 +109,34 @@ public class Controller {
         timeline.play();
         rotate.play();
     }
-    @FXML
-    public void signAnimationEnd(MouseEvent event) {
-        Pane pane = (Pane) event.getSource();
 
+    public void signAnimationEnd(MouseEvent event) {
         rotate.stop();
         timeline.stop();
-        rotate = new RotateTransition(Duration.seconds(.85), pane);
+        rotate = new RotateTransition(Duration.seconds(.85), (Pane) event.getSource());
         rotate.setAxis(X_AXIS);
         rotate.setToAngle(0);
         rotate.setCycleCount(1);
-
-        timeline = new Timeline(
-                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.widthProperty(), 21)),
-                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.heightProperty(), 35.66)),
-                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.radiusProperty(), 13.67)),
-                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.offsetXProperty(), 5)),
-                new KeyFrame(Duration.seconds(.85), new KeyValue(shadow.spreadProperty(), .28))
-        );
-        timeline.setCycleCount(1);
-
-        timeline.play();
         rotate.play();
+    }
+    @FXML
+    void bringToAccount(MouseEvent event) throws IOException {
+
+        FXMLLoader fxmlProfileLoader = new FXMLLoader(Login.class.getResource("profile.fxml"));
+
+        Scene ProfileScene = new Scene(fxmlProfileLoader.load(), 800, 600);
+
+        Stage ProfileStage = new Stage();
+        ProfileStage.setTitle("Account Page");
+        ProfileStage.setScene(ProfileScene);
+        ProfileStage.show();
+
+
+        Stage currentStage = (Stage) accountbtn.getScene().getWindow();
+        currentStage.close();
 
     }
+
 
     /**
      * added a create account button allows a new window to open where the user can be added to the firebase
