@@ -2,6 +2,9 @@
     -fx-background-color:  #899c66;
     -fx-border-radius:15px;
 }
+.check-box .box:hover {
+    -fx-background-color:  #bd9e24;
+}
 
 .text-field:hover, .text-field:selected, .text-field:focused{
     -fx-background-color: null;
@@ -12,8 +15,21 @@
 .button{
     -fx-background-color:  #899c66;
 }
+.button:hover{
+    -fx-background-color:  #bd9e24;
+}
+
+#loginBtn, #createAcctBtn, #forgotPassBtn{
+    -fx-text-fill: #899c66;
+    -fx-background-color: transparent;
+}
+#loginBtn:hover, #createAcctBtn:hover, #forgotPassBtn:hover{
+    -fx-text-fill: #bd9e24;
+}
+
 
 .image-view {
     -fx-effect: dropshadow(three-pass-box, rgb(0,0,0), 10, 0, 5, 0);
 }
+
 
