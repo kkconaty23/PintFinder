@@ -41,7 +41,8 @@ public class NewBarController {
             String resolvedLink = resolveShortenedUrl(link);
             if (resolvedLink == null) {
                 System.err.println("Failed to resolve shortened URL.");
-                return null;
+//                return null;
+                resolvedLink = link;
             }
 
             // Parse the resolved URL
