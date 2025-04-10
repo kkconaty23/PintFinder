@@ -1,0 +1,599 @@
+Index: src/main/java/org/jmc/pintfinder/Application.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.jmc.pintfinder;\r\n\r\nimport javafx.fxml.FXMLLoader;\r\nimport javafx.scene.Scene;\r\nimport javafx.scene.image.Image;\r\nimport javafx.stage.Stage;\r\n\r\nimport java.io.InputStream;\r\nimport java.io.IOException;\r\n\r\nimport com.google.auth.oauth2.GoogleCredentials;\r\nimport com.google.cloud.firestore.Firestore;\r\nimport com.google.firebase.FirebaseApp;\r\nimport com.google.firebase.FirebaseOptions;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.cloud.FirestoreClient;\r\n\r\n\r\npublic class Application extends javafx.application.Application {\r\n\r\n    public static Firestore fstore;\r\n    public static FirebaseAuth fauth;\r\n\r\n    /**\r\n     * load the default login screen\r\n     * @param stage\r\n     * @throws IOException\r\n     */\r\n    @Override\r\n    public void start(Stage stage) throws IOException {\r\n\r\n        initializeFirebase(); // Initialize Firebase before loading the UI\r\n\r\n        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource(\"/org/jmc/pintfinder/Login.fxml\"));\r\n        Scene scene = new Scene(fxmlLoader.load(), 1080, 732);\r\n        stage.getIcons().add(new Image(\"file:src/main/resources/img/PintFinder_Logo.png\"));//sets favicon\r\n        stage.setTitle(\"PintFinder's Home Page!\");\r\n        stage.setScene(scene);\r\n        stage.show();\r\n\r\n\r\n    }\r\n\r\n    /**\r\n     * enables the firebase to link to the application\r\n     * key.json is stored in the gitignore file\r\n     * @throws IOException\r\n     */\r\n    private void initializeFirebase() throws IOException {\r\n        InputStream serviceAccount = getClass().getClassLoader().getResourceAsStream(\"key.json\");\r\n\r\n        if (serviceAccount == null) {\r\n            throw new IOException(\"Firebase service account key file not found!\");\r\n        }\r\n\r\n        FirebaseOptions options = FirebaseOptions.builder()\r\n                .setCredentials(GoogleCredentials.fromStream(serviceAccount))\r\n                .build();\r\n\r\n        if (FirebaseApp.getApps().isEmpty()) {\r\n            FirebaseApp.initializeApp(options);\r\n        }\r\n\r\n        fstore = FirestoreClient.getFirestore();\r\n        fauth = FirebaseAuth.getInstance();\r\n\r\n        System.out.println(\"Firebase initialized successfully!\");\r\n    }\r\n\r\n    public static void main(String[] args) {\r\n        launch();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/jmc/pintfinder/Application.java b/src/main/java/org/jmc/pintfinder/Application.java
+--- a/src/main/java/org/jmc/pintfinder/Application.java	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
++++ b/src/main/java/org/jmc/pintfinder/Application.java	(date 1744131197025)
+@@ -16,6 +16,15 @@
+ import com.google.firebase.cloud.FirestoreClient;
+ 
+ 
++//this class should be replaced by login.java
++
++
++
++
++
++
++
++
+ public class Application extends javafx.application.Application {
+ 
+     public static Firestore fstore;
+Index: src/main/java/org/jmc/pintfinder/LoginController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.jmc.pintfinder;\r\n\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseAuthException;\r\nimport com.google.firebase.auth.UserRecord;\r\nimport com.google.firebase.database.*;\r\nimport javafx.application.Platform;\r\nimport javafx.event.ActionEvent;\r\nimport javafx.fxml.FXML;\r\nimport javafx.fxml.FXMLLoader;\r\nimport javafx.scene.Parent;\r\nimport javafx.scene.Scene;\r\nimport javafx.scene.control.*;\r\nimport javafx.stage.Stage;\r\n\r\nimport java.io.IOException;\r\nimport java.util.HashMap;\r\nimport java.util.Map;\r\n\r\npublic class LoginController {\r\n    @FXML\r\n    public Button createAcctBtn;\r\n\r\n    @FXML\r\n    private Label welcomeText;\r\n\r\n    @FXML\r\n    private TextField emailID;\r\n\r\n    @FXML\r\n    private Button forgotBtn;\r\n\r\n    @FXML\r\n    private PasswordField passwordID;\r\n\r\n    @FXML\r\n    private Button signInBtn;\r\n\r\n    @FXML\r\n    private CheckBox checkBox;\r\n\r\n    @FXML\r\n    private Label warningLabel;\r\n\r\n    @FXML\r\n    private Button makeAcctBtn;\r\n\r\n    @FXML\r\n    private TextField firstName;\r\n\r\n    @FXML\r\n    private TextField lastName;\r\n\r\n\r\n    /**\r\n     * query database and matches emails and passwords\r\n     * @param actionEvent\r\n     */\r\n    public void signInBtnClick(ActionEvent actionEvent) {\r\n        String email = emailID.getText();\r\n        String password = passwordID.getText();\r\n\r\n        if (email.isEmpty() || password.isEmpty()) {\r\n            warningLabel.setText(\"Please enter both email and password.\");\r\n            return;\r\n        }\r\n\r\n        // Reference to the \"users\" node in the database\r\n        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference(\"users\");\r\n\r\n        // Query the database to find the user by email\r\n        usersRef.orderByChild(\"email\").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {\r\n            @Override\r\n            public void onDataChange(DataSnapshot dataSnapshot) {\r\n                if (dataSnapshot.exists()) {\r\n                    // Get the user's data\r\n                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {\r\n                        String storedPassword = userSnapshot.child(\"password\").getValue(String.class);\r\n\r\n                        // Check if the entered password matches the stored password (ensure password is hashed)\r\n                        if (storedPassword.equals(password)) {\r\n                            System.out.println(\"User signed in successfully!\");\r\n\r\n                            // Use Platform.runLater to ensure UI changes are on the JavaFX Application Thread\r\n                            Platform.runLater(() -> {\r\n                                try {\r\n                                    FXMLLoader loader = new FXMLLoader(getClass().getResource(\"profile.fxml\"));\r\n                                    Stage stage = (Stage) emailID.getScene().getWindow();\r\n                                    Scene scene = new Scene(loader.load());\r\n\r\n                                    // Set the scene and show the profile page\r\n                                    stage.setScene(scene);\r\n                                    stage.show();\r\n                                    System.out.println(\"Loading profile\");\r\n                                } catch (IOException e) {\r\n                                    e.printStackTrace();\r\n                                    warningLabel.setText(\"Error loading profile.\");\r\n                                }\r\n                            });\r\n\r\n                        } else {\r\n                            // Incorrect password\r\n                            warningLabel.setText(\"Invalid password.\");\r\n                        }\r\n                    }\r\n                } else {\r\n                    // User not found\r\n                    warningLabel.setText(\"User not found.\");\r\n                }\r\n            }\r\n\r\n            @Override\r\n            public void onCancelled(DatabaseError databaseError) {\r\n                warningLabel.setText(\"Error querying database: \" + databaseError.getMessage());\r\n            }\r\n        });\r\n    }\r\n\r\n\r\n    /**\r\n     * loads the create account page\r\n     * @param event\r\n     * @throws IOException\r\n     */\r\n    @FXML\r\n    void makeActBtnClick(ActionEvent event) throws IOException {\r\n        FXMLLoader loader = new FXMLLoader(getClass().getResource(\"createAccount.fxml\"));\r\n        Parent root = loader.load();\r\n\r\n        Stage stage = new Stage();\r\n        stage.setTitle(\"Create Account\");\r\n        stage.setScene(new Scene(root));\r\n        stage.show();\r\n    }\r\n\r\n\r\n\r\n}\r\n\r\n\r\n\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/jmc/pintfinder/LoginController.java b/src/main/java/org/jmc/pintfinder/LoginController.java
+--- a/src/main/java/org/jmc/pintfinder/LoginController.java	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
++++ b/src/main/java/org/jmc/pintfinder/LoginController.java	(date 1744131812530)
+@@ -60,6 +60,9 @@
+         String email = emailID.getText();
+         String password = passwordID.getText();
+ 
++        //TODO:
++        //WANT TO ADD MORE CHECKS AND THROW ERROR MESSAGES
++        //NEED TO ADD WARNING LABEL TO SIGN IN PAGE
+         if (email.isEmpty() || password.isEmpty()) {
+             warningLabel.setText("Please enter both email and password.");
+             return;
+@@ -84,7 +87,7 @@
+                             // Use Platform.runLater to ensure UI changes are on the JavaFX Application Thread
+                             Platform.runLater(() -> {
+                                 try {
+-                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
++                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("homePage.fxml"));
+                                     Stage stage = (Stage) emailID.getScene().getWindow();
+                                     Scene scene = new Scene(loader.load());
+ 
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_3_29_2025_3_48_PM__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_29_2025_3_48_PM__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_29_2025_3_48_PM__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_29_2025_3_48_PM__Changes_.xml	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
++++ /dev/null	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
+@@ -1,9 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_3_29_2025_3_48_PM_[Changes]" date="1743277686646" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_29_2025_3_48_PM_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 3/29/2025 3:48 PM [Changes]" />
+-  <binary>
+-    <option name="BEFORE_PATH" value="target/classes/module-info.class" />
+-    <option name="AFTER_PATH" value="target/classes/module-info.class" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_29_2025_3_48_PM_[Changes]/module-info.class" />
+-  </binary>
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_3_31_2025_12_49_PM__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_31_2025_12_49_PM__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_31_2025_12_49_PM__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_31_2025_12_49_PM__Changes_.xml	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
++++ /dev/null	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
+@@ -1,19 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_3_31_2025_12_49_PM_[Changes]" date="1743439757604" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_31_2025_12_49_PM_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 3/31/2025 12:49 PM [Changes]" />
+-  <binary>
+-    <option name="BEFORE_PATH" value="target/classes/module-info.class" />
+-    <option name="AFTER_PATH" value="target/classes/module-info.class" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_31_2025_12_49_PM_[Changes]/module-info.class" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value="target/classes/org/jmc/pintfinder/LoginController.class" />
+-    <option name="AFTER_PATH" value="target/classes/org/jmc/pintfinder/LoginController.class" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_31_2025_12_49_PM_[Changes]/LoginController.class" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value="target/classes/org/jmc/pintfinder/Login.class" />
+-    <option name="AFTER_PATH" value="target/classes/org/jmc/pintfinder/Login.class" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_31_2025_12_49_PM_[Changes]/Login.class" />
+-  </binary>
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_3_31_2025_12_49_PM_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_31_2025_12_49_PM_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_31_2025_12_49_PM_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_31_2025_12_49_PM_[Changes]/shelved.patch	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
++++ /dev/null	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
+@@ -1,24 +0,0 @@
+-Index: src/main/java/org/jmc/pintfinder/Homepage.fxml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/src/main/java/org/jmc/pintfinder/Homepage.fxml b/src/main/java/org/jmc/pintfinder/Homepage.fxml
+-new file mode 100644
+---- /dev/null	(date 1743439380663)
+-+++ b/src/main/java/org/jmc/pintfinder/Homepage.fxml	(date 1743439380663)
+-@@ -0,0 +1,14 @@
+-+<?xml version="1.0" encoding="UTF-8"?>
+-+
+-+<?import java.lang.*?>
+-+<?import java.util.*?>
+-+<?import javafx.scene.*?>
+-+<?import javafx.scene.control.*?>
+-+<?import javafx.scene.layout.*?>
+-+
+-+<AnchorPane xmlns="http://javafx.com/javafx"
+-+            xmlns:fx="http://javafx.com/fxml"
+-+            fx:controller="org.jmc.pintfinder.Homepage"
+-+            prefHeight="400.0" prefWidth="600.0">
+-+
+-+</AnchorPane>
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_3_31_2025_12_42_PM_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2025_12_42_PM_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2025_12_42_PM_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2025_12_42_PM_[Changes]/shelved.patch	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
++++ /dev/null	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
+@@ -1,93 +0,0 @@
+-Index: target/classes/org/jmc/pintfinder/login.fxml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.scene.control.Button?>\r\n<?import javafx.scene.control.CheckBox?>\r\n<?import javafx.scene.control.Label?>\r\n<?import javafx.scene.control.PasswordField?>\r\n<?import javafx.scene.control.TextField?>\r\n<?import javafx.scene.image.Image?>\r\n<?import javafx.scene.image.ImageView?>\r\n<?import javafx.scene.layout.ColumnConstraints?>\r\n<?import javafx.scene.layout.GridPane?>\r\n<?import javafx.scene.layout.RowConstraints?>\r\n<?import javafx.scene.shape.Rectangle?>\r\n\r\n<GridPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"475.0\" prefWidth=\"600.0\" style=\"-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);\" xmlns=\"http://javafx.com/javafx/23.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"org.jmc.pintfinder.LoginController\">\r\n  <columnConstraints>\r\n    <ColumnConstraints hgrow=\"SOMETIMES\" minWidth=\"10.0\" prefWidth=\"100.0\" />\r\n    <ColumnConstraints halignment=\"CENTER\" hgrow=\"SOMETIMES\" minWidth=\"10.0\" prefWidth=\"100.0\" />\r\n    <ColumnConstraints hgrow=\"SOMETIMES\" minWidth=\"10.0\" prefWidth=\"100.0\" />\r\n  </columnConstraints>\r\n  <rowConstraints>\r\n    <RowConstraints minHeight=\"10.0\" prefHeight=\"30.0\" vgrow=\"SOMETIMES\" />\r\n    <RowConstraints minHeight=\"10.0\" prefHeight=\"30.0\" vgrow=\"SOMETIMES\" />\r\n    <RowConstraints minHeight=\"10.0\" prefHeight=\"30.0\" vgrow=\"SOMETIMES\" />\r\n  </rowConstraints>\r\n  <children>\r\n      <ImageView fitHeight=\"190.0\" fitWidth=\"200.0\" pickOnBounds=\"true\" preserveRatio=\"true\" translateY=\"47.0\" GridPane.columnIndex=\"1\">\r\n         <image>\r\n            <Image url=\"@../../../img/pintFindersLady.png\" />\r\n         </image>\r\n      </ImageView>\r\n    <Rectangle arcHeight=\"5.0\" arcWidth=\"5.0\" fill=\"WHITE\" height=\"217.0\" stroke=\"BLACK\" strokeType=\"INSIDE\" translateY=\"45.0\" translateZ=\"-10.0\" width=\"236.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"1\" />\r\n    <CheckBox alignment=\"CENTER\" contentDisplay=\"CENTER\" mnemonicParsing=\"false\" text=\"I am over 21\" textAlignment=\"CENTER\" translateY=\"25.0\" translateZ=\"1.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"2\" />\r\n    <TextField fx:id=\"emailID\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"1\" />\r\n    <PasswordField fx:id=\"passwordID\" layoutY=\"100.0\" translateY=\"50.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"1\" />\r\n    <Label text=\"Email:\" translateX=\"-80.0\" translateY=\"-25.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"1\" />\r\n    <Label text=\"Password:\" translateX=\"-70.0\" translateY=\"25.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"1\" />\r\n    <Button fx:id=\"signInBtn\" mnemonicParsing=\"false\" onAction=\"#signInBtnClick\" prefHeight=\"25.0\" prefWidth=\"110.0\" style=\"-fx-background-color: #000000;\" text=\"Sign In\" textFill=\"WHITE\" translateY=\"-45.0\" underline=\"true\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"2\" />\r\n    <Button fx:id=\"forgotBtn\" mnemonicParsing=\"false\" prefHeight=\"25.0\" prefWidth=\"118.0\" style=\"-fx-background-color: transparent;\" text=\"Forgot Password?\" translateY=\"-15.0\" underline=\"true\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"2\" />\r\n      <ImageView fitHeight=\"81.0\" fitWidth=\"77.0\" pickOnBounds=\"true\" preserveRatio=\"true\" translateX=\"115.0\" translateY=\"30.0\" GridPane.columnIndex=\"2\" GridPane.rowIndex=\"2\">\r\n         <image>\r\n            <Image url=\"@../../../img/PintFinder_Logo.png\" />\r\n         </image>\r\n      </ImageView>\r\n      <Button fx:id=\"makeAcctBtn\" layoutX=\"251.0\" layoutY=\"394.0\" mnemonicParsing=\"false\" onAction=\"#makeActBtnClick\" prefHeight=\"25.0\" prefWidth=\"174.0\" style=\"-fx-background-color: transparent;\" text=\"Create an Account\" underline=\"true\" GridPane.rowIndex=\"2\" />\r\n  </children>\r\n</GridPane>\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/target/classes/org/jmc/pintfinder/login.fxml b/target/classes/org/jmc/pintfinder/login.fxml
+---- a/target/classes/org/jmc/pintfinder/login.fxml	(revision 5b0d52ab18eac012a6bbfd74c9c7b08eed61b16f)
+-+++ b/target/classes/org/jmc/pintfinder/login.fxml	(date 1743277530658)
+-@@ -1,18 +1,11 @@
+- <?xml version="1.0" encoding="UTF-8"?>
+- 
+--<?import javafx.scene.control.Button?>
+--<?import javafx.scene.control.CheckBox?>
+--<?import javafx.scene.control.Label?>
+--<?import javafx.scene.control.PasswordField?>
+--<?import javafx.scene.control.TextField?>
+--<?import javafx.scene.image.Image?>
+--<?import javafx.scene.image.ImageView?>
+--<?import javafx.scene.layout.ColumnConstraints?>
+--<?import javafx.scene.layout.GridPane?>
+--<?import javafx.scene.layout.RowConstraints?>
+--<?import javafx.scene.shape.Rectangle?>
+-+<?import javafx.scene.control.*?>
+-+<?import javafx.scene.image.*?>
+-+<?import javafx.scene.layout.*?>
+-+<?import javafx.scene.shape.*?>
+- 
+--<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.LoginController">
+-+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+-   <columnConstraints>
+-     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+-     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+-@@ -24,24 +17,27 @@
+-     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+-   </rowConstraints>
+-   <children>
+-+      <ImageView fitHeight="310.0" fitWidth="743.0" pickOnBounds="true" preserveRatio="true" translateX="160.0" translateY="55.0" GridPane.columnIndex="1">
+-+         <image>
+-+            <Image url="@../../../img/pintFinderNameOnWoodBoard.png" />
+-+         </image>
+-+      </ImageView>
+-       <ImageView fitHeight="190.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" translateY="47.0" GridPane.columnIndex="1">
+-          <image>
+-             <Image url="@../../../img/pintFindersLady.png" />
+-          </image>
+-       </ImageView>
+-     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="217.0" stroke="BLACK" strokeType="INSIDE" translateY="45.0" translateZ="-10.0" width="236.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+--    <CheckBox alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="I am over 21" textAlignment="CENTER" translateY="25.0" translateZ="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+--    <TextField fx:id="emailID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+--    <PasswordField fx:id="passwordID" layoutY="100.0" translateY="50.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+-+    <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+-+    <PasswordField layoutY="100.0" translateY="50.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+-     <Label text="Email:" translateX="-80.0" translateY="-25.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+-     <Label text="Password:" translateX="-70.0" translateY="25.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+--    <Button fx:id="signInBtn" mnemonicParsing="false" onAction="#signInBtnClick" prefHeight="25.0" prefWidth="110.0" style="-fx-background-color: #000000;" text="Sign In" textFill="WHITE" translateY="-45.0" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+--    <Button fx:id="forgotBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" style="-fx-background-color: transparent;" text="Forgot Password?" translateY="-15.0" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+--      <ImageView fitHeight="81.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true" translateX="115.0" translateY="30.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+-+    <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" style="-fx-background-color: #000000;" text="Sign In" textFill="WHITE" translateY="-65.0" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+-+    <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" style="-fx-background-color: transparent;" text="Forgot Password?" translateY="-35.0" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+-+      <ImageView fitHeight="105.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" translateX="115.0" translateY="30.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+-          <image>
+-             <Image url="@../../../img/PintFinder_Logo.png" />
+-          </image>
+-       </ImageView>
+--      <Button fx:id="makeAcctBtn" layoutX="251.0" layoutY="394.0" mnemonicParsing="false" onAction="#makeActBtnClick" prefHeight="25.0" prefWidth="174.0" style="-fx-background-color: transparent;" text="Create an Account" underline="true" GridPane.rowIndex="2" />
+-   </children>
+- </GridPane>
+-Index: src/main/java/org/jmc/pintfinder/Homepage.fxml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/src/main/java/org/jmc/pintfinder/Homepage.fxml b/src/main/java/org/jmc/pintfinder/Homepage.fxml
+-new file mode 100644
+---- /dev/null	(date 1743277765984)
+-+++ b/src/main/java/org/jmc/pintfinder/Homepage.fxml	(date 1743277765984)
+-@@ -0,0 +1,14 @@
+-+<?xml version="1.0" encoding="UTF-8"?>
+-+
+-+<?import java.lang.*?>
+-+<?import java.util.*?>
+-+<?import javafx.scene.*?>
+-+<?import javafx.scene.control.*?>
+-+<?import javafx.scene.layout.*?>
+-+
+-+<AnchorPane xmlns="http://javafx.com/javafx"
+-+            xmlns:fx="http://javafx.com/fxml"
+-+            fx:controller="org.jmc.pintfinder.Homepage"
+-+            prefHeight="400.0" prefWidth="600.0">
+-+
+-+</AnchorPane>
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_3_31_2025_12_42_PM__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2025_12_42_PM__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2025_12_42_PM__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2025_12_42_PM__Changes_.xml	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
++++ /dev/null	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
+@@ -1,19 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_3_31_2025_12_42_PM_[Changes]" date="1743439380801" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2025_12_42_PM_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 3/31/2025 12:42 PM [Changes]" />
+-  <binary>
+-    <option name="BEFORE_PATH" value="target/classes/module-info.class" />
+-    <option name="AFTER_PATH" value="target/classes/module-info.class" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2025_12_42_PM_[Changes]/module-info.class" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value="target/classes/org/jmc/pintfinder/LoginController.class" />
+-    <option name="AFTER_PATH" value="target/classes/org/jmc/pintfinder/LoginController.class" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2025_12_42_PM_[Changes]/LoginController.class" />
+-  </binary>
+-  <binary>
+-    <option name="BEFORE_PATH" value="target/classes/org/jmc/pintfinder/Login.class" />
+-    <option name="AFTER_PATH" value="target/classes/org/jmc/pintfinder/Login.class" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2025_12_42_PM_[Changes]/Login.class" />
+-  </binary>
+-</changelist>
+\ No newline at end of file
+Index: src/main/resources/org/jmc/pintfinder/Homepage.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.scene.layout.AnchorPane?>\r\n<?import javafx.scene.web.WebView?>\r\n\r\n<AnchorPane prefHeight=\"732.0\" prefWidth=\"1083.0\" xmlns=\"http://javafx.com/javafx/8.0.171\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"org.jmc.pintfinder.Controller\">\r\n   <children>\r\n      <WebView fx:id=\"mapView\" layoutX=\"464.0\" layoutY=\"183.0\" prefHeight=\"298.0\" prefWidth=\"470.0\" />\r\n   </children>\r\n</AnchorPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/org/jmc/pintfinder/Homepage.fxml b/src/main/resources/org/jmc/pintfinder/Homepage.fxml
+--- a/src/main/resources/org/jmc/pintfinder/Homepage.fxml	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
++++ b/src/main/resources/org/jmc/pintfinder/Homepage.fxml	(date 1744129635926)
+@@ -1,10 +1,157 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ 
++<?import javafx.scene.control.Label?>
++<?import javafx.scene.effect.ColorAdjust?>
++<?import javafx.scene.effect.DropShadow?>
++<?import javafx.scene.image.Image?>
++<?import javafx.scene.image.ImageView?>
+ <?import javafx.scene.layout.AnchorPane?>
++<?import javafx.scene.layout.Pane?>
++<?import javafx.scene.text.Font?>
+ <?import javafx.scene.web.WebView?>
+ 
+-<AnchorPane prefHeight="732.0" prefWidth="1083.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.Controller">
++<AnchorPane prefHeight="732.0" prefWidth="1080.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" stylesheets="@../../../css/homePage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.Controller">
+    <children>
+-      <WebView fx:id="mapView" layoutX="464.0" layoutY="183.0" prefHeight="298.0" prefWidth="470.0" />
++      <Pane id="barOfDay" layoutX="35.0" layoutY="-142.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="265.0" prefWidth="145.0" style="-fx-border-color: #ff0000;">
++         <children>
++            <ImageView fitHeight="206.0" fitWidth="82.0" layoutX="-1.0" layoutY="205.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="206.0" fitWidth="82.0" layoutX="63.0" layoutY="214.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="206.0" fitWidth="82.0" layoutX="-3.0" layoutY="101.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="63.0" layoutY="101.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++               <effect>
++                  <ColorAdjust />
++               </effect>
++            </ImageView>
++            <ImageView fitHeight="81.0" fitWidth="145.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/blankWoodenSign04.png" />
++               </image>
++            </ImageView>
++            <Label id="barOfDayLabel" layoutX="12.0" layoutY="218.0" text="Bar of the Day" textFill="#3d4328">
++               <font>
++                  <Font name="System Bold" size="18.0" />
++               </font>
++            </Label>
++            <ImageView fitHeight="58.0" fitWidth="226.0" layoutX="-27.0" layoutY="322.0" pickOnBounds="true" rotate="11.7">
++               <image>
++                  <Image url="@../../../img/blankWoodenSign02.png" />
++               </image>
++            </ImageView>
++            <Label layoutX="51.0" layoutY="337.0" rotate="11.7" text="Reviews" textFill="#3d4328">
++               <font>
++                  <Font name="System Bold" size="18.0" />
++               </font>
++            </Label>
++         </children>
++         <effect>
++            <DropShadow height="35.66" offsetX="5.0" radius="13.665" spread="0.28" />
++         </effect>
++      </Pane>
++      <AnchorPane layoutX="372.0" layoutY="232.0" prefHeight="500.0" prefWidth="708.0" style="-fx-border-width: 4px 0px 0px 4px; -fx-border-color: #000000 transparent transparent #000000; -fx-border-radius: 0px 0px 0px 0px;">
++         <children>
++            <WebView fx:id="mapView" layoutX="12.0" layoutY="12.0" prefHeight="500.0" prefWidth="708.0" stylesheets="@../../../css/homePage.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
++         </children>
++      </AnchorPane>
++      <ImageView fitHeight="96.0" fitWidth="83.0" layoutX="997.0" layoutY="649.0" pickOnBounds="true" preserveRatio="true" translateX="20.0">
++         <image>
++            <Image url="@../../../img/PintFinder_Logo.png" />
++         </image>
++      </ImageView>
++      <Pane id="account" layoutX="912.0" layoutY="-136.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="265.0" prefWidth="133.0">
++         <children>
++            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-6.0" layoutY="133.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="60.0" layoutY="133.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="2.0" layoutY="194.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/blankWoodenSign04.png" />
++               </image>
++            </ImageView>
++            <Label layoutX="33.0" layoutY="220.0" text="Account" textFill="#3d4328">
++               <font>
++                  <Font name="System Bold" size="18.0" />
++               </font>
++            </Label>
++         </children>
++         <effect>
++            <DropShadow height="35.66" offsetX="5.0" radius="13.665" spread="0.28" />
++         </effect>
++      </Pane>
++      <Pane id="topRatedBars" layoutX="660.0" layoutY="-119.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="241.0" prefWidth="133.0">
++         <children>
++            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-10.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="56.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="-2.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/blankWoodenSign04.png" />
++               </image>
++            </ImageView>
++            <Label layoutX="5.0" layoutY="189.0" text="Top Rated Bars" textFill="#3d4328">
++               <font>
++                  <Font name="System Bold" size="18.0" />
++               </font>
++            </Label>
++         </children>
++         <effect>
++            <DropShadow height="35.66" offsetX="5.0" radius="13.665" spread="0.28" />
++         </effect>
++      </Pane>
++      <Pane id="barsNearYou" layoutX="372.0" layoutY="-132.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="241.0" prefWidth="133.0">
++         <children>
++            <ImageView fitHeight="123.0" fitWidth="72.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="123.0" fitWidth="72.0" layoutX="56.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="72.0" fitWidth="145.0" layoutX="-2.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/blankWoodenSign04.png" />
++               </image>
++            </ImageView>
++            <Label layoutX="10.0" layoutY="189.0" prefHeight="21.0" prefWidth="103.0" text="Bars Near You" textFill="#3d4328">
++               <font>
++                  <Font name="System Bold" size="18.0" />
++               </font>
++            </Label>
++         </children>
++         <effect>
++            <DropShadow height="35.66" offsetX="5.0" radius="13.665" spread="0.28" />
++         </effect>
++      </Pane>
+    </children>
+ </AnchorPane>
+Index: target/classes/org/jmc/pintfinder/Homepage.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.scene.layout.AnchorPane?>\r\n<?import javafx.scene.web.WebView?>\r\n\r\n<AnchorPane prefHeight=\"732.0\" prefWidth=\"1083.0\" xmlns=\"http://javafx.com/javafx/8.0.171\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"org.jmc.pintfinder.Controller\">\r\n   <children>\r\n      <WebView fx:id=\"mapView\" layoutX=\"464.0\" layoutY=\"183.0\" prefHeight=\"298.0\" prefWidth=\"470.0\" />\r\n   </children>\r\n</AnchorPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/target/classes/org/jmc/pintfinder/Homepage.fxml b/target/classes/org/jmc/pintfinder/Homepage.fxml
+--- a/target/classes/org/jmc/pintfinder/Homepage.fxml	(revision b4da2e8c5d8b2e576085020e2a173160d8db04d9)
++++ b/target/classes/org/jmc/pintfinder/Homepage.fxml	(date 1744129635926)
+@@ -1,10 +1,157 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ 
++<?import javafx.scene.control.Label?>
++<?import javafx.scene.effect.ColorAdjust?>
++<?import javafx.scene.effect.DropShadow?>
++<?import javafx.scene.image.Image?>
++<?import javafx.scene.image.ImageView?>
+ <?import javafx.scene.layout.AnchorPane?>
++<?import javafx.scene.layout.Pane?>
++<?import javafx.scene.text.Font?>
+ <?import javafx.scene.web.WebView?>
+ 
+-<AnchorPane prefHeight="732.0" prefWidth="1083.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.Controller">
++<AnchorPane prefHeight="732.0" prefWidth="1080.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" stylesheets="@../../../css/homePage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.Controller">
+    <children>
+-      <WebView fx:id="mapView" layoutX="464.0" layoutY="183.0" prefHeight="298.0" prefWidth="470.0" />
++      <Pane id="barOfDay" layoutX="35.0" layoutY="-142.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="265.0" prefWidth="145.0" style="-fx-border-color: #ff0000;">
++         <children>
++            <ImageView fitHeight="206.0" fitWidth="82.0" layoutX="-1.0" layoutY="205.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="206.0" fitWidth="82.0" layoutX="63.0" layoutY="214.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="206.0" fitWidth="82.0" layoutX="-3.0" layoutY="101.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="63.0" layoutY="101.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++               <effect>
++                  <ColorAdjust />
++               </effect>
++            </ImageView>
++            <ImageView fitHeight="81.0" fitWidth="145.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/blankWoodenSign04.png" />
++               </image>
++            </ImageView>
++            <Label id="barOfDayLabel" layoutX="12.0" layoutY="218.0" text="Bar of the Day" textFill="#3d4328">
++               <font>
++                  <Font name="System Bold" size="18.0" />
++               </font>
++            </Label>
++            <ImageView fitHeight="58.0" fitWidth="226.0" layoutX="-27.0" layoutY="322.0" pickOnBounds="true" rotate="11.7">
++               <image>
++                  <Image url="@../../../img/blankWoodenSign02.png" />
++               </image>
++            </ImageView>
++            <Label layoutX="51.0" layoutY="337.0" rotate="11.7" text="Reviews" textFill="#3d4328">
++               <font>
++                  <Font name="System Bold" size="18.0" />
++               </font>
++            </Label>
++         </children>
++         <effect>
++            <DropShadow height="35.66" offsetX="5.0" radius="13.665" spread="0.28" />
++         </effect>
++      </Pane>
++      <AnchorPane layoutX="372.0" layoutY="232.0" prefHeight="500.0" prefWidth="708.0" style="-fx-border-width: 4px 0px 0px 4px; -fx-border-color: #000000 transparent transparent #000000; -fx-border-radius: 0px 0px 0px 0px;">
++         <children>
++            <WebView fx:id="mapView" layoutX="12.0" layoutY="12.0" prefHeight="500.0" prefWidth="708.0" stylesheets="@../../../css/homePage.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
++         </children>
++      </AnchorPane>
++      <ImageView fitHeight="96.0" fitWidth="83.0" layoutX="997.0" layoutY="649.0" pickOnBounds="true" preserveRatio="true" translateX="20.0">
++         <image>
++            <Image url="@../../../img/PintFinder_Logo.png" />
++         </image>
++      </ImageView>
++      <Pane id="account" layoutX="912.0" layoutY="-136.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="265.0" prefWidth="133.0">
++         <children>
++            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-6.0" layoutY="133.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="60.0" layoutY="133.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="2.0" layoutY="194.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/blankWoodenSign04.png" />
++               </image>
++            </ImageView>
++            <Label layoutX="33.0" layoutY="220.0" text="Account" textFill="#3d4328">
++               <font>
++                  <Font name="System Bold" size="18.0" />
++               </font>
++            </Label>
++         </children>
++         <effect>
++            <DropShadow height="35.66" offsetX="5.0" radius="13.665" spread="0.28" />
++         </effect>
++      </Pane>
++      <Pane id="topRatedBars" layoutX="660.0" layoutY="-119.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="241.0" prefWidth="133.0">
++         <children>
++            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="-10.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="123.0" fitWidth="94.0" layoutX="56.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="78.0" fitWidth="145.0" layoutX="-2.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/blankWoodenSign04.png" />
++               </image>
++            </ImageView>
++            <Label layoutX="5.0" layoutY="189.0" text="Top Rated Bars" textFill="#3d4328">
++               <font>
++                  <Font name="System Bold" size="18.0" />
++               </font>
++            </Label>
++         </children>
++         <effect>
++            <DropShadow height="35.66" offsetX="5.0" radius="13.665" spread="0.28" />
++         </effect>
++      </Pane>
++      <Pane id="barsNearYou" layoutX="372.0" layoutY="-132.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="241.0" prefWidth="133.0">
++         <children>
++            <ImageView fitHeight="123.0" fitWidth="72.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="123.0" fitWidth="72.0" layoutX="56.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/chain.png" />
++               </image>
++            </ImageView>
++            <ImageView fitHeight="72.0" fitWidth="145.0" layoutX="-2.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true">
++               <image>
++                  <Image url="@../../../img/blankWoodenSign04.png" />
++               </image>
++            </ImageView>
++            <Label layoutX="10.0" layoutY="189.0" prefHeight="21.0" prefWidth="103.0" text="Bars Near You" textFill="#3d4328">
++               <font>
++                  <Font name="System Bold" size="18.0" />
++               </font>
++            </Label>
++         </children>
++         <effect>
++            <DropShadow height="35.66" offsetX="5.0" radius="13.665" spread="0.28" />
++         </effect>
++      </Pane>
+    </children>
+ </AnchorPane>
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_29_2025_3_48_PM_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_29_2025_3_48_PM_[Changes]/shelved.patch
+deleted file mode 100644
