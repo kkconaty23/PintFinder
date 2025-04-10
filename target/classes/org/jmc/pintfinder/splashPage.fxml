@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.shape.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="400.0" prefWidth="397.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.SplashController">
+<AnchorPane prefHeight="400.0" prefWidth="397.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.SplashController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="105.0" layoutY="298.0" stroke="BLACK" strokeType="INSIDE" width="420.0">
          <fill>
@@ -57,5 +60,10 @@
          </effect>
       </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#964b00" height="37.0" layoutY="269.0" stroke="BLACK" strokeType="INSIDE" width="420.0" />
+      <ImageView fx:id="wink" fitHeight="26.0" fitWidth="16.0" layoutX="207.0" layoutY="140.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../src/main/resources/img/wink.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
