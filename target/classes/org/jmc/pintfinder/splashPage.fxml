@@ -60,9 +60,9 @@
          </effect>
       </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#964b00" height="37.0" layoutY="269.0" stroke="BLACK" strokeType="INSIDE" width="420.0" />
-      <ImageView fx:id="wink" fitHeight="26.0" fitWidth="16.0" layoutX="207.0" layoutY="140.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="wink" fitHeight="14.0" fitWidth="19.0" layoutX="208.0" layoutY="140.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../src/main/resources/img/wink.png" />
+            <Image url="@../../../img/wink.png" />
          </image>
       </ImageView>
    </children>
