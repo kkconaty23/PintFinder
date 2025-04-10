@@ -34,7 +34,7 @@ public class Login extends Application {
 
         initializeFirebase(); // Initialize Firebase before loading the UI
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("splashPage.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 397, 400);
         stage.setResizable(false);
         stage.setTitle("PintFinder's Login Page!");
