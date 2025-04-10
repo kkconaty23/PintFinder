@@ -12,6 +12,7 @@ module org.jmc.pintfinder {
     requires com.google.auth;
     requires javafx.web;
     requires javafx.media;
+    requires java.desktop;
 
 
     opens org.jmc.pintfinder to javafx.fxml;

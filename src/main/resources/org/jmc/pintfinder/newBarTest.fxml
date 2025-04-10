@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../css/signInAndSignUp.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.NewBarController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000068" height="200.0" layoutX="90.0" layoutY="39.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <TextField id="googleLink" fx:id="googleLink" layoutX="108.0" layoutY="72.0" promptText="Google Link" />
+      <TextField id="barRating" layoutX="108.0" layoutY="114.0" promptText="Rating" />
+      <Button id="submitBtn" fx:id="submitBtn" layoutX="163.0" layoutY="188.0" mnemonicParsing="false" onAction="#submitBtnAction" style="-fx-background-color: #FFFFFF;" text="Submit" />
+   </children>
+</AnchorPane>

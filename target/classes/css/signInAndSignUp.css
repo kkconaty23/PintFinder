@@ -1,3 +1,7 @@
+.root{
+    -fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);
+}
+
 .check-box .box {
     -fx-background-color:  #899c66;
     -fx-border-radius:15px;
@@ -10,7 +14,6 @@
     -fx-background-color: null;
     -fx-border-color: #bd9e24;
     -fx-border-radius: 4px;
-    -fx-effect: dropshadow(three-pass-box, rgb(0,0,0), 10, 0, 0, 0);
 }
 
 .button{

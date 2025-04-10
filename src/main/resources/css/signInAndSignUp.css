@@ -1,3 +1,7 @@
+.root{
+    -fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);
+}
+
 .check-box .box {
     -fx-background-color:  #899c66;
     -fx-border-radius:15px;
