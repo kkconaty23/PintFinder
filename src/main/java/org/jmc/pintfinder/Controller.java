@@ -27,6 +27,9 @@ public class Controller {
     public  Button createAcctBtn;
 
     @FXML
+    private Label accountbtn;
+
+    @FXML
     private Label welcomeText;
 
     @FXML
@@ -50,15 +53,15 @@ public class Controller {
     @FXML
     private WebView mapView;
 
-//    for animation
+    //    for animation
     @FXML
     private RotateTransition rotate;
 
-//    for animation
+    //    for animation
     @FXML
     private Timeline timeline;
 
-//    for animation
+    //    for animation
     @FXML
     private DropShadow shadow;
 
@@ -140,6 +143,24 @@ public class Controller {
         rotate.play();
 
     }
+    @FXML
+    void bringToAccount(MouseEvent event) throws IOException {
+
+        FXMLLoader fxmlProfileLoader = new FXMLLoader(Login.class.getResource("profile.fxml"));
+
+        Scene ProfileScene = new Scene(fxmlProfileLoader.load(), 800, 600);
+
+        Stage ProfileStage = new Stage();
+        ProfileStage.setTitle("Account Page");
+        ProfileStage.setScene(ProfileScene);
+        ProfileStage.show();
+
+
+        Stage currentStage = (Stage) accountbtn.getScene().getWindow();
+        currentStage.close();
+
+    }
+
 
     /**
      * added a create account button allows a new window to open where the user can be added to the firebase

@@ -1,22 +1,21 @@
 package org.jmc.pintfinder;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-
-import java.io.InputStream;
-import java.io.IOException;
-
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.cloud.FirestoreClient;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 
-public class Application extends javafx.application.Application {
+public class SplashPageTest extends javafx.application.Application {
 
     public static Firestore fstore;
     public static FirebaseAuth fauth;
@@ -31,8 +30,8 @@ public class Application extends javafx.application.Application {
 
         initializeFirebase(); // Initialize Firebase before loading the UI
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("/org/jmc/pintfinder/Homepage.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1200, 740);
+        FXMLLoader fxmlLoader = new FXMLLoader(SplashPageTest.class.getResource("/org/jmc/pintfinder/splashPage.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(),420, 400);
         stage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
         stage.setTitle("PintFinder's Home Page!");
         stage.setScene(scene);
