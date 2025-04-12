@@ -1,5 +1,6 @@
 package org.jmc.pintfinder;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -16,6 +17,10 @@ import javafx.util.Duration;
 import java.io.IOException;
 
 public class SplashController {
+
+
+    @FXML
+    private ImageView wink;
         @FXML
      private ImageView sign;
 
@@ -27,7 +32,7 @@ public class SplashController {
     TranslateTransition tt1 = new TranslateTransition(Duration.seconds(2),pint1);
         TranslateTransition tt2 = new TranslateTransition(Duration.seconds(2),sign);
     public void initialize() {
-
+        wink.setOpacity(0);
         sign.setVisible(true);
         sign.setOpacity(1);
         tt2.setToY(0);
@@ -52,9 +57,16 @@ public class SplashController {
 
 
         tt1.play();
-
+        FadeTransition ft = new FadeTransition(Duration.seconds(.1), wink);
+        ft.setFromValue(0);
+        ft.setToValue(1);
+        ft.setCycleCount(2);
+        ft.setDelay(Duration.seconds(2));
+        ft.autoReverseProperty().set(true);
+        ft.play();
         PauseTransition pause = new PauseTransition(Duration.seconds(3));  // Duration should match the animation duration
         pause.setOnFinished(event -> {
+
             try {
 
                 FXMLLoader fxmlLoginLoader = new FXMLLoader(Login.class.getResource("login.fxml"));
