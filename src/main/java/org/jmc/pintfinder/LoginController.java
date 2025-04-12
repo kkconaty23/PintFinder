@@ -61,8 +61,11 @@ public class LoginController {
         String password = passwordID.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
-            warningLabel.setText("Please enter both email and password.");
-            return;
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            //warningLabel.setText("Must Answer");
+            alert.setTitle("Warning");
+            alert.setHeaderText("You must fill out both fields");
+            alert.showAndWait();
         }
 
         // Reference to the "users" node in the database
@@ -86,7 +89,7 @@ public class LoginController {
                                 try {
                                     FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
                                     Stage stage = (Stage) emailID.getScene().getWindow();
-                                    Scene scene = new Scene(loader.load());
+                                    Scene scene = new Scene(loader.load(),800, 600);
 
                                     // Set the scene and show the profile page
                                     stage.setScene(scene);
@@ -98,15 +101,22 @@ public class LoginController {
                                 }
                             });
 
-                        } else {
+                        }
+                        Platform.runLater(() -> {
+
+                        if(!storedPassword.equals(password)) {
+                                Alert alert = new Alert(Alert.AlertType.WARNING);
+                                //warningLabel.setText("Must Answer");
+                                alert.setTitle("Warning");
+                                alert.setHeaderText("Password is incorrect.");
+                                alert.showAndWait();
+                            }});
+
                             // Incorrect password
-                            warningLabel.setText("Invalid password.");
+                          //  warningLabel.setText("Invalid password.");
                         }
                     }
-                } else {
-                    // User not found
-                    warningLabel.setText("User not found.");
-                }
+
             }
 
             @Override

@@ -119,10 +119,24 @@ public class CreateAccountController {
         String fname = firstNameID.getText();
         String lname = lastNameID.getText();
 
-        if (!checkBox.isSelected()) {
-            warningLabel.setText("Must Answer");
-            return;
+
+
+        if(! checkBox.isSelected()){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            //warningLabel.setText("Must Answer");
+            alert.setTitle("Warning");
+            alert.setHeaderText("You Must be 21 or older");
+            alert.showAndWait();
         }
+        else if(!passwordID.getText().equals(confirmPasswordID.getText())){
+            Alert alert1 = new Alert(Alert.AlertType.WARNING);
+            alert1.setTitle("Error");
+            alert1.setHeaderText("Password Mismatch");
+            //warningLabel.setText("Passwords do not match");
+            alert1.showAndWait();
+        }
+        else{
+
 
         try {
             // Create user in Firebase Authentication
@@ -164,7 +178,7 @@ public class CreateAccountController {
     }
 
 
-}
+}}
 
 
 
