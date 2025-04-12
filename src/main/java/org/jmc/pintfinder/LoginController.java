@@ -87,9 +87,9 @@ public class LoginController {
                             // Use Platform.runLater to ensure UI changes are on the JavaFX Application Thread
                             Platform.runLater(() -> {
                                 try {
-                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
+                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("homePage.fxml"));
                                     Stage stage = (Stage) emailID.getScene().getWindow();
-                                    Scene scene = new Scene(loader.load(),800, 600);
+                                    Scene scene = new Scene(loader.load(),1080, 732);
 
                                     // Set the scene and show the profile page
                                     stage.setScene(scene);
@@ -104,7 +104,7 @@ public class LoginController {
                         }
                         Platform.runLater(() -> {
 
-                        if(!storedPassword.equals(password)) {
+                        if(!storedPassword.equals(password) && !password.isEmpty()) {
                                 Alert alert = new Alert(Alert.AlertType.WARNING);
                                 //warningLabel.setText("Must Answer");
                                 alert.setTitle("Warning");

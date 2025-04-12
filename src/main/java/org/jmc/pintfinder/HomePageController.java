@@ -8,9 +8,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.Axis;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -22,7 +22,7 @@ import java.net.URL;
 
 import static javafx.scene.transform.Rotate.X_AXIS;
 
-public class Controller {
+public class HomePageController {
     @FXML
     public  Button createAcctBtn;
 
@@ -64,6 +64,8 @@ public class Controller {
     //    for animation
     @FXML
     private DropShadow shadow;
+
+    @FXML private Pane profileBtn;
 
     @FXML
     public void initialize() {
@@ -156,7 +158,7 @@ public class Controller {
         ProfileStage.show();
 
 
-        Stage currentStage = (Stage) accountbtn.getScene().getWindow();
+        Stage currentStage = (Stage) profileBtn.getScene().getWindow();
         currentStage.close();
 
     }
