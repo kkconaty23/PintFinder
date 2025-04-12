@@ -141,6 +141,8 @@ public class LoginController {
         stage.setTitle("Create Account");
         stage.setScene(new Scene(root));
         stage.show();
+        Stage currentStage = (Stage) createAcctBtn.getScene().getWindow();
+        currentStage.close();
     }
 
 

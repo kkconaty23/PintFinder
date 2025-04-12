@@ -167,6 +167,17 @@ public class CreateAccountController {
             alert.setContentText("Account Created Successfully!");
             alert.showAndWait();
 
+            Stage currentStage = (Stage) loginBtn.getScene().getWindow();
+            currentStage.close();
+            FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("Login.fxml"));
+
+            Scene loginScene = new Scene(fxmlLoader.load(), 397, 400);
+
+            Stage loginStage = new Stage();
+
+            loginStage.setScene(loginScene);
+            loginStage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
