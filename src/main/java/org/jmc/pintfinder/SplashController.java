@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -76,6 +77,7 @@ public class SplashController {
                 Stage LoginStage = new Stage();
                 LoginStage.setTitle("Login Page");
                 LoginStage.setScene(LoginScene);
+                LoginStage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
                 LoginStage.show();
 
 

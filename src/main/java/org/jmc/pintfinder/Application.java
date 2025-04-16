@@ -29,13 +29,14 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        initializeFirebase(); // Initialize Firebase before loading the UI
+//        initializeFirebase(); // Initialize Firebase before loading the UI
 
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("/org/jmc/pintfinder/Homepage.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1200, 740);
+        Scene scene = new Scene(fxmlLoader.load(), 1080, 732);
         stage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
         stage.setTitle("PintFinder's Home Page!");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
 
 

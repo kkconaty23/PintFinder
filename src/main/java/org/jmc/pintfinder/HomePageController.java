@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -155,6 +156,7 @@ public class HomePageController {
         Stage ProfileStage = new Stage();
         ProfileStage.setTitle("Account Page");
         ProfileStage.setScene(ProfileScene);
+        ProfileStage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
         ProfileStage.show();
 
 
