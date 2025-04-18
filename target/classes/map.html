@@ -9,82 +9,141 @@
             margin: 0;
             padding: 0;
         }
-        /*#map {*/
-        /*    border-top-left-radius: 15px;*/
-        /*}*/
 
-        .emoji-icon {
-            background-color: white;
-            border: 1px solid black;
-            border-radius: 50%;
-            font-size: 28px;
-            line-height: 32px;
-            text-align: center;
+        #searchBox {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            padding: 6px 12px;
+            width: 250px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
+
+        #suggestions {
+            position: absolute;
+            top: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 250px;
+            background: white;
+            border: 1px solid #ccc;
+            border-top: none;
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+
+        #suggestions li {
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        #suggestions li:hover {
+            background-color: #f0f0f0;
+        }
+
 
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 </head>
 <body>
-    <div id="map"></div>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
+<input type="text" id="searchBox" placeholder="Search for a bar..." />
+<ul id="suggestions"></ul>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    window.addEventListener('load', function () {
         // Initialize Map
-        const map = L.map('map').setView([40.7528 , -73.4265], 13);
+        const map = L.map('map').setView([40.7528, -73.4265], 13);
 
         // Add OpenStreetMap tile
         L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Add Default Marker
-        L.marker([40.7528 , -73.4265]).addTo(map).bindPopup('Farmingdale State College').openPopup();
+        // Default Marker
+        L.marker([40.7528, -73.4265]).addTo(map).bindPopup('Farmingdale State College').openPopup();
 
-        //Custom Markers
-        const emojiIcon = L.divIcon({
-            html: "🍺",
-            className: "PintFinder_Logo.png",
+        // Custom Image Marker
+        const imageIcon = L.divIcon({
+            html: '<img src="img/mapIcon.png" style="width: 32px; height: 32px; border-radius: 50%;">',
+            className: '',
             iconSize: [32, 32]
-
         });
 
-        L.marker([40.7481, -73.4290], { icon: emojiIcon })
-            .addTo(map)
-            .bindPopup("Changing Times Pub! 🍻");
+        // Helper function to call Java safely
+        function updateFromJava(title, description) {
+            if (typeof javaBridge !== 'undefined') {
+                javaBridge.updateLocation(title, description);
+            } else {
+                console.warn("javaBridge not ready yet.");
+            }
+        }
 
-        L.marker([40.6720, -73.5027], { icon: emojiIcon })
-            .addTo(map)
-            .bindPopup("Barrage Brewing Company! 🍻");
+        const markers = [];
 
-        L.marker([40.6719, -73.4216], { icon: emojiIcon })
-            .addTo(map)
-            .bindPopup("Small Craft Brewing Company! 🍺");
+        function addBarMarker(coords, name, description) {
+            const marker = L.marker(coords, { icon: imageIcon })
+                .addTo(map)
+                .on('click', function () {
+                    updateFromJava(name, description);
+                });
+            marker.barName = name.toLowerCase(); // for search
+            markers.push(marker);
+        }
 
-        L.marker([47.6001, -120.6595], { icon: emojiIcon })
-            .addTo(map)
-            .bindPopup("Icicle Brewing Company! 🍻");
+        // Marker with Java bridge click
+        addBarMarker([40.7481, -73.4290], "Changing Times Pub!", "Bar & Grill\n1247 Melville Rd, Farmingdale, New York 11735-1302");
+        addBarMarker([40.6720, -73.5027], "Barrage Brewing Company", "Brewery\n32 Allen Blvd, Unit E, Farmingdale, NY 11735");
+        addBarMarker([40.6719, -73.4216], "Small Craft Brewing Company", "Microbrewery\n66 Merrick Rd, Amityville, NY 11701");
+        addBarMarker([47.6001, -120.6595], "Icicle Brewing Company", "Brewpub\n935 Front St, Leavenworth, WA 98826");
+        addBarMarker([40.7608, -73.2658], "Great South Bay Brewery", "Craft Brewery\n25 Drexel Dr, Bay Shore, NY 11706");
+        addBarMarker([40.8731, -73.5339], "Oyster Bay Brewing Company", "Taproom\n36 Audrey Ave, Oyster Bay, NY 11771");
+        addBarMarker([40.73393, -73.2322], "Destination Unknown Beer Company", "Craft Brewery\n1 S Chicago Ave, Bay Shore, NY 11706");
+        addBarMarker([40.889694, -73.3874], "The Blind Bat Brewery", "Farm Brewery\nCenterport, NY (check website for hours)");
+        addBarMarker([40.900136, -73.3535], "Sand City Brewing Company", "Brewery & Taproom\n60 Main St, Northport, NY 11768");
 
-        L.marker([40.7608, -73.2658], { icon: emojiIcon })
-            .addTo(map)
-            .bindPopup("Great South Bay Brewery! 🍺");
+        const searchBox = document.getElementById('searchBox');
+        const suggestionsList = document.getElementById('suggestions');
 
-        L.marker([40.8731, -73.5339], { icon: emojiIcon })
-            .addTo(map)
-            .bindPopup("Oyster Bay Brewing Company! 🍺");
+        searchBox.addEventListener('input', function (e) {
+            const query = e.target.value.toLowerCase();
+            suggestionsList.innerHTML = '';
 
-        L.marker([40.73393, -73.2322], { icon: emojiIcon })
-            .addTo(map)
-            .bindPopup("Destination Unknown Beer Company! 🍻");
+            if (!query) {
+                markers.forEach(marker => marker.setOpacity(1));
+                return;
+            }
 
-        L.marker([40.889694, -73.3874], { icon: emojiIcon })
-            .addTo(map)
-            .bindPopup("The Blind Bat Brewery! 🍺");
+            markers.forEach(marker => {
+                if (marker.barName.includes(query)) {
+                    marker.setOpacity(1);
 
-        L.marker([40.900136, -73.3535], { icon: emojiIcon })
-            .addTo(map)
-            .bindPopup("Sand City Brewing Company! 🍺");
+                    const li = document.createElement('li');
+                    li.textContent = marker.barName;
+                    li.addEventListener('click', () => {
+                        searchBox.value = marker.barName;
+                        suggestionsList.innerHTML = '';
+                        map.setView(marker.getLatLng(), 15);
+                        marker.fire('click'); // optional: simulate clicking marker
+                    });
+                    suggestionsList.appendChild(li);
+                } else {
+                    marker.setOpacity(0.2);
+                }
+            });
+        });
 
+    });
 
-    </script>
+</script>
 </body>
 </html>
