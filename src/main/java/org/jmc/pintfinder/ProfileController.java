@@ -3,6 +3,7 @@ package org.jmc.pintfinder;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -13,6 +14,34 @@ import java.io.IOException;
 public class ProfileController {
 
     @FXML private ImageView profileBackBtn;
+
+
+    @FXML
+    private ImageView logOutBtn;
+
+
+    @FXML
+    void returnToLogin(MouseEvent event) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText("You are successfully logged out");
+        alert.showAndWait();
+
+        Stage currentStage = (Stage) logOutBtn.getScene().getWindow();
+        currentStage.close();
+        FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("Login.fxml"));
+
+        Scene loginScene = new Scene(fxmlLoader.load(), 397, 400);
+
+        Stage loginStage = new Stage();
+
+        loginStage.setScene(loginScene);
+        loginStage.show();
+
+    }
+
+
 
     @FXML void bringToHomepage(MouseEvent event) throws IOException {
 
