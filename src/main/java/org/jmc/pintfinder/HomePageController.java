@@ -3,6 +3,8 @@ package org.jmc.pintfinder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import javafx.animation.*;
+import javafx.application.Platform;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,15 +12,25 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
 import javafx.stage.Stage;
 import javafx.scene.web.WebView;
 import javafx.util.Duration;
+import netscape.javascript.JSObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static javafx.scene.transform.Rotate.X_AXIS;
 
@@ -67,14 +79,51 @@ public class HomePageController {
 
     @FXML private Pane profileBtn;
 
+    @FXML private Label titleLabel;
+    @FXML private Label descriptionLabel;
+
+    @FXML private VBox reviewList;
+    @FXML private TextArea reviewInput;
+    @FXML private ComboBox<Integer> ratingCombo;
+
+    private final Map<String, List<String>> locationReviews = new HashMap<>();
+    private final Map<String, List<Integer>> locationRatings = new HashMap<>();
+    private String currentLocation = null;
+
+    @FXML private ProgressIndicator ratingIndicator;
+    @FXML private Label averageOverlay;
+
     @FXML
     public void initialize() {
         URL mapUrl = getClass().getResource("/map.html");
         if (mapUrl != null) {
-            System.out.println(" Loading: " + mapUrl.toExternalForm());
-            mapView.getEngine().load(mapUrl.toExternalForm());
+            System.out.println("Loading: " + mapUrl.toExternalForm());
+
+            WebEngine webEngine = mapView.getEngine();
+            webEngine.load(mapUrl.toExternalForm());
+
+            // Create the Java bridge
+            MapBridge bridge = new MapBridge();
+            bridge.setOnTitleChange(title -> Platform.runLater(() -> titleLabel.setText(title)));
+            bridge.setOnDescriptionChange(desc -> Platform.runLater(() -> descriptionLabel.setText(desc)));
+            bridge.setOnLocationSwitch(locationName -> {
+                currentLocation = locationName;
+                Platform.runLater(() -> { loadReviewsForLocation(locationName);});
+            });
+
+            // Hook the bridge into the JS context after the page loads
+            webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                if (newState == Worker.State.SUCCEEDED) {
+                    JSObject window = (JSObject) webEngine.executeScript("window");
+                    window.setMember("javaBridge", bridge);
+                    System.out.println("Java bridge connected to JS.");
+                }
+            });
+            ratingCombo.getItems().addAll(IntStream.rangeClosed(1,10).boxed().collect(Collectors.toList()));
+            ratingCombo.setValue(10);
+
         } else {
-            System.out.println(" map.html not found in resources!");
+            System.out.println("map.html not found in resources!");
         }
     }
 
@@ -155,6 +204,7 @@ public class HomePageController {
         Stage ProfileStage = new Stage();
         ProfileStage.setTitle("Account Page");
         ProfileStage.setScene(ProfileScene);
+        ProfileStage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
         ProfileStage.show();
 
 
@@ -243,6 +293,66 @@ public class HomePageController {
         stage.setScene(new Scene(root));
         stage.show();
     }
+
+    @FXML
+    private void handleSubmitReview() {
+        String text = reviewInput.getText().trim();
+        Integer rating = ratingCombo.getValue();
+
+        if (!text.isEmpty() && rating != null && currentLocation != null) {
+            // Add review text to review map
+            String fullReview = "⭐ " + rating + "/10\n" + text;
+            locationReviews.computeIfAbsent(currentLocation, k -> new ArrayList<>()).add(fullReview);
+
+            // Add rating to rating map
+            locationRatings.computeIfAbsent(currentLocation, k -> new ArrayList<>()).add(rating);
+
+            // Add review to UI
+            Label label = new Label(fullReview);
+            label.setWrapText(true);
+            label.setStyle("-fx-background-color: white; -fx-padding: 8; -fx-border-color: #ccc;");
+            reviewList.getChildren().add(label);
+
+            // Update rating meter
+            updateAverageRating(currentLocation);
+
+            // Clear inputs
+            reviewInput.clear();
+            ratingCombo.setValue(10);
+        }
+    }
+
+
+    private void loadReviewsForLocation(String location){
+        reviewList.getChildren().clear();
+
+        List<String> reviews = locationReviews.getOrDefault(location, new ArrayList<>());
+
+        for(String review : reviews){
+            Label label = new Label(review);
+            label.setWrapText(true);
+            label.setStyle("-fx-background-color: white; -fx-padding: 8; -fx-border-color: #ccc;");
+            reviewList.getChildren().add(label);
+        }
+    }
+
+    private void updateAverageRating(String locationName) {
+        List<Integer> ratings = locationRatings.getOrDefault(locationName, new ArrayList<>());
+
+        if (ratings.isEmpty()) {
+            ratingIndicator.setProgress(0);
+            averageOverlay.setText("N/A");
+            return;
+        }
+
+        double avg = ratings.stream().mapToInt(i -> i).average().orElse(0.0);
+        ratingIndicator.setProgress(avg / 10.0); // progress is between 0.0 and 1.0
+        averageOverlay.setText(String.format("%.1f", avg));
+    }
+
+
+
+
 
 
 

@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -93,6 +94,8 @@ public class LoginController {
 
                                     // Set the scene and show the profile page
                                     stage.setScene(scene);
+                                    stage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
+                                    stage.setResizable(false);
                                     stage.show();
                                     System.out.println("Loading profile");
                                 } catch (IOException e) {
@@ -140,7 +143,10 @@ public class LoginController {
         Stage stage = new Stage();
         stage.setTitle("Create Account");
         stage.setScene(new Scene(root));
+        stage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
         stage.show();
+        Stage currentStage = (Stage) createAcctBtn.getScene().getWindow();
+        currentStage.close();
     }
 
 

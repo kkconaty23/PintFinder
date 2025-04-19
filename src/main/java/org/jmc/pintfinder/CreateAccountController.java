@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -91,6 +92,7 @@ public class CreateAccountController {
             Stage LoginStage = new Stage();
             LoginStage.setTitle("Login Page");
             LoginStage.setScene(LoginScene);
+            LoginStage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
             LoginStage.show();
 
 
@@ -166,6 +168,17 @@ public class CreateAccountController {
             alert.setHeaderText(null);
             alert.setContentText("Account Created Successfully!");
             alert.showAndWait();
+
+            Stage currentStage = (Stage) loginBtn.getScene().getWindow();
+            currentStage.close();
+            FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("Login.fxml"));
+
+            Scene loginScene = new Scene(fxmlLoader.load(), 397, 400);
+
+            Stage loginStage = new Stage();
+
+            loginStage.setScene(loginScene);
+            loginStage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
