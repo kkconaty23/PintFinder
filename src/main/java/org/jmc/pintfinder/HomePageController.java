@@ -8,6 +8,7 @@ import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -84,14 +85,16 @@ public class HomePageController {
 
     @FXML private VBox reviewList;
     @FXML private TextArea reviewInput;
-    @FXML private ComboBox<Integer> ratingCombo;
+    @FXML private Slider ratingCombo;
+    @FXML private Label comboLabel;
 
     private final Map<String, List<String>> locationReviews = new HashMap<>();
-    private final Map<String, List<Integer>> locationRatings = new HashMap<>();
+    private final Map<String, List<Double>> locationRatings = new HashMap<>();
     private String currentLocation = null;
 
     @FXML private ProgressIndicator ratingIndicator;
     @FXML private Label averageOverlay;
+    @FXML private Button submitReview;
 
     @FXML
     public void initialize() {
@@ -119,8 +122,25 @@ public class HomePageController {
                     System.out.println("Java bridge connected to JS.");
                 }
             });
-            ratingCombo.getItems().addAll(IntStream.rangeClosed(1,10).boxed().collect(Collectors.toList()));
-            ratingCombo.setValue(10);
+            ratingCombo.setMin(0);
+            ratingCombo.setMax(10);
+            ratingCombo.setValue(10);//TODO: set default rating to bar average
+            ratingCombo.setShowTickLabels(true);
+            // creating a listener to update the label when the slider value changes
+            ratingCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
+                comboLabel.setText("Score: " + String.format("%.1f", newValue.doubleValue()));
+            });
+            ratingCombo.setMajorTickUnit(2);
+            ratingCombo.setMinorTickCount(0);
+            submitReview.setOnAction(event -> handleSubmitReview());
+
+            // Bind the Enter key to the submitReview action
+            reviewInput.setOnKeyPressed(keyEvent -> {
+                if (keyEvent.getCode().toString().equals("ENTER")) {
+                    handleSubmitReview();
+                    keyEvent.consume(); // Prevents adding a new line in the TextArea
+                }
+            });
 
         } else {
             System.out.println("map.html not found in resources!");
@@ -297,11 +317,11 @@ public class HomePageController {
     @FXML
     private void handleSubmitReview() {
         String text = reviewInput.getText().trim();
-        Integer rating = ratingCombo.getValue();
+        double rating = Math.round(ratingCombo.getValue() * 10.0) / 10.0;//makes sure its 1 decimal
 
-        if (!text.isEmpty() && rating != null && currentLocation != null) {
+        if (!text.isEmpty()  && currentLocation != null) {
             // Add review text to review map
-            String fullReview = "⭐ " + rating + "/10\n" + text;
+            String fullReview = String.format("%2.1f | %s", rating, text);
             locationReviews.computeIfAbsent(currentLocation, k -> new ArrayList<>()).add(fullReview);
 
             // Add rating to rating map
@@ -310,7 +330,6 @@ public class HomePageController {
             // Add review to UI
             Label label = new Label(fullReview);
             label.setWrapText(true);
-            label.setStyle("-fx-background-color: white; -fx-padding: 8; -fx-border-color: #ccc;");
             reviewList.getChildren().add(label);
 
             // Update rating meter
@@ -324,6 +343,9 @@ public class HomePageController {
 
 
     private void loadReviewsForLocation(String location){
+        if(reviewList != null){
+            reviewList.getChildren().clear();
+        }
         reviewList.getChildren().clear();
 
         List<String> reviews = locationReviews.getOrDefault(location, new ArrayList<>());
@@ -331,13 +353,12 @@ public class HomePageController {
         for(String review : reviews){
             Label label = new Label(review);
             label.setWrapText(true);
-            label.setStyle("-fx-background-color: white; -fx-padding: 8; -fx-border-color: #ccc;");
             reviewList.getChildren().add(label);
         }
     }
 
     private void updateAverageRating(String locationName) {
-        List<Integer> ratings = locationRatings.getOrDefault(locationName, new ArrayList<>());
+        List<Double> ratings = locationRatings.getOrDefault(locationName, new ArrayList<>());
 
         if (ratings.isEmpty()) {
             ratingIndicator.setProgress(0);
@@ -345,7 +366,7 @@ public class HomePageController {
             return;
         }
 
-        double avg = ratings.stream().mapToInt(i -> i).average().orElse(0.0);
+        double avg = ratings.stream().mapToDouble(i -> i).average().orElse(0.0);
         ratingIndicator.setProgress(avg / 10.0); // progress is between 0.0 and 1.0
         averageOverlay.setText(String.format("%.1f", avg));
     }
