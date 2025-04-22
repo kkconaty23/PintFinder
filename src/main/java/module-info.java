@@ -15,6 +15,7 @@ module org.jmc.pintfinder {
     requires jdk.jsobject;
 
 
-    opens org.jmc.pintfinder to javafx.fxml;
+    opens org.jmc.pintfinder to javafx.fxml, firebase.admin;
+//    opens org.jmc.pintfinder to javafx.fxml;
     exports org.jmc.pintfinder;
 }

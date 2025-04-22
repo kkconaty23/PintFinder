@@ -63,7 +63,6 @@ public class LoginController {
 
         if (email.isEmpty() || password.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            //warningLabel.setText("Must Answer");
             alert.setTitle("Warning");
             alert.setHeaderText("You must fill out both fields");
             alert.showAndWait();
@@ -100,7 +99,7 @@ public class LoginController {
                                     System.out.println("Loading profile");
                                 } catch (IOException e) {
                                     e.printStackTrace();
-                                    warningLabel.setText("Error loading profile.");
+//                                    warningLabel.setText("Error loading profile.");
                                 }
                             });
 
@@ -109,14 +108,13 @@ public class LoginController {
 
                         if(!storedPassword.equals(password) && !password.isEmpty()) {
                                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                                //warningLabel.setText("Must Answer");
+
                                 alert.setTitle("Warning");
                                 alert.setHeaderText("Password is incorrect.");
                                 alert.showAndWait();
                             }});
 
-                            // Incorrect password
-                          //  warningLabel.setText("Invalid password.");
+
                         }
                     }
 

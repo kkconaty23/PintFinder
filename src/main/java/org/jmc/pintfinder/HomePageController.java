@@ -2,6 +2,7 @@ package org.jmc.pintfinder;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
+import com.google.firebase.database.*;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
@@ -37,7 +38,7 @@ import static javafx.scene.transform.Rotate.X_AXIS;
 
 public class HomePageController {
     @FXML
-    public  Button createAcctBtn;
+    public Button createAcctBtn;
 
     @FXML
     private Label accountbtn;
@@ -78,29 +79,40 @@ public class HomePageController {
     @FXML
     private DropShadow shadow;
 
-    @FXML private Pane profileBtn;
+    @FXML
+    private Pane profileBtn;
 
-    @FXML private Label titleLabel;
-    @FXML private Label descriptionLabel;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private Label descriptionLabel;
 
-    @FXML private VBox reviewList;
-    @FXML private TextArea reviewInput;
-    @FXML private Slider ratingCombo;
-    @FXML private Label comboLabel;
+    @FXML
+    private VBox reviewList;
+    @FXML
+    private TextArea reviewInput;
+    @FXML
+    private Slider ratingCombo;
+    @FXML
+    private Label comboLabel;
 
     private final Map<String, List<String>> locationReviews = new HashMap<>();
     private final Map<String, List<Double>> locationRatings = new HashMap<>();
     private String currentLocation = null;
 
-    @FXML private ProgressIndicator ratingIndicator;
-    @FXML private Label averageOverlay;
-    @FXML private Button submitReview;
+    @FXML
+    private ProgressIndicator ratingIndicator;
+    @FXML
+    private Label averageOverlay;
+    @FXML
+    private Button submitReview;
 
     private List<Bar> barList = new ArrayList<>();
 
     @FXML
     public void initialize() {
         loadBars();//method to create all bar objects
+        FirebaseBarUploader.uploadBars(barList);
         URL mapUrl = getClass().getResource("/map.html");
         if (mapUrl != null) {
             System.out.println("Loading: " + mapUrl.toExternalForm());
@@ -114,7 +126,9 @@ public class HomePageController {
             bridge.setOnDescriptionChange(desc -> Platform.runLater(() -> descriptionLabel.setText(desc)));
             bridge.setOnLocationSwitch(locationName -> {
                 currentLocation = locationName;
-                Platform.runLater(() -> { loadReviewsForLocation(locationName);});
+                Platform.runLater(() -> {
+                    loadReviewsForLocation(locationName);
+                });
             });
 
             // Hook the bridge into the JS context after the page loads
@@ -193,6 +207,7 @@ public class HomePageController {
         timeline.play();
         rotate.play();
     }
+
     @FXML
     public void signAnimationEnd(MouseEvent event) {
         Pane pane = (Pane) event.getSource();
@@ -217,6 +232,7 @@ public class HomePageController {
         rotate.play();
 
     }
+
     @FXML
     void bringToAccount(MouseEvent event) throws IOException {
 
@@ -249,12 +265,11 @@ public class HomePageController {
         String password = passwordID.getText();
 
 
-        if(! checkBox.isSelected()){
+        if (!checkBox.isSelected()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             warningLabel.setText("Must Answer");
             return;
         }
-
 
 
         // create a user in Firebase
@@ -275,19 +290,19 @@ public class HomePageController {
         String email = emailID.getText();
         String password = passwordID.getText();
 
-        if(email.isEmpty() || password.isEmpty()){
+        if (email.isEmpty() || password.isEmpty()) {
             warningLabel.setText("Please Enter Email and Password");
             return;
         }
 
-        if(!checkBox.isSelected()){
+        if (!checkBox.isSelected()) {
             warningLabel.setText("You must agree to continue.");
             return;
         }
 
         System.out.println("Logging in user: " + email + "...");
 
-        try{
+        try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Homepage.fxml"));
             Parent root = fxmlLoader.load();
 
@@ -303,6 +318,7 @@ public class HomePageController {
 
     /**
      * registers the users email and password and puts them into firebase
+     *
      * @param event
      * @throws IOException
      */
@@ -316,44 +332,97 @@ public class HomePageController {
         stage.setScene(new Scene(root));
         stage.show();
     }
-
     @FXML
     private void handleSubmitReview() {
         String text = reviewInput.getText().trim();
-        double rating = Math.round(ratingCombo.getValue() * 10.0) / 10.0;//makes sure its 1 decimal
+        double newRating = Math.round(ratingCombo.getValue() * 10.0) / 10.0;
 
-        if (!text.isEmpty()  && currentLocation != null) {
-            // Add review text to review map
-            String fullReview = String.format("%2.1f | %s", rating, text);
+        if (!text.isEmpty() && currentLocation != null) {
+            String fullReview = String.format("%2.1f | %s", newRating, text);
+
+            // Local map updates
             locationReviews.computeIfAbsent(currentLocation, k -> new ArrayList<>()).add(fullReview);
+            locationRatings.computeIfAbsent(currentLocation, k -> new ArrayList<>()).add(newRating);
 
-            // Add rating to rating map
-            locationRatings.computeIfAbsent(currentLocation, k -> new ArrayList<>()).add(rating);
-
-            // Add review to UI
-            Label label = new Label(fullReview);
-            label.setWrapText(true);
-            reviewList.getChildren().add(label);
-
-            // Update rating meter
+            reviewList.getChildren().add(new Label(fullReview));
             updateAverageRating(currentLocation);
 
-            // Clear inputs
+            // Firebase DB reference to the bar
+            DatabaseReference barRef = FirebaseDatabase.getInstance()
+                    .getReference("bars")
+                    .child(currentLocation);
+
+            // Generate a unique ID for this review
+            DatabaseReference reviewsRef = barRef.child("reviews").push();
+            String reviewId = reviewsRef.getKey();
+
+            // Create review object
+            Map<String, Object> reviewData = new HashMap<>();
+            reviewData.put("text", text);
+            reviewData.put("rating", newRating);
+            reviewData.put("timestamp", ServerValue.TIMESTAMP);
+
+            // Read current rating and numRatings, then update
+            barRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    // Create a transaction to ensure atomic updates
+                    Map<String, Object> updates = new HashMap<>();
+
+                    if (snapshot.exists()) {
+                        Double oldRating = snapshot.child("rating").getValue(Double.class);
+                        Long numRatings = snapshot.child("numRatings").getValue(Long.class);
+
+                        if (oldRating == null) oldRating = 0.0;
+                        if (numRatings == null) numRatings = 0L;
+
+                        long newNumRatings = numRatings + 1;
+                        double avg = Math.round(((oldRating * numRatings + newRating) / newNumRatings) * 10.0) / 10.0;
+
+                        // Update aggregate rating data
+                        updates.put("rating", avg);
+                        updates.put("numRatings", newNumRatings);
+                    } else {
+                        // Bar doesn't exist yet, initialize it
+                        updates.put("rating", newRating);
+                        updates.put("numRatings", 1L);
+                        updates.put("name", currentLocation); // Assuming currentLocation is the bar name
+                    }
+
+                    // Add the new review
+                    updates.put("reviews/" + reviewId, reviewData);
+
+                    // Apply all updates atomically
+                    barRef.updateChildren(updates, (error, ref) -> {
+                        if (error != null) {
+                            System.err.println("Failed to update bar data: " + error.getMessage());
+                        } else {
+                            System.out.println("Bar rating and review successfully updated");
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    System.err.println("Failed to read or update rating: " + error.getMessage());
+                }
+            });
+
             reviewInput.clear();
             ratingCombo.setValue(10);
         }
     }
 
 
-    private void loadReviewsForLocation(String location){
-        if(reviewList != null){
+    private void loadReviewsForLocation(String location) {
+        if (reviewList != null) {
             reviewList.getChildren().clear();
         }
         reviewList.getChildren().clear();
 
         List<String> reviews = locationReviews.getOrDefault(location, new ArrayList<>());
 
-        for(String review : reviews){
+        for (String review : reviews) {
             Label label = new Label(review);
             label.setWrapText(true);
             reviewList.getChildren().add(label);
@@ -378,23 +447,27 @@ public class HomePageController {
      * method use to create bar object from all the bars on the map
      */
     private void loadBars() {
-        barList.add(new Bar(1, "Changing Times Pub!", 40.7481, -73.4290, 0.0));
-        barList.add(new Bar(2, "Barrage Brewing Company", 40.6720, -73.5027, 0.0));
-        barList.add(new Bar(3, "Small Craft Brewing Company", 40.6719, -73.4216, 0.0));
-        barList.add(new Bar(4, "Icicle Brewing Company", 47.6001, -120.6595, 0.0));
-        barList.add(new Bar(5, "Great South Bay Brewery", 40.7608, -73.2658, 0.0));
-        barList.add(new Bar(6, "Oyster Bay Brewing Company", 40.8731, -73.5339, 0.0));
-        barList.add(new Bar(7, "Destination Unknown Beer Company", 40.73393, -73.2322, 0.0));
-        barList.add(new Bar(8, "The Blind Bat Brewery", 40.889694, -73.3874, 0.0));
-        barList.add(new Bar(9, "Sand City Brewing Company", 40.900136, -73.3535, 0.0));
+        barList.add(new Bar( "Changing Times Pub!", 40.7481, -73.4290, 0.0));
+        barList.add(new Bar( "Barrage Brewing Company", 40.6720, -73.5027, 0.0));
+        barList.add(new Bar( "Small Craft Brewing Company", 40.6719, -73.4216, 0.0));
+        barList.add(new Bar( "Icicle Brewing Company", 47.6001, -120.6595, 0.0));
+        barList.add(new Bar( "Great South Bay Brewery", 40.7608, -73.2658, 0.0));
+        barList.add(new Bar( "Oyster Bay Brewing Company", 40.8731, -73.5339, 0.0));
+        barList.add(new Bar( "Destination Unknown Beer Company", 40.73393, -73.2322, 0.0));
+        barList.add(new Bar( "The Blind Bat Brewery", 40.889694, -73.3874, 0.0));
+        barList.add(new Bar( "Sand City Brewing Company", 40.900136, -73.3535, 0.0));
     }
 
+    public static class FirebaseBarUploader {
+        public static void uploadBars(List<Bar> barList) {
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("bars");
 
+            for (Bar bar : barList) {
+                ref.child(String.valueOf(bar.getName())).setValueAsync(bar);
+            }
+        }
 
-
-
-
-
+    }
 }
 
 
