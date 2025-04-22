@@ -96,8 +96,11 @@ public class HomePageController {
     @FXML private Label averageOverlay;
     @FXML private Button submitReview;
 
+    private List<Bar> barList = new ArrayList<>();
+
     @FXML
     public void initialize() {
+        loadBars();//method to create all bar objects
         URL mapUrl = getClass().getResource("/map.html");
         if (mapUrl != null) {
             System.out.println("Loading: " + mapUrl.toExternalForm());
@@ -369,6 +372,21 @@ public class HomePageController {
         double avg = ratings.stream().mapToDouble(i -> i).average().orElse(0.0);
         ratingIndicator.setProgress(avg / 10.0); // progress is between 0.0 and 1.0
         averageOverlay.setText(String.format("%.1f", avg));
+    }
+
+    /**
+     * method use to create bar object from all the bars on the map
+     */
+    private void loadBars() {
+        barList.add(new Bar(1, "Changing Times Pub!", 40.7481, -73.4290, 0.0));
+        barList.add(new Bar(2, "Barrage Brewing Company", 40.6720, -73.5027, 0.0));
+        barList.add(new Bar(3, "Small Craft Brewing Company", 40.6719, -73.4216, 0.0));
+        barList.add(new Bar(4, "Icicle Brewing Company", 47.6001, -120.6595, 0.0));
+        barList.add(new Bar(5, "Great South Bay Brewery", 40.7608, -73.2658, 0.0));
+        barList.add(new Bar(6, "Oyster Bay Brewing Company", 40.8731, -73.5339, 0.0));
+        barList.add(new Bar(7, "Destination Unknown Beer Company", 40.73393, -73.2322, 0.0));
+        barList.add(new Bar(8, "The Blind Bat Brewery", 40.889694, -73.3874, 0.0));
+        barList.add(new Bar(9, "Sand City Brewing Company", 40.900136, -73.3535, 0.0));
     }
 
 

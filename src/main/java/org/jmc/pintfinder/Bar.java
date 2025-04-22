@@ -6,17 +6,17 @@ public class Bar {
     private double latitude;
     private double longitude;
     private double rating; // out of 10.0
-    private String website;
+
 
     public Bar() {}
 
-    public Bar(int id, String name, double latitude, double longitude, double rating, String website) {
+    public Bar(int id, String name, double latitude, double longitude, double rating) {
         this.id = id;
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
         this.rating = rating;
-        this.website = website;
+
     }
 
     // Getters and Setters
@@ -63,14 +63,6 @@ public class Bar {
         } else {
             throw new IllegalArgumentException("Rating must be between 0.0 and 10.0");
         }
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
     }
 
     @Override
