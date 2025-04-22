@@ -18,7 +18,7 @@ public class ProfileController {
 
         FXMLLoader fxmlProfileLoader = new FXMLLoader(Login.class.getResource("homePage.fxml"));
 
-        Scene ProfileScene = new Scene(fxmlProfileLoader.load(), 1080, 732);
+        Scene ProfileScene = new Scene(fxmlProfileLoader.load(), 1080, 750);
 
         Stage ProfileStage = new Stage();
         ProfileStage.setTitle("Profile Page");
