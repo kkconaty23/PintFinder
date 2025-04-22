@@ -111,8 +111,8 @@ public class HomePageController {
 
     @FXML
     public void initialize() {
-//        loadBars();//method to create all bar objects
-        FirebaseBarUploader.uploadBars(barList);
+//        loadBars();//METHOD USED TO LOAD FIREBASE WITH THE BARS(ONLY USE FORE RESETTING)
+        FirebaseBarUploader.uploadBars(barList);//refresh the bars in fire base
 
         URL mapUrl = getClass().getResource("/map.html");
         if (mapUrl != null) {
@@ -254,6 +254,9 @@ public class HomePageController {
     }
 
 
+    /**
+     * updated review button click to submit the review to fire base
+     */
     @FXML
     private void handleSubmitReview() {
         String text = reviewInput.getText().trim();
@@ -271,14 +274,14 @@ public class HomePageController {
 
             // Firebase DB reference to the bar
             DatabaseReference barRef = FirebaseDatabase.getInstance()
-                    .getReference("bars")
+                    .getReference("bars")//uses the bars table
                     .child(currentLocation);
 
             // Generate a unique ID for this review
             DatabaseReference reviewsRef = barRef.child("reviews").push();
             String reviewId = reviewsRef.getKey();
 
-            // Create review object
+            //create review object as a hashmap
             Map<String, Object> reviewData = new HashMap<>();
             reviewData.put("text", text);
             reviewData.put("rating", newRating);
@@ -292,8 +295,8 @@ public class HomePageController {
                     Map<String, Object> updates = new HashMap<>();
 
                     if (snapshot.exists()) {
-                        Double oldRating = snapshot.child("rating").getValue(Double.class);
-                        Long numRatings = snapshot.child("numRatings").getValue(Long.class);
+                        Double oldRating = snapshot.child("rating").getValue(Double.class);//QUERYING THE DB
+                        Long numRatings = snapshot.child("numRatings").getValue(Long.class);//QUERYING THE DB
 
                         if (oldRating == null) oldRating = 0.0;
                         if (numRatings == null) numRatings = 0L;
@@ -301,7 +304,7 @@ public class HomePageController {
                         long newNumRatings = numRatings + 1;
                         double avg = Math.round(((oldRating * numRatings + newRating) / newNumRatings) * 10.0) / 10.0;
 
-                        // Update aggregate rating data
+                        //update aggregate rating data in DB
                         updates.put("rating", avg);
                         updates.put("numRatings", newNumRatings);
                     } else {
@@ -311,10 +314,10 @@ public class HomePageController {
                         updates.put("name", currentLocation); // Assuming currentLocation is the bar name
                     }
 
-                    // Add the new review
+                    //add the new review to the DB
                     updates.put("reviews/" + reviewId, reviewData);
 
-                    // Apply all updates atomically
+                    //apply all updates
                     barRef.updateChildren(updates, (error, ref) -> {
                         if (error != null) {
                             System.err.println("Failed to update bar data: " + error.getMessage());
@@ -367,7 +370,7 @@ public class HomePageController {
 
     /**
      * method use to create bar object from all the bars on the map
-     * ONCE NEW BARS ARE ADDED WE DONT NEED TO USE THIS METHOD
+     * ONCE NEW BARS ARE ADDED WE DONT NEED TO USE THIS METHOD (WILL REMOVE RATINGS)
      */
     private void loadBars() {
         barList.add(new Bar( "Changing Times Pub!", 40.7481, -73.4290, 0.0));
@@ -381,6 +384,9 @@ public class HomePageController {
         barList.add(new Bar( "Sand City Brewing Company", 40.900136, -73.3535, 0.0));
     }
 
+    /**
+     * loads the existing bars to display ratings
+     */
     public static class FirebaseBarUploader {
         public static void uploadBars(List<Bar> barList) {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("bars");
