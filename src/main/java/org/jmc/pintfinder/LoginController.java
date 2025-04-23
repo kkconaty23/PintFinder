@@ -89,7 +89,7 @@ public class LoginController {
                                 try {
                                     FXMLLoader loader = new FXMLLoader(getClass().getResource("homePage.fxml"));
                                     Stage stage = (Stage) emailID.getScene().getWindow();
-                                    Scene scene = new Scene(loader.load(),1080, 732);
+                                    Scene scene = new Scene(loader.load(),1080, 775);
 
                                     // Set the scene and show the profile page
                                     stage.setScene(scene);
