@@ -19,6 +19,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.web.WebEngine;
 import javafx.stage.Stage;
 import javafx.scene.web.WebView;
@@ -101,7 +105,7 @@ public class HomePageController {
     private String currentLocation = null;
 
     @FXML
-    private ProgressIndicator ratingIndicator;
+    private Rectangle ratingIndicator;
     @FXML
     private Label averageOverlay;
     @FXML
@@ -239,7 +243,7 @@ public class HomePageController {
 
         FXMLLoader fxmlProfileLoader = new FXMLLoader(Login.class.getResource("profile.fxml"));
 
-        Scene ProfileScene = new Scene(fxmlProfileLoader.load(), 800, 600);
+        Scene ProfileScene = new Scene(fxmlProfileLoader.load(), 600, 400);
 
         Stage ProfileStage = new Stage();
         ProfileStage.setTitle("Account Page");
@@ -346,6 +350,10 @@ public class HomePageController {
         reviewList.getChildren().clear();
 
         List<String> reviews = locationReviews.getOrDefault(location, new ArrayList<>());
+        List<Double> ratings = locationRatings.getOrDefault(location, new ArrayList<>());
+        double avg = ratings.stream().mapToDouble(i -> i).average().orElse(0.0);
+        ratingCombo.setValue(avg);
+
 
         for (String review : reviews) {
             Label label = new Label(review);
@@ -358,16 +366,41 @@ public class HomePageController {
         List<Double> ratings = locationRatings.getOrDefault(locationName, new ArrayList<>());
 
         if (ratings.isEmpty()) {
-            ratingIndicator.setProgress(0);
+            ratingIndicator.setFill(Color.TRANSPARENT);
             averageOverlay.setText("N/A");
+            ratingCombo.setValue(0);
             return;
         }
 
         double avg = ratings.stream().mapToDouble(i -> i).average().orElse(0.0);
-        ratingIndicator.setProgress(avg / 10.0); // progress is between 0.0 and 1.0
+
+        double averageRatio = avg / 10.0; // Assuming 'avg' is a value between 0 and 10
+
+
+        LinearGradient gradient = new LinearGradient(
+                0, 0, 0, 1, true, null,
+                new Stop(0, Color.web(calculateColor(averageRatio))),
+                new Stop(1, Color.RED)
+        );
+        ratingIndicator.setFill(gradient);
+        ratingIndicator.setHeight(averageRatio * 100+16); // Adjust width based on average ratio
+        ratingIndicator.setTranslateY((1.0-averageRatio) * 100);
         averageOverlay.setText(String.format("%.1f", avg));
+
     }
 
+    private String calculateColor(double ratio) {
+        // Ensure ratio is within 0-1 range
+        ratio = Math.max(0, Math.min(ratio, 1));
+
+        // Calculate RGB components.  This example transitions from green to red.
+        int red = (int) (255 * (1-ratio));
+        int green = (int) (255 * (ratio));
+        int blue = 0;
+
+        // Format as a hex string.
+        return String.format("#%02X%02X%02X", red, green, blue);
+    }
     /**
      * method use to create bar object from all the bars on the map
      * ONCE NEW BARS ARE ADDED WE DONT NEED TO USE THIS METHOD (WILL REMOVE RATINGS)
