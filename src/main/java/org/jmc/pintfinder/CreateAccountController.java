@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -54,6 +55,9 @@ public class CreateAccountController {
     @FXML
     private PasswordField confirmPasswordID;
 
+
+
+
     public void initialize() {
         signUpBtn.setOpacity(.3);
         signUpBtn.setDisable(true);
@@ -62,6 +66,8 @@ public class CreateAccountController {
         confirmPasswordID.textProperty().addListener((observable, oldValue, newValue) -> checkFields());
         firstNameID.textProperty().addListener((observable, oldValue, newValue) -> checkFields());
         lastNameID.textProperty().addListener((observable, oldValue, newValue) -> checkFields());
+
+
     }
 
     private void checkFields() {
@@ -149,6 +155,8 @@ public class CreateAccountController {
 
             UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
             System.out.println("User created successfully: " + userRecord.getUid());
+            SessionManager.setCurrentUserUid(userRecord.getUid()); //Assign ID (sessionManager.java)
+
 
             // Store user data in Firebase Realtime Database
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users");
@@ -189,9 +197,11 @@ public class CreateAccountController {
             alert.showAndWait();
         }
     }
+}
 
 
-}}
+
+}
 
 
 

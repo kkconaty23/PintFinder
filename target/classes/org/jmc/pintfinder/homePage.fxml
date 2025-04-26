@@ -191,7 +191,7 @@
                   <Image url="@../../../img/emptyPintGlass.png" />
                </image>
             </ImageView>
-            <Label fx:id="averageOverlay" layoutX="31.0" layoutY="133.0" prefHeight="45.0" prefWidth="66.0" text="test">
+            <Label fx:id="averageOverlay" layoutX="31.0" layoutY="133.0" prefHeight="45.0" prefWidth="66.0" text="N/A">
                <font>
                   <Font size="24.0" />
                </font></Label>

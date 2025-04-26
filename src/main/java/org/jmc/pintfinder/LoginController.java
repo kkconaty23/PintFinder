@@ -83,6 +83,8 @@ public class LoginController {
                         // Check if the entered password matches the stored password (ensure password is hashed)
                         if (storedPassword.equals(password)) {
                             System.out.println("User signed in successfully!");
+                            SessionManager.setCurrentUserUid(userSnapshot.getKey());
+
 
                             // Use Platform.runLater to ensure UI changes are on the JavaFX Application Thread
                             Platform.runLater(() -> {
