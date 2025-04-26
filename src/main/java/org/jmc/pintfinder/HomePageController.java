@@ -129,10 +129,12 @@ public class HomePageController {
             MapBridge bridge = new MapBridge();
             bridge.setOnTitleChange(title -> Platform.runLater(() -> titleLabel.setText(title)));
             bridge.setOnDescriptionChange(desc -> Platform.runLater(() -> descriptionLabel.setText(desc)));
+            //the bar with focus also gets the bar info from the DB
             bridge.setOnLocationSwitch(locationName -> {
                 currentLocation = locationName;
                 Platform.runLater(() -> {
-                    loadReviewsForLocation(locationName);
+                    // Fetch bar data including ratings from Firebase
+                    fetchBarDataFromFirebase(locationName);
                 });
             });
 
@@ -167,6 +169,103 @@ public class HomePageController {
         } else {
             System.out.println("map.html not found in resources!");
         }
+    }
+
+    /**
+     * method to get the bar data from firebase
+     * @param barName
+     */
+    private void fetchBarDataFromFirebase(String barName) {
+        DatabaseReference barRef = FirebaseDatabase.getInstance()
+                .getReference("bars")
+                .child(barName);
+
+        barRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Clear existing local data for this location
+                    locationReviews.computeIfAbsent(barName, k -> new ArrayList<>()).clear();
+                    locationRatings.computeIfAbsent(barName, k -> new ArrayList<>()).clear();
+
+                    // overall rating
+                    Double rating = snapshot.child("rating").getValue(Double.class);
+                    Long numRatings = snapshot.child("numRatings").getValue(Long.class);
+
+                    if (rating != null && numRatings != null) {
+                        // display the overall rating
+                        Platform.runLater(() -> {
+                            // Update the UI with the rating
+                            updateRatingDisplay(rating, numRatings);
+                        });
+                    }
+
+                    // individual reviews
+                    DataSnapshot reviewsSnapshot = snapshot.child("reviews");
+                    if (reviewsSnapshot.exists()) {
+                        for (DataSnapshot reviewSnapshot : reviewsSnapshot.getChildren()) {
+                            String text = reviewSnapshot.child("text").getValue(String.class);
+                            Double reviewRating = reviewSnapshot.child("rating").getValue(Double.class);
+
+                            if (text != null && reviewRating != null) {
+                                String fullReview = String.format("%2.1f | %s", reviewRating, text);
+                                locationReviews.get(barName).add(fullReview);
+                                locationRatings.get(barName).add(reviewRating);
+                            }
+                        }
+                        // Load reviews to UI
+                        loadReviewsForLocation(barName);
+                    }
+                } else {
+                    // no data exists
+                    clearRatingDisplay();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Error fetching bar data: " + error.getMessage());
+            }
+        });
+    }
+
+    /**
+     * method that updates the pint glass based on ratings
+     * @param rating
+     * @param numRatings
+     */
+    private void updateRatingDisplay(double rating, long numRatings) {
+        // update rating indicator
+        double averageRatio = rating / 10.0;
+
+        LinearGradient gradient = new LinearGradient(
+                0, 0, 0, 1, true, null,
+                new Stop(0, Color.web(calculateColor(averageRatio))),
+                new Stop(1, Color.RED)
+        );
+
+        ratingIndicator.setFill(gradient);
+        ratingIndicator.setHeight(averageRatio * 100 + 16);
+        ratingIndicator.setTranslateY((1.0 - averageRatio) * 100);
+
+        //update text display
+        averageOverlay.setText(String.format("%.1f", rating));
+
+
+        ratingCombo.setValue(rating);
+    }
+
+    /**
+     * method to clear the rating display when no data exists
+     */
+    private void clearRatingDisplay() {
+
+        ratingIndicator.setFill(Color.TRANSPARENT);
+        averageOverlay.setText("No Ratings");
+        reviewList.getChildren().clear();
+
+        // Reset slider to default
+        ratingCombo.setValue(5.0);
     }
 
     @FXML
