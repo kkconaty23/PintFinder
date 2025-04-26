@@ -113,6 +113,9 @@ public class HomePageController {
 
     private List<Bar> barList = new ArrayList<>();
 
+    /**
+     * initialize method to load up all the important features before the fxml
+     */
     @FXML
     public void initialize() {
 //        loadBars();//METHOD USED TO LOAD FIREBASE WITH THE BARS(ONLY USE FORE RESETTING)
@@ -162,7 +165,7 @@ public class HomePageController {
             reviewInput.setOnKeyPressed(keyEvent -> {
                 if (keyEvent.getCode().toString().equals("ENTER")) {
                     handleSubmitReview();
-                    keyEvent.consume(); // Prevents adding a new line in the TextArea
+                    keyEvent.consume(); // prevents adding a new line in the TextArea
                 }
             });
 
