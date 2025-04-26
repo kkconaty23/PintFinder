@@ -29,7 +29,7 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-//        initializeFirebase(); // Initialize Firebase before loading the UI
+        initializeFirebase(); // Initialize Firebase before loading the UI
 
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("/org/jmc/pintfinder/Homepage.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1080, 775);
