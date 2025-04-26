@@ -249,6 +249,7 @@ public class HomePageController {
         ProfileStage.setTitle("Account Page");
         ProfileStage.setScene(ProfileScene);
         ProfileStage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
+        ProfileStage.setResizable(false);
         ProfileStage.show();
 
 
