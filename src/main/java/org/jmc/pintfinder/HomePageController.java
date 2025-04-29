@@ -175,7 +175,7 @@ public class HomePageController {
     }
 
     /**
-     * method to get the bar data from firebase
+     * method to get the bar data from firebase based on what bar is clicked on
      * @param barName
      */
     private void fetchBarDataFromFirebase(String barName) {
