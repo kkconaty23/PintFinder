@@ -31,7 +31,7 @@
   - Filter by average rating.  
 - **Desktop‑First UX**:  
   - Responsive JavaFX UI with modern controls.  
-  - Dark/light theme toggle.
+  
 
 ---
 
