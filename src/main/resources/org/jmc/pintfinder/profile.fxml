@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.ProfileController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.ProfileController">
    <children>
       <ListView layoutX="325.0" layoutY="200.0" prefHeight="201.0" prefWidth="275.0" style="-fx-background-color: #748351; -fx-border-color: #000000; -fx-border-width: 2px 0px 0px 2px;" />
       <AnchorPane layoutX="56.0" layoutY="24.0" prefHeight="102.0" prefWidth="97.0" style="-fx-border-radius: 100%; -fx-background-radius: 100%; -fx-border-color: #000000; -fx-background-color: #ffffffaa;">
@@ -74,9 +74,9 @@
             <Label layoutX="122.0" layoutY="47.0" prefHeight="17.0" prefWidth="110.0" text="Label" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <ImageView fx:id="profileBackBtn" fitHeight="62.0" fitWidth="94.0" layoutY="339.0" onMouseClicked="#bringToHomepage" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="profileBackBtn" fitHeight="33.0" fitWidth="48.0" layoutX="8.0" layoutY="360.0" onMouseClicked="#bringToHomepage" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../img/PintFinder_Logo.png" />
+            <Image url="@../../../img/icons8-back-50.png" />
          </image>
          <cursor>
             <Cursor fx:constant="HAND" />
