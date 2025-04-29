@@ -18,18 +18,18 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebEngine;
 import javafx.stage.Stage;
 import javafx.scene.web.WebView;
 import javafx.util.Duration;
 import netscape.javascript.JSObject;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URL;
@@ -218,14 +218,11 @@ public class HomePageController {
                             String text = reviewSnapshot.child("text").getValue(String.class);
                             Double reviewRating = reviewSnapshot.child("rating").getValue(Double.class);
                             Long timestamp = reviewSnapshot.child("timestamp").getValue(Long.class);
+                            String reviewer = reviewSnapshot.child("reviewer").getValue(String.class);
+                            if (reviewer == null) reviewer = "Anonymous";
 
                             if (text != null && reviewRating != null) {
-                                // Add to local data collection
-                                locationReviews.get(barName).add(String.format("%2.1f | %s", reviewRating, text));
-                                locationRatings.get(barName).add(reviewRating);
-
-                                // Add to sorting list
-                                allReviews.add(new ReviewItem(text, reviewRating, timestamp != null ? timestamp : 0L));
+                                allReviews.add(new ReviewItem(text, reviewRating, timestamp != null ? timestamp : 0L, reviewer));
                             }
                         }
 
@@ -264,26 +261,20 @@ public class HomePageController {
         });
     }
 
-    /**
-     * review class stores the reviews as objects
-     */
     private static class ReviewItem {
         String text;
         double rating;
         long timestamp;
+        String reviewer;
 
-        /**
-         * review constructor
-         * @param text
-         * @param rating
-         * @param timestamp
-         */
-        ReviewItem(String text, double rating, long timestamp) {
+        ReviewItem(String text, double rating, long timestamp, String reviewer) {
             this.text = text;
             this.rating = rating;
             this.timestamp = timestamp;
+            this.reviewer = reviewer;
         }
     }
+
 
     /**
      * Display reviews in the side panel
@@ -304,12 +295,11 @@ public class HomePageController {
         }
 
         // Add each review
-        for (ReviewItem review : reviews) {
-            VBox reviewCard = createReviewCard(review);
+        for (int i = 0; i < reviews.size(); i++) {
+            VBox reviewCard = createReviewCard(reviews.get(i), i + 1);
             reviewList.getChildren().add(reviewCard);
 
-            // Add separator between reviews
-            if (reviews.indexOf(review) < reviews.size() - 1) {
+            if (i < reviews.size() - 1) {
                 Separator separator = new Separator();
                 separator.setPadding(new Insets(8, 0, 8, 0));
                 reviewList.getChildren().add(separator);
@@ -322,39 +312,32 @@ public class HomePageController {
      * @param review The review item to display
      * @return A styled VBox containing the review
      */
-    private VBox createReviewCard(ReviewItem review) {
+    private VBox createReviewCard(ReviewItem review, int index) {
         VBox card = new VBox(5);
         card.setPadding(new Insets(8));
+        card.setFillWidth(true);
+        card.setMaxWidth(256); // Optional, matches ScrollPane width
 
-        // Rating display
-        HBox ratingDisplay = new HBox(5);
+        // Create text object with full review
+        String fullReviewText = String.format("%.1f", review.rating) + " | " + review.text;
+        Text textNode = new Text(fullReviewText);
+        textNode.setStyle("-fx-font-size: 14px; -fx-fill: #8B4513;");
 
-        // Create rating label
-        Label ratingLabel = new Label(String.format("%.1f", review.rating));
-        ratingLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #e67e22;");
+        TextFlow textFlow = new TextFlow(textNode);
+        textFlow.setPrefWidth(240); // Slightly under ScrollPane to allow padding
+        textFlow.setLineSpacing(2);
+        textFlow.setPadding(new Insets(4));
+        textFlow.setStyle("-fx-background-color: transparent;");
 
+        // Tooltip on hover
+        String dateStr = review.timestamp > 0
+                ? new SimpleDateFormat("MMM d, yyyy").format(new Date(review.timestamp))
+                : "Unknown Date";
+        Tooltip tooltip = new Tooltip("Reviewed by: " + review.reviewer + "\nDate: " + dateStr);
+        tooltip.setShowDelay(Duration.millis(100));
+        Tooltip.install(textFlow, tooltip);
 
-
-
-
-        ratingDisplay.getChildren().addAll(ratingLabel);
-
-        // Review text
-        Label textLabel = new Label(review.text);
-        textLabel.setWrapText(true);
-        textLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #8B4513");
-
-        // Date
-        if (review.timestamp > 0) {
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy");
-            String dateStr = sdf.format(new Date(review.timestamp));
-            Label dateLabel = new Label(dateStr);
-            dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: BLACK;");
-            card.getChildren().addAll(ratingDisplay, textLabel, dateLabel);
-        } else {
-            card.getChildren().addAll(ratingDisplay, textLabel);
-        }
-
+        card.getChildren().add(textFlow);
         return card;
     }
 
@@ -508,91 +491,87 @@ public class HomePageController {
     }
 
 
-    /**
-     * updated review button click to submit the review to fire base
-     */
     @FXML
     private void handleSubmitReview() {
         String text = reviewInput.getText().trim();
         double newRating = Math.round(ratingCombo.getValue() * 10.0) / 10.0;
 
         if (!text.isEmpty() && currentLocation != null) {
-            String fullReview = String.format("%2.1f | %s", newRating, text);
+            String uid = SessionManager.getCurrentUserUid();
 
-            // Local map updates
-            locationReviews.computeIfAbsent(currentLocation, k -> new ArrayList<>()).add(fullReview);
-            locationRatings.computeIfAbsent(currentLocation, k -> new ArrayList<>()).add(newRating);
-
-            reviewList.getChildren().add(new Label(fullReview));
-            updateAverageRating(currentLocation);
-
-            // Firebase DB reference to the bar
-            DatabaseReference barRef = FirebaseDatabase.getInstance()
-                    .getReference("bars")//uses the bars table
-                    .child(currentLocation);
-
-            // Generate a unique ID for this review
-            DatabaseReference reviewsRef = barRef.child("reviews").push();
-            String reviewId = reviewsRef.getKey();
-
-            //create review object as a hashmap
-            Map<String, Object> reviewData = new HashMap<>();
-            reviewData.put("text", text);
-            reviewData.put("rating", newRating);
-            reviewData.put("timestamp", ServerValue.TIMESTAMP);
-
-            // Read current rating and numRatings, then update
-            barRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(uid);
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    // Create a transaction to ensure atomic updates
-                    Map<String, Object> updates = new HashMap<>();
+                public void onDataChange(DataSnapshot userSnapshot) {
+                    String reviewerName = userSnapshot.child("firstName").getValue(String.class);
+                    if (reviewerName == null) reviewerName = "Anonymous";
 
-                    if (snapshot.exists()) {
-                        Double oldRating = snapshot.child("rating").getValue(Double.class);//QUERYING THE DB
-                        Long numRatings = snapshot.child("numRatings").getValue(Long.class);//QUERYING THE DB
+                    DatabaseReference barRef = FirebaseDatabase.getInstance().getReference("bars").child(currentLocation);
+                    DatabaseReference reviewsRef = barRef.child("reviews").push();
+                    String reviewId = reviewsRef.getKey();
 
-                        if (oldRating == null) oldRating = 0.0;
-                        if (numRatings == null) numRatings = 0L;
+                    Map<String, Object> reviewData = new HashMap<>();
+                    reviewData.put("text", text);
+                    reviewData.put("rating", newRating);
+                    reviewData.put("timestamp", ServerValue.TIMESTAMP);
+                    reviewData.put("reviewer", reviewerName);
 
-                        long newNumRatings = numRatings + 1;
-                        double avg = Math.round(((oldRating * numRatings + newRating) / newNumRatings) * 10.0) / 10.0;
+                    barRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            Map<String, Object> updates = new HashMap<>();
 
-                        //update aggregate rating data in DB
-                        updates.put("rating", avg);
-                        updates.put("numRatings", newNumRatings);
-                    } else {
-                        // Bar doesn't exist yet, initialize it
-                        updates.put("rating", newRating);
-                        updates.put("numRatings", 1L);
-                        updates.put("name", currentLocation); // Assuming currentLocation is the bar name
-                    }
+                            if (snapshot.exists()) {
+                                Double oldRating = snapshot.child("rating").getValue(Double.class);
+                                Long numRatings = snapshot.child("numRatings").getValue(Long.class);
 
-                    //add the new review to the DB
-                    updates.put("reviews/" + reviewId, reviewData);
+                                if (oldRating == null) oldRating = 0.0;
+                                if (numRatings == null) numRatings = 0L;
 
-                    //apply all updates
-                    barRef.updateChildren(updates, (error, ref) -> {
-                        if (error != null) {
-                            System.err.println("Failed to update bar data: " + error.getMessage());
-                        } else {
-                            System.out.println("Bar rating and review successfully updated");
+                                long newNumRatings = numRatings + 1;
+                                double avg = Math.round(((oldRating * numRatings + newRating) / newNumRatings) * 10.0) / 10.0;
+
+                                updates.put("rating", avg);
+                                updates.put("numRatings", newNumRatings);
+                            } else {
+                                updates.put("rating", newRating);
+                                updates.put("numRatings", 1L);
+                                updates.put("name", currentLocation);
+                            }
+
+                            updates.put("reviews/" + reviewId, reviewData);
+
+                            barRef.updateChildren(updates, (error, ref) -> {
+                                if (error != null) {
+                                    System.err.println("Failed to update bar data: " + error.getMessage());
+                                } else {
+                                    System.out.println("Bar rating and review successfully updated");
+
+                                    Platform.runLater(() -> {
+                                        reviewInput.clear();
+                                        ratingCombo.setValue(10);
+
+                                        // 🔄 Refresh the full list of reviews from DB
+                                        fetchBarDataFromFirebase(currentLocation);
+                                    });
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            System.err.println("Failed to read or update rating: " + error.getMessage());
                         }
                     });
                 }
 
                 @Override
                 public void onCancelled(DatabaseError error) {
-                    System.err.println("Failed to read or update rating: " + error.getMessage());
+                    System.err.println("Failed to fetch user info: " + error.getMessage());
                 }
             });
-
-            reviewInput.clear();
-            ratingCombo.setValue(10);
         }
     }
-
-
 
     private void updateAverageRating(String locationName) {
         List<Double> ratings = locationRatings.getOrDefault(locationName, new ArrayList<>());

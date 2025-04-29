@@ -158,7 +158,7 @@
       <Label fx:id="titleLabel" layoutX="302.0" layoutY="178.0" prefHeight="57.0" prefWidth="586.0" textFill="WHITE" />
       <VBox id="reveiwsContainer" fx:id="reviewSection" alignment="BASELINE_CENTER" layoutX="11.0" layoutY="266.0" prefHeight="491.0" prefWidth="260.0">
          <children>
-            <ScrollPane id="scrollPane" hbarPolicy="NEVER" prefHeight="344.0" prefWidth="256.0">
+            <ScrollPane id="scrollPane" fitToWidth="true" fitToHeight="false" hbarPolicy="NEVER" prefHeight="344.0" prefWidth="256.0">
                <content>
                   <VBox id="reveiws" fx:id="reviewList" prefHeight="94.0" prefWidth="259.0">
                      <children>
