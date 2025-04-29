@@ -1,9 +1,0 @@
-<changelist name="Uncommitted_changes_before_Merge_at_4_27_2025_9_48_AM_[Changes]" date="1745761684695" recycled="true" deleted="true">
-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_4_27_2025_9_48_AM_[Changes]/shelved.patch" />
-  <option name="DESCRIPTION" value="Uncommitted changes before Merge at 4/27/2025 9:48 AM [Changes]" />
-  <binary>
-    <option name="BEFORE_PATH" value="target/classes/org/jmc/pintfinder/HomePageController.class" />
-    <option name="AFTER_PATH" value="target/classes/org/jmc/pintfinder/HomePageController.class" />
-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_4_27_2025_9_48_AM_[Changes]/HomePageController.class" />
-  </binary>
-</changelist>

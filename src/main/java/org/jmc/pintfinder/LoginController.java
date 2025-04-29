@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,10 +16,12 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
-public class LoginController {
+public class LoginController implements Initializable {
     @FXML
     public Button createAcctBtn;
 
@@ -55,6 +58,7 @@ public class LoginController {
 
     /**
      * query database and matches emails and passwords
+     *
      * @param actionEvent
      */
     public void signInBtnClick(ActionEvent actionEvent) {
@@ -91,13 +95,14 @@ public class LoginController {
                                 try {
                                     FXMLLoader loader = new FXMLLoader(getClass().getResource("homePage.fxml"));
                                     Stage stage = (Stage) emailID.getScene().getWindow();
-                                    Scene scene = new Scene(loader.load(),1080, 775);
+                                    Scene scene = new Scene(loader.load(), 1080, 775);
 
                                     // Set the scene and show the profile page
                                     stage.setScene(scene);
                                     stage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
                                     stage.setResizable(false);
                                     stage.show();
+                                    stage.centerOnScreen();
                                     System.out.println("Loading profile");
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -108,17 +113,18 @@ public class LoginController {
                         }
                         Platform.runLater(() -> {
 
-                        if(!storedPassword.equals(password) && !password.isEmpty()) {
+                            if (!storedPassword.equals(password) && !password.isEmpty()) {
                                 Alert alert = new Alert(Alert.AlertType.WARNING);
 
                                 alert.setTitle("Warning");
                                 alert.setHeaderText("Password is incorrect.");
                                 alert.showAndWait();
-                            }});
+                            }
+                        });
 
 
-                        }
                     }
+                }
 
             }
 
@@ -132,6 +138,7 @@ public class LoginController {
 
     /**
      * loads the create account page
+     *
      * @param event
      * @throws IOException
      */
@@ -149,8 +156,14 @@ public class LoginController {
         currentStage.close();
     }
 
-
-
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        passwordID.setOnKeyPressed(event -> {
+            if (event.getCode().toString().equals("ENTER")) {
+                signInBtnClick(new ActionEvent());
+            }
+        });
+    }
 }
 
 
