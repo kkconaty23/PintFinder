@@ -341,14 +341,14 @@ public class HomePageController {
         // Review text
         Label textLabel = new Label(review.text);
         textLabel.setWrapText(true);
-        textLabel.setStyle("-fx-font-size: 14px;");
+        textLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #8B4513");
 
         // Date
         if (review.timestamp > 0) {
             SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy");
             String dateStr = sdf.format(new Date(review.timestamp));
             Label dateLabel = new Label(dateStr);
-            dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #000000;");
+            dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: BLACK;");
             card.getChildren().addAll(ratingDisplay, textLabel, dateLabel);
         } else {
             card.getChildren().addAll(ratingDisplay, textLabel);

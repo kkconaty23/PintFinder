@@ -37,7 +37,7 @@ public class Login extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("splashPage.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 397, 400);
         stage.setResizable(false);
-        stage.setTitle("PintFinder's Login Page!");
+        stage.setTitle("PintFinder's Login Page");
         stage.setScene(scene);
         stage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));
         stage.show();
