@@ -1,11 +1,35 @@
-# Default ignored files
+# =========================
+# IntelliJ Project Files
+# =========================
+.idea/
+*.iml
 /shelf/
 /.idea/workspace.xml
-# Editor-based HTTP Client requests
 /httpRequests/
-# Datasource local storage ignored files
-/dataSources/
-/dataSources.local.xml
+dataSources/
+dataSources.local.xml
 
-# Ignore key.json file
+# =========================
+# Build Output
+# =========================
+out/
+target/
+build/
+*.class
+
+# =========================
+# OS Generated Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Firebase Keys and Secrets
+# =========================
 src/main/resources/key.json
+
+# =========================
+# Version Control Temporary Files
+# =========================
+*.patch
+*.diff
