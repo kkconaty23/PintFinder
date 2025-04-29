@@ -9,8 +9,9 @@
 1. [Features](#features)  
 2. [Architecture & Tech Stack](#architecture--tech-stack)  
 3. [Prerequisites](#prerequisites)  
-4. [Setup & Installation](#setup--installation)  
-5. [Contributing](#contributors)    
+4. [Setup & Installation](#setup--installation)
+5. [Intended Users].(#intended--users).
+6. [Contributing](#contributors)    
 
 
 ---
@@ -28,10 +29,13 @@
   - Real‑time updates and offline support.
 - **Search & Filter**:  
   - Search bars by name or location.  
-  - Filter by average rating.  
+  - Filter by average rating.
+  - **Personlized Profile Page**
+  - Set your profile picture.
+  - Look up your past reviews and favorite bars.
 - **Desktop‑First UX**:  
   - Responsive JavaFX UI with modern controls.  
-  - Dark/light theme toggle.
+  
 
 ---
 
@@ -44,6 +48,7 @@
 | **Backend / Database**      | Firebase Firestore & Firebase Auth        |
 | **Build Tool**              | Maven                                     |
 | **Language**                | Java                                      |
+| **IDE**                     | Intelij Ultimate Edition                  |
 
 ---
 
@@ -52,6 +57,13 @@
 - Java Development Kit (JDK) 11 or above  
 - Maven 3.6+  
 - Firebase account with a Firestore database set up  
+
+---
+## Intended Users
+
+-People above the age of 21: Those above the legal drinking age in America
+-Guinness fans: Drinkers who are people who order Guinness when going out to a bar
+-Social Media Users: People who use social media both post online and view other people's content
 
 ---
 
@@ -68,7 +80,7 @@
 - [Kevin Conaty](https://github.com/kkconaty23) 
 - [Justin Derenthal](https://github.com/JderenthalCS) 
 - [Josh Samson](https://github.com/jsams909) 
-- [Josh Samson](https://github.com/ryguy0601)
+- [Ryan Cuccurullo](https://github.com/ryguy0601)
 
 
 

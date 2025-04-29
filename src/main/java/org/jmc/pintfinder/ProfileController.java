@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,7 +19,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ProfileController implements Initializable {
-
+    @FXML
+    private Label logOutBtn;
     @FXML private ImageView profileBackBtn;
     @FXML private Label userFirstNameText;
 
@@ -70,6 +72,26 @@ public class ProfileController implements Initializable {
 
         Stage currentStage = (Stage) profileBackBtn.getScene().getWindow();
         currentStage.close();
+
+    }
+    @FXML
+    void returnToLogin(MouseEvent event) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText("You are successfully logged out");
+        alert.showAndWait();
+
+        Stage currentStage = (Stage) logOutBtn.getScene().getWindow();
+        currentStage.close();
+        FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("Login.fxml"));
+
+        Scene loginScene = new Scene(fxmlLoader.load(), 397, 400);
+
+        Stage loginStage = new Stage();
+
+        loginStage.setScene(loginScene);
+        loginStage.show();
 
     }
 
