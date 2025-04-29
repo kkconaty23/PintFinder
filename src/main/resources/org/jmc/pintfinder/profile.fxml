@@ -86,12 +86,12 @@
          </effect></ImageView>
       <Pane layoutX="501.0" layoutY="-2.0">
          <children>
-            <ImageView fitHeight="52.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="52.0" fitWidth="108.0" onMouseClicked="#returnToLogin" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/blankWoodenSign03.png" />
                </image>
             </ImageView>
-            <Label layoutX="24.0" layoutY="17.0" prefHeight="19.0" prefWidth="48.0" text="Log Out">
+            <Label fx:id="logOutBtn" layoutX="24.0" layoutY="17.0" onMouseClicked="#returnToLogin" prefHeight="19.0" prefWidth="48.0" text="Log Out">
                <font>
                   <Font size="13.0" />
                </font>
