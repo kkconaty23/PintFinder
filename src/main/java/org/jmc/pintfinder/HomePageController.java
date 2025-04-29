@@ -213,6 +213,7 @@ public class HomePageController {
                         //create a list to store all reviews for sorting
                         List<ReviewItem> allReviews = new ArrayList<>();
 
+                        //for each review available get the rating and text review
                         for (DataSnapshot reviewSnapshot : reviewsSnapshot.getChildren()) {
                             String text = reviewSnapshot.child("text").getValue(String.class);
                             Double reviewRating = reviewSnapshot.child("rating").getValue(Double.class);

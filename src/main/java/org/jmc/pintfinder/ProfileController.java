@@ -1,5 +1,8 @@
 package org.jmc.pintfinder;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 import com.google.firebase.database.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -16,6 +19,8 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class ProfileController implements Initializable {
@@ -24,9 +29,35 @@ public class ProfileController implements Initializable {
     @FXML private ImageView profileBackBtn;
     @FXML private Label userFirstNameText;
 
+    @FXML
+    private Label dateLabel;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadUserFirstName();
+        try {
+            loadDate();
+        } catch (FirebaseAuthException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * gets the data from fire base when the user was created and displays it when PP is init
+     * @throws FirebaseAuthException
+     */
+    private void loadDate() throws FirebaseAuthException {
+        String uid = SessionManager.getCurrentUserUid();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        UserRecord user = auth.getUser(uid);  // Or auth.getUserByEmail(email)
+
+        long creationTimestamp = user.getUserMetadata().getCreationTimestamp();
+        Date creationDate = new Date(creationTimestamp);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy");
+        String formattedDate = dateFormat.format(creationDate);
+
+        dateLabel.setText(formattedDate);
     }
 
     private void loadUserFirstName() {

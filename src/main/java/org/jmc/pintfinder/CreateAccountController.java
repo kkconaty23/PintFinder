@@ -129,6 +129,7 @@ public class CreateAccountController {
 
 
 
+
         if(! checkBox.isSelected()){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             //warningLabel.setText("Must Answer");
@@ -167,6 +168,7 @@ public class CreateAccountController {
             userData.put("password", password);
             userData.put("firstName", fname);
             userData.put("lastName", lname);
+
 
             databaseReference.child(userRecord.getUid()).setValueAsync(userData);// storing user data into the database
 

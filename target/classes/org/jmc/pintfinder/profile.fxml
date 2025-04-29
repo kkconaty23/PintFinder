@@ -71,7 +71,7 @@
             <Label layoutX="10.0" layoutY="47.0" text="Member Since:" textFill="WHITE" GridPane.rowIndex="2" />
             <Label prefHeight="17.0" prefWidth="110.0" text="Label" textFill="WHITE" GridPane.columnIndex="1" />
             <Label layoutX="122.0" layoutY="17.0" prefHeight="17.0" prefWidth="110.0" text="Label" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label layoutX="122.0" layoutY="47.0" prefHeight="17.0" prefWidth="110.0" text="Label" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="dateLabel" layoutX="122.0" layoutY="47.0" prefHeight="17.0" prefWidth="110.0" text="Label" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <ImageView fx:id="profileBackBtn" fitHeight="33.0" fitWidth="48.0" layoutX="8.0" layoutY="360.0" onMouseClicked="#bringToHomepage" pickOnBounds="true" preserveRatio="true">
