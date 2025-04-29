@@ -9,6 +9,7 @@ import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,6 +18,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -31,10 +33,8 @@ import netscape.javascript.JSObject;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -191,46 +191,192 @@ public class HomePageController {
                     locationReviews.computeIfAbsent(barName, k -> new ArrayList<>()).clear();
                     locationRatings.computeIfAbsent(barName, k -> new ArrayList<>()).clear();
 
-                    // overall rating
+                    // Get overall rating
                     Double rating = snapshot.child("rating").getValue(Double.class);
                     Long numRatings = snapshot.child("numRatings").getValue(Long.class);
 
                     if (rating != null && numRatings != null) {
-                        // display the overall rating
+                        // Display the overall rating
                         Platform.runLater(() -> {
-                            // Update the UI with the rating
                             updateRatingDisplay(rating, numRatings);
                         });
                     }
 
-                    // individual reviews
+                    // Clear existing reviews display
+                    Platform.runLater(() -> {
+                        reviewList.getChildren().clear();
+                    });
+
+                    // text reviews
                     DataSnapshot reviewsSnapshot = snapshot.child("reviews");
                     if (reviewsSnapshot.exists()) {
+                        //create a list to store all reviews for sorting
+                        List<ReviewItem> allReviews = new ArrayList<>();
+
                         for (DataSnapshot reviewSnapshot : reviewsSnapshot.getChildren()) {
                             String text = reviewSnapshot.child("text").getValue(String.class);
                             Double reviewRating = reviewSnapshot.child("rating").getValue(Double.class);
+                            Long timestamp = reviewSnapshot.child("timestamp").getValue(Long.class);
 
                             if (text != null && reviewRating != null) {
-                                String fullReview = String.format("%2.1f | %s", reviewRating, text);
-                                locationReviews.get(barName).add(fullReview);
+                                // Add to local data collection
+                                locationReviews.get(barName).add(String.format("%2.1f | %s", reviewRating, text));
                                 locationRatings.get(barName).add(reviewRating);
+
+                                // Add to sorting list
+                                allReviews.add(new ReviewItem(text, reviewRating, timestamp != null ? timestamp : 0L));
                             }
                         }
-                        // Load reviews to UI
-                        loadReviewsForLocation(barName);
+
+                        // Sort reviews by newest first
+                        allReviews.sort((r1, r2) -> Long.compare(r2.timestamp, r1.timestamp));
+
+                        // Display reviews in UI
+                        Platform.runLater(() -> {
+                            displayReviews(allReviews);
+                        });
+                    } else {
+                        // No reviews found
+                        Platform.runLater(() -> {
+                            displayNoReviews();
+                        });
                     }
                 } else {
-                    // no data exists
-                    clearRatingDisplay();
+                    // No data exists for this bar
+                    Platform.runLater(() -> {
+                        clearRatingDisplay();
+                        displayNoReviews();
+                    });
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
                 System.err.println("Error fetching bar data: " + error.getMessage());
+                Platform.runLater(() -> {
+                    Label errorLabel = new Label("Error loading reviews. Please try again.");
+                    errorLabel.setStyle("-fx-text-fill: #e74c3c;");
+                    reviewList.getChildren().clear();
+                    reviewList.getChildren().add(errorLabel);
+                });
             }
         });
     }
+
+    /**
+     * review class stores the reviews as objects
+     */
+    private static class ReviewItem {
+        String text;
+        double rating;
+        long timestamp;
+
+        /**
+         * review constructor
+         * @param text
+         * @param rating
+         * @param timestamp
+         */
+        ReviewItem(String text, double rating, long timestamp) {
+            this.text = text;
+            this.rating = rating;
+            this.timestamp = timestamp;
+        }
+    }
+
+    /**
+     * Display reviews in the side panel
+     * @param reviews List of review items to display
+     */
+    private void displayReviews(List<ReviewItem> reviews) {
+        reviewList.getChildren().clear();
+
+        // Add header
+        Label headerLabel = new Label(String.format("%d Review%s", reviews.size(), reviews.size() == 1 ? "" : "s"));
+        headerLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+        headerLabel.setPadding(new Insets(0, 0, 10, 0));
+        reviewList.getChildren().add(headerLabel);
+
+        if (reviews.isEmpty()) {
+            displayNoReviews();
+            return;
+        }
+
+        // Add each review
+        for (ReviewItem review : reviews) {
+            VBox reviewCard = createReviewCard(review);
+            reviewList.getChildren().add(reviewCard);
+
+            // Add separator between reviews
+            if (reviews.indexOf(review) < reviews.size() - 1) {
+                Separator separator = new Separator();
+                separator.setPadding(new Insets(8, 0, 8, 0));
+                reviewList.getChildren().add(separator);
+            }
+        }
+    }
+
+    /**
+     * Create a styled review card when someone leaves a review
+     * @param review The review item to display
+     * @return A styled VBox containing the review
+     */
+    private VBox createReviewCard(ReviewItem review) {
+        VBox card = new VBox(5);
+        card.setPadding(new Insets(8));
+
+        // Rating display
+        HBox ratingDisplay = new HBox(5);
+
+        // Create rating label
+        Label ratingLabel = new Label(String.format("%.1f", review.rating));
+        ratingLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #e67e22;");
+
+
+
+
+
+        ratingDisplay.getChildren().addAll(ratingLabel);
+
+        // Review text
+        Label textLabel = new Label(review.text);
+        textLabel.setWrapText(true);
+        textLabel.setStyle("-fx-font-size: 14px;");
+
+        // Date
+        if (review.timestamp > 0) {
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy");
+            String dateStr = sdf.format(new Date(review.timestamp));
+            Label dateLabel = new Label(dateStr);
+            dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #000000;");
+            card.getChildren().addAll(ratingDisplay, textLabel, dateLabel);
+        } else {
+            card.getChildren().addAll(ratingDisplay, textLabel);
+        }
+
+        return card;
+    }
+
+    /**
+     * Display a message when no reviews are available
+     */
+    private void displayNoReviews() {
+        reviewList.getChildren().clear();
+
+        VBox noReviewsBox = new VBox(10);
+        noReviewsBox.setAlignment(Pos.CENTER);
+        noReviewsBox.setPadding(new Insets(20));
+
+        Label noReviewsLabel = new Label("No Reviews Yet");
+        noReviewsLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+
+        Label promptLabel = new Label("Be the first to share your experience!");
+        promptLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #7f8c8d;");
+
+        noReviewsBox.getChildren().addAll(noReviewsLabel, promptLabel);
+        reviewList.getChildren().add(noReviewsBox);
+    }
+
 
     /**
      * method that updates the pint glass based on ratings
@@ -446,24 +592,6 @@ public class HomePageController {
     }
 
 
-    private void loadReviewsForLocation(String location) {
-        if (reviewList != null) {
-            reviewList.getChildren().clear();
-        }
-        reviewList.getChildren().clear();
-
-        List<String> reviews = locationReviews.getOrDefault(location, new ArrayList<>());
-        List<Double> ratings = locationRatings.getOrDefault(location, new ArrayList<>());
-        double avg = ratings.stream().mapToDouble(i -> i).average().orElse(0.0);
-        ratingCombo.setValue(avg);
-
-
-        for (String review : reviews) {
-            Label label = new Label(review);
-            label.setWrapText(true);
-            reviewList.getChildren().add(label);
-        }
-    }
 
     private void updateAverageRating(String locationName) {
         List<Double> ratings = locationRatings.getOrDefault(locationName, new ArrayList<>());
@@ -509,15 +637,14 @@ public class HomePageController {
      * ONCE NEW BARS ARE ADDED WE DONT NEED TO USE THIS METHOD (WILL REMOVE RATINGS)
      */
     private void loadBars() {
-        barList.add(new Bar( "Changing Times Pub!", 40.7481, -73.4290, 0.0));
-        barList.add(new Bar( "Barrage Brewing Company", 40.6720, -73.5027, 0.0));
-        barList.add(new Bar( "Small Craft Brewing Company", 40.6719, -73.4216, 0.0));
-        barList.add(new Bar( "Icicle Brewing Company", 47.6001, -120.6595, 0.0));
-        barList.add(new Bar( "Great South Bay Brewery", 40.7608, -73.2658, 0.0));
-        barList.add(new Bar( "Oyster Bay Brewing Company", 40.8731, -73.5339, 0.0));
-        barList.add(new Bar( "Destination Unknown Beer Company", 40.73393, -73.2322, 0.0));
-        barList.add(new Bar( "The Blind Bat Brewery", 40.889694, -73.3874, 0.0));
-        barList.add(new Bar( "Sand City Brewing Company", 40.900136, -73.3535, 0.0));
+        barList.add(new Bar("Oakdale Brew House", 40.7386, -73.1192, 0));
+        barList.add(new Bar("Artemis", 40.8097, -73.1063, 0));
+        barList.add(new Bar("Toomey's Tavern", 40.6624, -73.4240, 0));
+        barList.add(new Bar("Johnny McGorey's Pub", 40.6782, -73.4548, 0));
+        barList.add(new Bar("Portly Villager", 40.7328, -73.0886, 0));
+        barList.add(new Bar("Destination Unknown Beer Company", 40.73393, -73.2322, 0));
+        barList.add(new Bar("Momos Too Sports Bar & Grill", 40.7472, -73.0578, 0));
+        barList.add(new Bar("Sand City Brewing Company", 40.900136, -73.3535, 0));
     }
 
     /**
