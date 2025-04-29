@@ -91,6 +91,7 @@ body{
     -fx-padding: 10px;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
+    -fx-wrap-text: true;
 }
 
 #reveiws .label:hover{
