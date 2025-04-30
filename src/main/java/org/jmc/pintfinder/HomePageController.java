@@ -296,14 +296,8 @@ public class HomePageController {
 
         // Add each review
         for (int i = 0; i < reviews.size(); i++) {
-            VBox reviewCard = createReviewCard(reviews.get(i), i + 1);
+            TextFlow reviewCard = createReviewCard(reviews.get(i), i + 1);
             reviewList.getChildren().add(reviewCard);
-
-            if (i < reviews.size() - 1) {
-                Separator separator = new Separator();
-                separator.setPadding(new Insets(8, 0, 8, 0));
-                reviewList.getChildren().add(separator);
-            }
         }
     }
 
@@ -312,22 +306,17 @@ public class HomePageController {
      * @param review The review item to display
      * @return A styled VBox containing the review
      */
-    private VBox createReviewCard(ReviewItem review, int index) {
-        VBox card = new VBox(5);
-        card.setPadding(new Insets(8));
-        card.setFillWidth(true);
-        card.setMaxWidth(256); // Optional, matches ScrollPane width
+    private TextFlow createReviewCard(ReviewItem review, int index) {
 
         // Create text object with full review
         String fullReviewText = String.format("%.1f", review.rating) + " | " + review.text;
         Text textNode = new Text(fullReviewText);
-        textNode.setStyle("-fx-font-size: 14px; -fx-fill: #8B4513;");
+        textNode.setStyle("-fx-font-size: 14px; -fx-fill: #cccccc;");
 
         TextFlow textFlow = new TextFlow(textNode);
         textFlow.setPrefWidth(240); // Slightly under ScrollPane to allow padding
         textFlow.setLineSpacing(2);
-        textFlow.setPadding(new Insets(4));
-        textFlow.setStyle("-fx-background-color: transparent;");
+        textFlow.getStyleClass().add("reviewLooks");
 
         // Tooltip on hover
         String dateStr = review.timestamp > 0
@@ -336,9 +325,7 @@ public class HomePageController {
         Tooltip tooltip = new Tooltip("Reviewed by: " + review.reviewer + "\nDate: " + dateStr);
         tooltip.setShowDelay(Duration.millis(100));
         Tooltip.install(textFlow, tooltip);
-
-        card.getChildren().add(textFlow);
-        return card;
+        return textFlow;
     }
 
     /**
@@ -373,8 +360,9 @@ public class HomePageController {
 
         LinearGradient gradient = new LinearGradient(
                 0, 0, 0, 1, true, null,
-                new Stop(0, Color.web(calculateColor(averageRatio))),
-                new Stop(1, Color.RED)
+                new Stop(0, Color.web("#F1E5C0")), // creamy top
+                new Stop(0.3, Color.web("#1C0A00")) // dark stout body (dominant)
+
         );
 
         ratingIndicator.setFill(gradient);
@@ -599,17 +587,18 @@ public class HomePageController {
         averageOverlay.setText(String.format("%.1f", avg));
 
     }
-
     private String calculateColor(double ratio) {
-        // Ensure ratio is within 0-1 range
+        // Clamp ratio to 0-1
         ratio = Math.max(0, Math.min(ratio, 1));
 
-        // Calculate RGB components.  This example transitions from green to red.
-        int red = (int) (255 * (1-ratio));
-        int green = (int) (255 * (ratio));
-        int blue = 0;
+        // Guinness colors: dark ruby (low), creamy tan (high)
+        int startR = 28, startG = 10, startB = 0;      // #1C0A00
+        int endR = 241, endG = 229, endB = 192;        // #F1E5C0
 
-        // Format as a hex string.
+        int red = (int) (startR + ratio * (endR - startR));
+        int green = (int) (startG + ratio * (endG - startG));
+        int blue = (int) (startB + ratio * (endB - startB));
+
         return String.format("#%02X%02X%02X", red, green, blue);
     }
     /**
