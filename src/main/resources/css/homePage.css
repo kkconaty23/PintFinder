@@ -82,11 +82,13 @@ body{
     -fx-effect: dropshadow(gaussian, rgb(189, 158, 36), 10, 0.75, 0, 0);
 }
 
-#reveiws .label{
+/*#reveiws .label{*/
+#reveiws .reviewLooks, #reveiws .label{
     -fx-background-color: transparent;
     -fx-border-color: #cccccc;
     -fx-border-width: 0px 0px 2px 0px;
     -fx-text-fill: #cccccc;
+    -fx-text-color: #cccccc;
     -fx-min-width: 256px;
     -fx-padding: 10px;
     -fx-font-weight: bold;
@@ -94,7 +96,8 @@ body{
     -fx-wrap-text: true;
 }
 
-#reveiws .label:hover{
+/*#reveiws .label:hover{*/
+#reveiws .reviewLooks:hover, #reveiws .label:hover{
     -fx-effect: dropshadow(gaussian, rgb(137, 156, 102), 15, 0.75, 0, 0);
     -fx-border-color: #bd9e24;
 }

@@ -296,14 +296,14 @@ public class HomePageController {
 
         // Add each review
         for (int i = 0; i < reviews.size(); i++) {
-            VBox reviewCard = createReviewCard(reviews.get(i), i + 1);
+            TextFlow reviewCard = createReviewCard(reviews.get(i), i + 1);
             reviewList.getChildren().add(reviewCard);
 
-            if (i < reviews.size() - 1) {
-                Separator separator = new Separator();
-                separator.setPadding(new Insets(8, 0, 8, 0));
-                reviewList.getChildren().add(separator);
-            }
+//            if (i < reviews.size() - 1) {
+//                Separator separator = new Separator();
+//                separator.setPadding(new Insets(8, 0, 8, 0));
+//                reviewList.getChildren().add(separator);
+//            }
         }
     }
 
@@ -312,7 +312,7 @@ public class HomePageController {
      * @param review The review item to display
      * @return A styled VBox containing the review
      */
-    private VBox createReviewCard(ReviewItem review, int index) {
+    private TextFlow createReviewCard(ReviewItem review, int index) {
         VBox card = new VBox(5);
         card.setPadding(new Insets(8));
         card.setFillWidth(true);
@@ -321,13 +321,14 @@ public class HomePageController {
         // Create text object with full review
         String fullReviewText = String.format("%.1f", review.rating) + " | " + review.text;
         Text textNode = new Text(fullReviewText);
-        textNode.setStyle("-fx-font-size: 14px; -fx-fill: #8B4513;");
+        textNode.setStyle("-fx-font-size: 14px; -fx-fill: #cccccc;");
 
         TextFlow textFlow = new TextFlow(textNode);
         textFlow.setPrefWidth(240); // Slightly under ScrollPane to allow padding
         textFlow.setLineSpacing(2);
-        textFlow.setPadding(new Insets(4));
-        textFlow.setStyle("-fx-background-color: transparent;");
+//        textFlow.setPadding(new Insets(4));
+//        textFlow.setStyle("-fx-background-color: transparent;");
+        textFlow.getStyleClass().add("reviewLooks");
 
         // Tooltip on hover
         String dateStr = review.timestamp > 0
@@ -338,7 +339,7 @@ public class HomePageController {
         Tooltip.install(textFlow, tooltip);
 
         card.getChildren().add(textFlow);
-        return card;
+        return textFlow;
     }
 
     /**
