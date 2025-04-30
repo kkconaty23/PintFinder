@@ -82,7 +82,6 @@ body{
     -fx-effect: dropshadow(gaussian, rgb(189, 158, 36), 10, 0.75, 0, 0);
 }
 
-/*#reveiws .label{*/
 #reveiws .reviewLooks, #reveiws .label{
     -fx-background-color: transparent;
     -fx-border-color: #cccccc;
@@ -96,19 +95,15 @@ body{
     -fx-wrap-text: true;
 }
 
-/*#reveiws .label:hover{*/
-#reveiws .reviewLooks:hover, #reveiws .label:hover{
+reveiws .reviewLooks:hover, #reveiws .label:hover{
     -fx-effect: dropshadow(gaussian, rgb(137, 156, 102), 15, 0.75, 0, 0);
     -fx-border-color: #bd9e24;
 }
 
 #reveiwTextArea{
-    /*-fx-padding: 15px 0px;*/
     -fx-background-color: transparent;
     -fx-text-fill: #cccccc;
     -fx-border-width: 0px;
-    /*-fx-prompt-text-fill: #222;*/
-
 }
 #reveiwTextArea .viewport{
     -fx-border-width: 0px;
@@ -117,7 +112,6 @@ body{
 #reveiwTextArea .content{
     -fx-background-color: transparent;
     -fx-border-width: 0px 2px 0px 0px;
-    /*-fx-border-radius: 0px 0px 0px 15px ;*/
     -fx-background-radius: 0px 0px 0px 15px;
     -fx-border-color: #cccccc;
     -fx-text-fill: #cccccc;
@@ -125,9 +119,6 @@ body{
 
 .button{
     -fx-background-color:  #899c66;
-    /*-fx-padding: 5px;*/
-    /*-fx-start-margin: 10px;*/
-;
     -fx-alignment: center;
 
 }
@@ -176,5 +167,4 @@ body{
 #addReviewContainer{
     -fx-border-width: 2px 0px;
     -fx-border-color: #cccccc;
-    /*-fx-padding: 15px 0px;*/
 }

@@ -298,12 +298,6 @@ public class HomePageController {
         for (int i = 0; i < reviews.size(); i++) {
             TextFlow reviewCard = createReviewCard(reviews.get(i), i + 1);
             reviewList.getChildren().add(reviewCard);
-
-//            if (i < reviews.size() - 1) {
-//                Separator separator = new Separator();
-//                separator.setPadding(new Insets(8, 0, 8, 0));
-//                reviewList.getChildren().add(separator);
-//            }
         }
     }
 
@@ -313,10 +307,6 @@ public class HomePageController {
      * @return A styled VBox containing the review
      */
     private TextFlow createReviewCard(ReviewItem review, int index) {
-        VBox card = new VBox(5);
-        card.setPadding(new Insets(8));
-        card.setFillWidth(true);
-        card.setMaxWidth(256); // Optional, matches ScrollPane width
 
         // Create text object with full review
         String fullReviewText = String.format("%.1f", review.rating) + " | " + review.text;
@@ -326,8 +316,6 @@ public class HomePageController {
         TextFlow textFlow = new TextFlow(textNode);
         textFlow.setPrefWidth(240); // Slightly under ScrollPane to allow padding
         textFlow.setLineSpacing(2);
-//        textFlow.setPadding(new Insets(4));
-//        textFlow.setStyle("-fx-background-color: transparent;");
         textFlow.getStyleClass().add("reviewLooks");
 
         // Tooltip on hover
@@ -337,8 +325,6 @@ public class HomePageController {
         Tooltip tooltip = new Tooltip("Reviewed by: " + review.reviewer + "\nDate: " + dateStr);
         tooltip.setShowDelay(Duration.millis(100));
         Tooltip.install(textFlow, tooltip);
-
-        card.getChildren().add(textFlow);
         return textFlow;
     }
 
