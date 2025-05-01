@@ -10,7 +10,7 @@
 2. [Architecture & Tech Stack](#architecture--tech-stack)  
 3. [Prerequisites](#prerequisites)  
 4. [Setup & Installation](#setup--installation)
-5. [Intended Users].(#intended--users).
+5. [Intended & Users](#intended--users)
 6. [Contributing](#contributors)    
 
 
