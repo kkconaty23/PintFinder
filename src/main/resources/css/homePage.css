@@ -95,7 +95,7 @@ body{
     -fx-wrap-text: true;
 }
 
-reveiws .reviewLooks:hover, #reveiws .label:hover{
+#reveiws .reviewLooks:hover, #reveiws .label:hover{
     -fx-effect: dropshadow(gaussian, rgb(137, 156, 102), 15, 0.75, 0, 0);
     -fx-border-color: #bd9e24;
 }
