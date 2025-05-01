@@ -94,7 +94,7 @@ public class ProfileController implements Initializable {
         Scene ProfileScene = new Scene(fxmlProfileLoader.load(), 1080, 775);
 
         Stage ProfileStage = new Stage();
-        ProfileStage.setTitle("Profile Page");
+        ProfileStage.setTitle("PintFinder's Home Page");
         ProfileStage.setScene(ProfileScene);
         ProfileStage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
         ProfileStage.setResizable(false);

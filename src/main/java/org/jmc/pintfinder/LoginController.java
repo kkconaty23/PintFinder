@@ -97,12 +97,14 @@ public class LoginController implements Initializable {
                                     Stage stage = (Stage) emailID.getScene().getWindow();
                                     Scene scene = new Scene(loader.load(), 1080, 775);
 
+
                                     // Set the scene and show the profile page
                                     stage.setScene(scene);
                                     stage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
                                     stage.setResizable(false);
-                                    stage.show();
                                     stage.centerOnScreen();
+                                    stage.setTitle("PintFinder's Home Page");
+                                    stage.show();
                                     System.out.println("Loading profile");
                                 } catch (IOException e) {
                                     e.printStackTrace();
