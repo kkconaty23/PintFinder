@@ -61,9 +61,9 @@
 ---
 ## Intended Users
 
--People above the age of 21: Those above the legal drinking age in America
--Guinness fans: Drinkers who are people who order Guinness when going out to a bar
--Social Media Users: People who use social media both post online and view other people's content
+- People above the age of 21: Those above the legal drinking age in America
+- Guinness fans: Drinkers who are people who order Guinness when going out to a bar
+- Social Media Users: People who use social media both post online and view other people's content
 
 ---
 
