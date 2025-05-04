@@ -677,17 +677,32 @@ public class HomePageController {
         }
     }
     private void displayTopBars(List<BarWithRating> bars) {
-        if (reviewList.getChildren().size() > 0) {
-            // Do NOT remove the header label (index 0), just remove everything below it
+        if (reviewList.getChildren().isEmpty() || !(reviewList.getChildren().get(0) instanceof Label)) {
+            Label header = new Label("Top 10 Bars");
+            header.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;");
+            reviewList.getChildren().add(0, header);
+        } else {
+            ((Label) reviewList.getChildren().get(0)).setText("Top 10 Bars");
+        }
+
+        // Remove everything *after* the header
+        if (reviewList.getChildren().size() > 1) {
             reviewList.getChildren().remove(1, reviewList.getChildren().size());
         }
 
         for (BarWithRating bar : bars) {
             Label barLabel = new Label(String.format("%s - %.1f ★", bar.name, bar.rating));
             barLabel.setStyle("-fx-text-fill: #f1c40f; -fx-font-size: 14px;");
+            barLabel.setWrapText(true);
+            barLabel.setMaxWidth(reviewList.getWidth() - 20);
+            reviewList.widthProperty().addListener((obs, oldVal, newVal) -> {
+                barLabel.setMaxWidth(newVal.doubleValue() - 20);
+            });
+
             reviewList.getChildren().add(barLabel);
         }
     }
+
 
 }
 
