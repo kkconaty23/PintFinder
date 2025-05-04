@@ -629,6 +629,24 @@ public class HomePageController {
         }
 
     }
+    private TextFlow createBarCard(BarWithRating bar, int index) {
+        String fullBarText = String.format("%.1f", bar.rating) + " | " + bar.name;
+        Text textNode = new Text(fullBarText);
+        textNode.setStyle("-fx-font-size: 14px; -fx-fill: #cccccc;");
+
+        TextFlow textFlow = new TextFlow(textNode);
+        textFlow.setPrefWidth(240); // Consistent with reviews
+        textFlow.setLineSpacing(2);
+        textFlow.getStyleClass().add("reviewLooks");
+
+        // Optional tooltip (e.g., placeholder info)
+        Tooltip tooltip = new Tooltip("Bar ranking #" + index);
+        tooltip.setShowDelay(Duration.millis(100));
+        Tooltip.install(textFlow, tooltip);
+
+        return textFlow;
+    }
+
     @FXML
     private void fetchAndDisplayTopBars(MouseEvent event) {
 
@@ -677,36 +695,21 @@ public class HomePageController {
         }
     }
     private void displayTopBars(List<BarWithRating> bars) {
-        if (reviewList.getChildren().isEmpty() || !(reviewList.getChildren().get(0) instanceof Label)) {
-            Label header = new Label("Top 10 Bars");
-            header.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;");
-            reviewList.getChildren().add(0, header);
-        } else {
-            ((Label) reviewList.getChildren().get(0)).setText("Top 10 Bars");
+        reviewList.getChildren().clear(); // Clear sidebar
+
+        // Add consistent header
+        Label headerLabel = new Label("Top 10 Bars");
+        headerLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+        headerLabel.setPadding(new Insets(0, 0, 10, 0));
+        reviewList.getChildren().add(headerLabel);
+
+        // Add each styled bar card
+        for (int i = 0; i < bars.size(); i++) {
+            TextFlow barCard = createBarCard(bars.get(i), i + 1);
+            reviewList.getChildren().add(barCard);
         }
 
-        // Remove everything *after* the header
-        if (reviewList.getChildren().size() > 1) {
-            reviewList.getChildren().remove(1, reviewList.getChildren().size());
-        }
-
-        for (BarWithRating bar : bars) {
-            Label barLabel = new Label(String.format("%s - %.1f ★", bar.name, bar.rating));
-            barLabel.setStyle("-fx-text-fill: #f1c40f; -fx-font-size: 14px;");
-            barLabel.setWrapText(true);
-            barLabel.setMaxWidth(reviewList.getWidth() - 20);
-            reviewList.widthProperty().addListener((obs, oldVal, newVal) -> {
-                barLabel.setMaxWidth(newVal.doubleValue() - 20);
-            });
-
-            reviewList.getChildren().add(barLabel);
-        }
-    }
-
-
-}
-
-
+    }}
 
 
 
