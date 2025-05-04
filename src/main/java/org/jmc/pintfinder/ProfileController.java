@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -28,6 +29,10 @@ public class ProfileController implements Initializable {
     private Label logOutBtn;
     @FXML private ImageView profileBackBtn;
     @FXML private Label userFirstNameText;
+    @FXML private Label lastBarReview;
+    @FXML private Label numReviews;
+    @FXML private ListView<String> pastReviews;
+
 
     @FXML
     private Label dateLabel;
@@ -35,7 +40,10 @@ public class ProfileController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadUserFirstName();
+        fetchCurrentUserReviews();
         try {
+            loadNumReviews();
+            loadLastBarReview();
             loadDate();
         } catch (FirebaseAuthException e) {
             throw new RuntimeException(e);
@@ -58,6 +66,64 @@ public class ProfileController implements Initializable {
         String formattedDate = dateFormat.format(creationDate);
 
         dateLabel.setText(formattedDate);
+    }
+
+    private void loadNumReviews() {
+        String uid = SessionManager.getCurrentUserUid();
+        if (uid == null) {
+            System.out.println("No user logged in.");
+            return;
+        }
+
+        DatabaseReference userReviewsRef = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(uid)
+                .child("reviews");
+
+        userReviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                int reviewCount = (int) snapshot.getChildrenCount();
+                Platform.runLater(() -> numReviews.setText(String.valueOf(reviewCount)));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Error fetching review count: " + error.getMessage());
+            }
+        });
+    }
+
+    private void loadLastBarReview() {
+        String uid = SessionManager.getCurrentUserUid();
+        if (uid == null) {
+            System.out.println("No user logged in.");
+            return;
+        }
+
+        DatabaseReference userReviewsRef = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(uid)
+                .child("reviews");
+
+        userReviewsRef.orderByKey().limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot reviewSnapshot : snapshot.getChildren()) {
+                    String barName = reviewSnapshot.child("barName").getValue(String.class);
+//                    String text = reviewSnapshot.child("text").getValue(String.class);
+//                    Double rating = reviewSnapshot.child("rating").getValue(Double.class);
+
+                    String lastReviewText = String.format("%s", barName);
+                    Platform.runLater(() -> lastBarReview.setText(lastReviewText));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Error fetching last bar review: " + error.getMessage());
+            }
+        });
     }
 
     private void loadUserFirstName() {
@@ -83,6 +149,51 @@ public class ProfileController implements Initializable {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("DatabaseError: " + databaseError.getMessage());
+            }
+        });
+    }
+    @FXML
+    private void fetchCurrentUserReviews() {
+        String uid = SessionManager.getCurrentUserUid();
+        if (uid == null) {
+            System.out.println("No user logged in.");
+            return;
+        }
+
+        DatabaseReference userReviewsRef = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(uid)
+                .child("reviews");
+
+        userReviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    System.out.println("User Reviews:");
+
+                    for (DataSnapshot reviewSnapshot : snapshot.getChildren()) {
+                        String barName = reviewSnapshot.child("barName").getValue(String.class);
+                        String text = reviewSnapshot.child("text").getValue(String.class);
+                        Double rating = reviewSnapshot.child("rating").getValue(Double.class);
+
+                        System.out.printf("- %s: %.1f ★ | %s\n",
+                                barName,
+                                rating != null ? rating : 0,
+                                text != null ? text : "(no text)"
+                        );
+
+                        // Add the review to the ListView
+                        String reviewText = String.format("%s: %.1f ★ | %s", barName, rating != null ? rating : 0, text != null ? text : "(no text)");
+                        pastReviews.getItems().add(reviewText);
+                    }
+                } else {
+                    System.out.println("No reviews found for this user.");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Error fetching user reviews: " + error.getMessage());
             }
         });
     }

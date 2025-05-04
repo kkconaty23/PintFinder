@@ -3,6 +3,7 @@ package org.jmc.pintfinder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.database.*;
+import com.google.gson.JsonParseException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -168,6 +169,7 @@ public class CreateAccountController {
             userData.put("password", password);
             userData.put("firstName", fname);
             userData.put("lastName", lname);
+            userData.put("reviews", new HashMap<>());
 
 
             databaseReference.child(userRecord.getUid()).setValueAsync(userData);// storing user data into the database

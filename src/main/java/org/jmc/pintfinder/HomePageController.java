@@ -544,6 +544,15 @@ public class HomePageController {
                                     });
                                 }
                             });
+                            DatabaseReference userReviewRef = userRef.child("reviews").child(reviewId);
+
+                            Map<String, Object> userReviewData = new HashMap<>();
+                            userReviewData.put("barName", currentLocation);
+                            userReviewData.put("text", text);
+                            userReviewData.put("rating", newRating);
+                            userReviewData.put("timestamp", ServerValue.TIMESTAMP);
+
+                            userReviewRef.setValueAsync(userReviewData);
                         }
 
                         @Override
