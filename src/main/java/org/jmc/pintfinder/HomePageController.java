@@ -629,6 +629,81 @@ public class HomePageController {
         }
 
     }
+    @FXML
+    private void fetchAndDisplayTopBars(MouseEvent event) {
+
+        DatabaseReference barsRef = FirebaseDatabase.getInstance().getReference("bars");
+
+        barsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    List<BarWithRating> bars = new ArrayList<>();
+
+                    for (DataSnapshot barSnapshot : snapshot.getChildren()) {
+                        String name = barSnapshot.child("name").getValue(String.class);
+                        Double rating = barSnapshot.child("rating").getValue(Double.class);
+
+                        if (name != null && rating != null) {
+                            bars.add(new BarWithRating(name, rating));
+                        }
+                    }
+
+                    // Sort by rating descending
+                    bars.sort((b1, b2) -> Double.compare(b2.rating, b1.rating));
+
+                    // Take top 10
+                    List<BarWithRating> topBars = bars.stream().limit(10).collect(Collectors.toList());
+
+                    Platform.runLater(() -> displayTopBars(topBars));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Failed to fetch top bars: " + error.getMessage());
+            }
+        });
+    }
+
+    // Helper class to store bar name and rating
+    private static class BarWithRating {
+        String name;
+        double rating;
+
+        BarWithRating(String name, double rating) {
+            this.name = name;
+            this.rating = rating;
+        }
+    }
+    private void displayTopBars(List<BarWithRating> bars) {
+        if (reviewList.getChildren().isEmpty() || !(reviewList.getChildren().get(0) instanceof Label)) {
+            Label header = new Label("Top 10 Bars");
+            header.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;");
+            reviewList.getChildren().add(0, header);
+        } else {
+            ((Label) reviewList.getChildren().get(0)).setText("Top 10 Bars");
+        }
+
+        // Remove everything *after* the header
+        if (reviewList.getChildren().size() > 1) {
+            reviewList.getChildren().remove(1, reviewList.getChildren().size());
+        }
+
+        for (BarWithRating bar : bars) {
+            Label barLabel = new Label(String.format("%s - %.1f ★", bar.name, bar.rating));
+            barLabel.setStyle("-fx-text-fill: #f1c40f; -fx-font-size: 14px;");
+            barLabel.setWrapText(true);
+            barLabel.setMaxWidth(reviewList.getWidth() - 20);
+            reviewList.widthProperty().addListener((obs, oldVal, newVal) -> {
+                barLabel.setMaxWidth(newVal.doubleValue() - 20);
+            });
+
+            reviewList.getChildren().add(barLabel);
+        }
+    }
+
+
 }
 
 
