@@ -62,7 +62,8 @@
 <script>
     window.addEventListener('load', function () {
         // Initialize Map
-        const map = L.map('map').setView([40.7528, -73.4265], 13);
+        window.map = L.map('map').setView([40.7528, -73.4265], 13);
+
 
         // Add OpenStreetMap tile
         L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
@@ -88,7 +89,7 @@
             }
         }
 
-        const markers = [];
+        window.markers = [];
 
         function addBarMarker(coords, name, description) {
             const marker = L.marker(coords, { icon: imageIcon })
@@ -97,7 +98,7 @@
                     updateFromJava(name, description);
                 });
             marker.barName = name.toLowerCase(); // for search
-            markers.push(marker);
+            window.markers.push(marker);
         }
 
         // Marker with Java bridge click

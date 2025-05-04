@@ -113,6 +113,11 @@ public class HomePageController {
 
     private List<Bar> barList = new ArrayList<>();
 
+    @FXML private Label barOfTheDayName;
+    @FXML private Pane barOfTheDay;
+    private Bar barOfTheDayData;
+    private WebEngine webEngine;
+
     /**
      * initialize method to load up all the important features before the fxml
      */
@@ -125,8 +130,9 @@ public class HomePageController {
         if (mapUrl != null) {
             System.out.println("Loading: " + mapUrl.toExternalForm());
 
-            WebEngine webEngine = mapView.getEngine();
+            webEngine = mapView.getEngine();  // Remove 'WebEngine' type so it assigns to the field
             webEngine.load(mapUrl.toExternalForm());
+            loadBarOfTheDay();
 
             // Create the Java bridge
             MapBridge bridge = new MapBridge();
@@ -709,7 +715,111 @@ public class HomePageController {
             reviewList.getChildren().add(barCard);
         }
 
-    }}
+    }
+
+    private void loadBarOfTheDay() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("barOfTheDay");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    long lastUpdated = snapshot.child("lastUpdated").getValue(Long.class);
+                    String barId = snapshot.child("selectedBarId").getValue(String.class);
+
+                    long now = System.currentTimeMillis();
+                    long oneDay = 24 * 60 * 60 * 1000;
+
+                    if (now - lastUpdated > oneDay) {
+                        pickNewBarOfTheDay();
+                    } else {
+                        fetchBarOfTheDayDetails(barId);
+                    }
+                } else {
+                    pickNewBarOfTheDay();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Failed to load Bar of the Day: " + error.getMessage());
+            }
+        });
+    }
+    private void pickNewBarOfTheDay() {
+        DatabaseReference barsRef = FirebaseDatabase.getInstance().getReference("bars");
+
+        barsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                List<DataSnapshot> allBars = new ArrayList<>();
+                snapshot.getChildren().forEach(allBars::add);
+
+                if (!allBars.isEmpty()) {
+                    Random rand = new Random();
+                    DataSnapshot selected = allBars.get(rand.nextInt(allBars.size()));
+                    String selectedId = selected.getKey();
+
+                    Map<String, Object> update = new HashMap<>();
+                    update.put("selectedBarId", selectedId);
+                    update.put("lastUpdated", System.currentTimeMillis());
+
+                    FirebaseDatabase.getInstance().getReference("barOfTheDay").updateChildrenAsync(update);
+                    ;
+                    fetchBarOfTheDayDetails(selectedId);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {}
+        });
+    }
+
+    private void fetchBarOfTheDayDetails(String barId) {
+        DatabaseReference barRef = FirebaseDatabase.getInstance().getReference("bars").child(barId);
+
+        barRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                barOfTheDayData = snapshot.getValue(Bar.class);
+                if (barOfTheDayData != null) {
+                    Platform.runLater(() -> {
+                        if (barOfTheDayName != null) {
+                            barOfTheDayName.setText(barOfTheDayData.getName());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {}
+        });
+    }
+    @FXML
+    void onBarOfTheDayClicked(MouseEvent event) {
+        if (barOfTheDayData != null && webEngine != null) {
+            System.out.println("Bar of the Day clicked: " + barOfTheDayData.getName());
+
+            String js = String.format(
+                    "map.setView([%f, %f], 15);" +
+                            "markers.forEach(m => { if (m.barName === '%s'.toLowerCase()) m.fire('click'); });",
+                    barOfTheDayData.getLatitude(),
+                    barOfTheDayData.getLongitude(),
+                    barOfTheDayData.getName()
+            );
+
+            webEngine.executeScript(js);
+        } else {
+            System.out.println("Bar data or WebEngine not ready.");
+        }
+    }
+
+
+
+
+
+
+}
 
 
 

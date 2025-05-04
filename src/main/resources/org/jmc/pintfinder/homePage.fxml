@@ -18,9 +18,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane prefHeight="775.0" prefWidth="1080.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" stylesheets="@../../../css/homePage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.HomePageController">
+<AnchorPane prefHeight="775.0" prefWidth="1080.0" style="-fx-background-color: linear-gradient(from 0% 10% to 0% 45%,#262704,#899C66);" stylesheets="@../../../css/homePage.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jmc.pintfinder.HomePageController">
    <children>
-      <Pane id="barOfDay" layoutX="35.0" layoutY="-132.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="265.0" prefWidth="145.0">
+      <Pane id="barOfDay" fx:id="barOfTheDay" layoutX="35.0" layoutY="-132.0" onMouseEntered="#signAnimationStart" onMouseExited="#signAnimationEnd" prefHeight="265.0" prefWidth="145.0">
          <children>
             <ImageView fitHeight="206.0" fitWidth="82.0" layoutX="14.0" layoutY="133.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -35,16 +35,17 @@
                   <ColorAdjust />
                </effect>
             </ImageView>
-            <ImageView fitHeight="81.0" fitWidth="145.0" layoutX="17.0" layoutY="194.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="81.0" fitWidth="145.0" layoutX="17.0" layoutY="194.0" onMouseClicked="#onBarOfTheDayClicked" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
             </ImageView>
-            <Label id="barOfDayLabel" layoutX="29.0" layoutY="220.0" text="Bar of the Day">
+            <Label id="barOfDayLabel" fx:id="barOfTheDayName" layoutX="29.0" layoutY="233.0" text="Bar of the Day">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
+            <Label layoutX="27.0" layoutY="207.0" text="Check out:" />
          </children>
          <effect>
             <DropShadow height="35.66" offsetX="5.0" radius="13.665" spread="0.28" />
@@ -110,7 +111,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <Label layoutX="5.0" layoutY="220.0" onMouseClicked="#fetchAndDisplayTopBars" text="Top Rated Bars">
+            <Label layoutX="17.0" layoutY="220.0" onMouseClicked="#fetchAndDisplayTopBars" text="Top 10 Bars">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
