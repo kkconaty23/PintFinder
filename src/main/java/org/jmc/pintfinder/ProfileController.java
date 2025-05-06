@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ProfileController implements Initializable {
@@ -180,14 +181,9 @@ public class ProfileController implements Initializable {
                         String text = reviewSnapshot.child("text").getValue(String.class);
                         Double rating = reviewSnapshot.child("rating").getValue(Double.class);
 
-//                        System.out.printf("- %s: %.1f ★ | %s\n",
-//                                barName,
-//                                rating != null ? rating : 0,
-//                                text != null ? text : "(no text)"
-//                        );
                         //dynamic char limit based on list view size
                         int charLimit = (int)(pastReviews.getPrefWidth() / 7.2); // Adjust this value based on your font size and ListView width
-                        System.out.println("Character limit: " + charLimit);
+
                         // Add the review to the ListView
                         String reviewText = wrapTextSmart(String.format("%s: %.1f ★ | %s", barName, rating != null ? rating : 0, text != null ? text : "(no text)"),
                                 charLimit-6);//change this number if you change the size of the list veiw
@@ -251,6 +247,10 @@ public class ProfileController implements Initializable {
         alert.setTitle("Success");
         alert.setHeaderText(null);
         alert.setContentText("You are successfully logged out");
+        // Apply custom stylesheet
+        alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/alert.css")).toExternalForm());
+        alert.getDialogPane().getStyleClass().add("dialog-pane");
+
         alert.showAndWait();
 
         Stage currentStage = (Stage) logOutBtn.getScene().getWindow();
@@ -262,6 +262,8 @@ public class ProfileController implements Initializable {
         Stage loginStage = new Stage();
 
         loginStage.setScene(loginScene);
+        loginStage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
+
         loginStage.show();
 
     }

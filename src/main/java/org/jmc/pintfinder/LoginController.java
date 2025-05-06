@@ -13,12 +13,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
@@ -69,6 +72,11 @@ public class LoginController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
             alert.setHeaderText("You must fill out both fields");
+
+            // Apply custom stylesheet
+            alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/alert.css")).toExternalForm());
+            alert.getDialogPane().getStyleClass().add("dialog-pane");
+
             alert.showAndWait();
         }
 
@@ -120,6 +128,11 @@ public class LoginController implements Initializable {
 
                                 alert.setTitle("Warning");
                                 alert.setHeaderText("Password is incorrect.");
+
+                                // Apply custom stylesheet
+                                alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/alert.css")).toExternalForm());
+                                alert.getDialogPane().getStyleClass().add("dialog-pane");
+
                                 alert.showAndWait();
                             }
                         });
