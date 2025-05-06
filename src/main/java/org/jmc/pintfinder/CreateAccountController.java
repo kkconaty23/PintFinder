@@ -17,6 +17,7 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class CreateAccountController {
     @FXML
@@ -110,6 +111,10 @@ public class CreateAccountController {
             alert.setTitle("Error");
             alert.setHeaderText("Failed to load Login Page");
             alert.setContentText("An error occurred while trying to load the Login page.");
+            // Apply custom stylesheet
+            alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/alert.css")).toExternalForm());
+            alert.getDialogPane().getStyleClass().add("dialog-pane");
+
             alert.showAndWait();
         }
     }
@@ -135,6 +140,9 @@ public class CreateAccountController {
             //warningLabel.setText("Must Answer");
             alert.setTitle("Warning");
             alert.setHeaderText("You Must be 21 or older");
+            // Apply custom stylesheet
+            alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/alert.css")).toExternalForm());
+            alert.getDialogPane().getStyleClass().add("dialog-pane");
             alert.showAndWait();
         }
         else if(!passwordID.getText().equals(confirmPasswordID.getText())){
@@ -142,6 +150,9 @@ public class CreateAccountController {
             alert1.setTitle("Error");
             alert1.setHeaderText("Password Mismatch");
             //warningLabel.setText("Passwords do not match");
+            // Apply custom stylesheet
+            alert1.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/alert.css")).toExternalForm());
+            alert1.getDialogPane().getStyleClass().add("dialog-pane");
             alert1.showAndWait();
         }
         else{
@@ -177,6 +188,9 @@ public class CreateAccountController {
             alert.setTitle("Success");
             alert.setHeaderText(null);
             alert.setContentText("Account Created Successfully!");
+            // Apply custom stylesheet
+            alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/alert.css")).toExternalForm());
+            alert.getDialogPane().getStyleClass().add("dialog-pane");
             alert.showAndWait();
 
             Stage currentStage = (Stage) loginBtn.getScene().getWindow();
@@ -196,6 +210,10 @@ public class CreateAccountController {
             alert.setTitle("Error");
             alert.setHeaderText(null);
             alert.setContentText("Error creating user: " + e.getMessage());
+            // Apply custom stylesheet
+            alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/alert.css")).toExternalForm());
+            alert.getDialogPane().getStyleClass().add("dialog-pane");
+
             alert.showAndWait();
         }
     }
