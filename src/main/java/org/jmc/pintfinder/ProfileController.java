@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -144,6 +145,9 @@ public class ProfileController implements Initializable {
                 String firstName = dataSnapshot.getValue(String.class);
                 if (firstName != null){
                     Platform.runLater(() -> userFirstNameText.setText(firstName));
+                    userFirstNameText.setMinWidth(175);
+                    userFirstNameText.setAlignment(Pos.CENTER);
+                    userFirstNameText.setLayoutX(41);
                 }
             }
             @Override
@@ -176,14 +180,18 @@ public class ProfileController implements Initializable {
                         String text = reviewSnapshot.child("text").getValue(String.class);
                         Double rating = reviewSnapshot.child("rating").getValue(Double.class);
 
-                        System.out.printf("- %s: %.1f ★ | %s\n",
-                                barName,
-                                rating != null ? rating : 0,
-                                text != null ? text : "(no text)"
-                        );
-
+//                        System.out.printf("- %s: %.1f ★ | %s\n",
+//                                barName,
+//                                rating != null ? rating : 0,
+//                                text != null ? text : "(no text)"
+//                        );
+                        //dynamic char limit based on list view size
+                        int charLimit = (int)(pastReviews.getPrefWidth() / 7.2); // Adjust this value based on your font size and ListView width
+                        System.out.println("Character limit: " + charLimit);
                         // Add the review to the ListView
-                        String reviewText = String.format("%s: %.1f ★ | %s", barName, rating != null ? rating : 0, text != null ? text : "(no text)");
+                        String reviewText = wrapTextSmart(String.format("%s: %.1f ★ | %s", barName, rating != null ? rating : 0, text != null ? text : "(no text)"),
+                                charLimit-6);//change this number if you change the size of the list veiw
+
                         pastReviews.getItems().add(reviewText);
                     }
                 } else {
@@ -197,7 +205,28 @@ public class ProfileController implements Initializable {
             }
         });
     }
+    public static String wrapTextSmart(String text, int maxLineLength) {
+        if (text == null || text.isEmpty()) return "";
 
+        StringBuilder wrapped = new StringBuilder();
+        String[] words = text.split(" ");
+        int currentLineLength = 0;
+
+        for (String word : words) {
+            if (currentLineLength + word.length() > maxLineLength) {
+                wrapped.append("\n");
+                currentLineLength = 0;
+            } else if (currentLineLength != 0) {
+                wrapped.append(" ");
+                currentLineLength += 1;
+            }
+
+            wrapped.append(word);
+            currentLineLength += word.length();
+        }
+
+        return wrapped.toString();
+    }
     @FXML void bringToHomepage(MouseEvent event) throws IOException {
 
         FXMLLoader fxmlProfileLoader = new FXMLLoader(Login.class.getResource("homePage.fxml"));
