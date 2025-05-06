@@ -157,7 +157,7 @@ public class HomePageController {
             });
             ratingCombo.setMin(0);
             ratingCombo.setMax(10);
-            ratingCombo.setValue(10);//TODO: set default rating to bar average
+            ratingCombo.setValue(10);
             ratingCombo.setShowTickLabels(true);
             // creating a listener to update the label when the slider value changes
             ratingCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -785,6 +785,29 @@ public class HomePageController {
         });
     }
 
+    public static String wrapTextSmart(String text, int maxLineLength) {
+        if (text == null || text.isEmpty()) return "";
+
+        StringBuilder wrapped = new StringBuilder();
+        String[] words = text.split(" ");
+        int currentLineLength = 0;
+
+        for (String word : words) {
+            if (currentLineLength + word.length() > maxLineLength) {
+                wrapped.append("\n");
+                currentLineLength = 0;
+            } else if (currentLineLength != 0) {
+                wrapped.append(" ");
+                currentLineLength += 1;
+            }
+
+            wrapped.append(word);
+            currentLineLength += word.length();
+        }
+
+        return wrapped.toString();
+    }
+
     private void fetchBarOfTheDayDetails(String barId) {
         DatabaseReference barRef = FirebaseDatabase.getInstance().getReference("bars").child(barId);
 
@@ -795,7 +818,8 @@ public class HomePageController {
                 if (barOfTheDayData != null) {
                     Platform.runLater(() -> {
                         if (barOfTheDayName != null) {
-                            barOfTheDayName.setText(barOfTheDayData.getName());
+                            barOfTheDayName.setText(wrapTextSmart(barOfTheDayData.getName(),21));
+//                            barOfTheDayName.setText(wrapTextSmart("Sand City Brewing Company",21));
                         }
                     });
                 }
@@ -810,12 +834,13 @@ public class HomePageController {
         if (barOfTheDayData != null && webEngine != null) {
             System.out.println("Bar of the Day clicked: " + barOfTheDayData.getName());
 
+            String barNameLower = barOfTheDayData.getName().toLowerCase().replace("'", "\\'");
             String js = String.format(
                     "map.setView([%f, %f], 15);" +
-                            "markers.forEach(m => { if (m.barName === '%s'.toLowerCase()) m.fire('click'); });",
+                            "markers.forEach(m => { if (m.barName === '%s') m.fire('click'); });",
                     barOfTheDayData.getLatitude(),
                     barOfTheDayData.getLongitude(),
-                    barOfTheDayData.getName()
+                    barNameLower
             );
 
             webEngine.executeScript(js);

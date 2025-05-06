@@ -1,2 +1,53 @@
 
 
+.list-view {
+    -fx-background-color: #1e1e1e;
+    -fx-control-inner-background: #1e1e1e;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
+
+/* Style each list cell */
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 0px 0px 2px 0px;
+    -fx-text-fill: #cccccc;
+    -fx-text-color: #cccccc;
+    -fx-min-width: 256px;
+    -fx-padding: 10px;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-wrap-text: true;
+}
+
+/*!* When a cell is selected *!*/
+/*.list-cell:selected {*/
+/*    -fx-background-color: #333333;*/
+/*    -fx-text-fill: black;*/
+/*}*/
+
+/* Hover effect */
+.list-cell:hover {
+    -fx-effect: dropshadow(gaussian, rgb(137, 156, 102), 15, 0.75, 0, 0);
+    -fx-border-color: #bd9e24;
+}
+
+.list-view .scroll-bar {
+    -fx-background-color: #00000044;
+}
+
+.list-view .scroll-bar:horizontal{
+    -fx-opacity: 0;
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+}
+
+.list-view .scroll-bar .thumb {
+    -fx-background-color: #899C66FF;
+    -fx-effect: dropshadow(gaussian, rgb(137, 156, 102), 10, 0.75, 0, 0);
+}
+.list-view .scroll-bar .thumb:hover, .list-view .scroll-bar .thumb:pressed {
+    -fx-background-color: #bd9e24;
+    -fx-effect: dropshadow(gaussian, rgb(189, 158, 36), 10, 0.75, 0, 0);
+}
