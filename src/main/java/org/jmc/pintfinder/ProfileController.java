@@ -263,6 +263,7 @@ public class ProfileController implements Initializable {
 
         loginStage.setScene(loginScene);
         loginStage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
+        loginStage.setResizable(false);
 
         loginStage.show();
 

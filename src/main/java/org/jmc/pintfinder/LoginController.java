@@ -166,6 +166,7 @@ public class LoginController implements Initializable {
         stage.setTitle("Create Account");
         stage.setScene(new Scene(root));
         stage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
+        stage.setResizable(false);
         stage.show();
         Stage currentStage = (Stage) createAcctBtn.getScene().getWindow();
         currentStage.close();

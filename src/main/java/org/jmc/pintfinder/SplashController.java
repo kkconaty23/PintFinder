@@ -78,6 +78,7 @@ public class SplashController {
                 LoginStage.setTitle("Login Page");
                 LoginStage.setScene(LoginScene);
                 LoginStage.getIcons().add(new Image("file:src/main/resources/img/PintFinder_Logo.png"));//sets favicon
+                LoginStage.setResizable(false);
                 LoginStage.show();
 
 
