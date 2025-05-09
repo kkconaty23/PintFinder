@@ -148,7 +148,7 @@ public class ProfileController implements Initializable {
                     Platform.runLater(() -> userFirstNameText.setText(firstName));
                     userFirstNameText.setMinWidth(175);
                     userFirstNameText.setAlignment(Pos.CENTER);
-                    userFirstNameText.setLayoutX(41);
+                    userFirstNameText.setLayoutX(50);
                 }
             }
             @Override
