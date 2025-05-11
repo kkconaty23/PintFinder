@@ -98,12 +98,52 @@ public class HomePageController {
         if (mapUrl != null) {
             System.out.println("Loading: " + mapUrl.toExternalForm());
 
-            webEngine = mapView.getEngine();  // Remove 'WebEngine' type so it assigns to the field
+            webEngine = mapView.getEngine();
             webEngine.load(mapUrl.toExternalForm());
             loadBarOfTheDay();
 
             // Create the Java bridge
             MapBridge bridge = new MapBridge();
+            bridge.setOnTitleChange(title -> Platform.runLater(() -> titleLabel.setText(title)));
+            bridge.setOnDescriptionChange(desc -> Platform.runLater(() -> descriptionLabel.setText(desc)));
+            bridge.setOnLocationSwitch(locationName -> {
+                currentLocation = locationName;
+                Platform.runLater(() -> {
+                    fetchBarDataFromFirebase(locationName);
+                });
+            });
+
+            // Store reference to WebEngine in the bridge
+            bridge.setWebEngine(webEngine);
+
+            // Hook the bridge into the JS context and inject geolocation polyfill
+            webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                if (newState == Worker.State.SUCCEEDED) {
+                    JSObject window = (JSObject) webEngine.executeScript("window");
+                    window.setMember("javaBridge", bridge);
+                    System.out.println("Java bridge connected to JS.");
+
+                    // Inject geolocation polyfill
+                    try {
+                        webEngine.executeScript(
+                                "navigator.geolocation = navigator.geolocation || {};" +
+                                        "navigator.geolocation.getCurrentPosition = function(success, error, options) {" +
+                                        "    console.log('Geolocation requested');" +
+                                        "    javaBridge.getUserLocation();" +
+                                        "    window.tempGeolocationCallback = success;" +
+                                        "};"
+                        );
+                        System.out.println("Geolocation polyfill injected successfully");
+                    } catch (Exception e) {
+                        System.err.println("Failed to inject geolocation polyfill: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            });
+            loadBarOfTheDay();
+
+            // Create the Java bridge
+
             bridge.setOnTitleChange(title -> Platform.runLater(() -> titleLabel.setText(title)));
             bridge.setOnDescriptionChange(desc -> Platform.runLater(() -> descriptionLabel.setText(desc)));
             //the bar with focus also gets the bar info from the DB
@@ -870,11 +910,28 @@ public class HomePageController {
     }
 
 
+    @FXML
+    void barsNearYou(MouseEvent event) {
+        if (webEngine != null) {
+            System.out.println("Calling locateUser() JavaScript function");
+            try {
+                webEngine.executeScript("locateUser()");
+            } catch (Exception e) {
+                System.err.println("Error calling locateUser(): " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("WebEngine is not initialized.");
+        }
+    }
+
+
+    }
 
 
 
 
-}
+
 
 
 

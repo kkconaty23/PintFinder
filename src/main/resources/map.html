@@ -49,8 +49,6 @@
         #suggestions li:hover {
             background-color: #f0f0f0;
         }
-
-
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 </head>
@@ -63,7 +61,6 @@
     window.addEventListener('load', function () {
         // Initialize Map
         window.map = L.map('map').setView([40.7528, -73.4265], 13);
-
 
         // Add OpenStreetMap tile
         L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
@@ -101,7 +98,7 @@
             window.markers.push(marker);
         }
 
-        // Marker with Java bridge click
+        // Add Bar Markers
         addBarMarker([40.7481, -73.4290], "Changing Times Pub!", "Bar & Grill\n1247 Melville Rd, Farmingdale, New York 11735-1302");
         addBarMarker([40.7386, -73.1192], "Oakdale Brew House", "Restaurant\n927a Montauk Hwy, Oakdale, NY 11769");
         addBarMarker([40.8097, -73.1063], "Artemis", "Cocktail Bar\n3 Hawkins Ave Unit 1110, Ronkonkoma, NY 11779");
@@ -134,7 +131,7 @@
                         searchBox.value = marker.barName;
                         suggestionsList.innerHTML = '';
                         map.setView(marker.getLatLng(), 15);
-                        marker.fire('click'); // optional: simulate clicking marker
+                        marker.fire('click');
                     });
                     suggestionsList.appendChild(li);
                 } else {
@@ -143,8 +140,35 @@
             });
         });
 
-    });
+        // Locate User Function
+        function locateUser() {
+            if (!navigator.geolocation) {
+                alert("Geolocation is not supported by your browser.");
+                return;
+            }
 
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+
+                    // Move the map to user's location
+                    map.setView([lat, lng], 14);
+
+                    // Add a marker for user's location (optional)
+                    const userMarker = L.marker([lat, lng]).addTo(map)
+                        .bindPopup("You are here!").openPopup();
+                },
+                function (error) {
+                    console.error("Geolocation error:", error);
+                    alert("Unable to retrieve your location.");
+                }
+            );
+        }
+
+        // Make it accessible from Java
+        window.locateUser = locateUser;
+    });
 </script>
 </body>
 </html>

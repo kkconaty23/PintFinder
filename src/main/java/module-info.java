@@ -13,6 +13,7 @@ module org.jmc.pintfinder {
     requires javafx.web;
     requires javafx.media;
     requires jdk.jsobject;
+    requires org.json;
 
 
     opens org.jmc.pintfinder to javafx.fxml, firebase.admin;

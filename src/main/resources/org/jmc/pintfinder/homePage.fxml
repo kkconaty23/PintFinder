@@ -151,7 +151,7 @@
                   <Image url="@../../../img/chain.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="78.0" fitWidth="145.0" layoutY="194.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="78.0" fitWidth="145.0" layoutY="194.0" onMouseClicked="#barsNearYou" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/blankWoodenSign04.png" />
                </image>
@@ -159,7 +159,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <Label layoutX="11.0" layoutY="220.0" prefHeight="27.0" prefWidth="121.0" text="Bars Near You">
+            <Label layoutX="11.0" layoutY="220.0" onMouseClicked="#barsNearYou" prefHeight="27.0" prefWidth="121.0" text="Bars Near You">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
