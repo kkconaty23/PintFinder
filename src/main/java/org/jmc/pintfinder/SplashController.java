@@ -16,22 +16,23 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
-
+/**
+ * Controller for the splash screen in the PintFinder application.
+ * Handles initial animations and transitions to the login page after a delay.
+ */
 public class SplashController {
 
+    @FXML private ImageView wink;
+    @FXML private ImageView sign;
+    @FXML private ImageView pint1;
+    @FXML private ImageView pint2;
 
-    @FXML
-    private ImageView wink;
-        @FXML
-     private ImageView sign;
-
-        @FXML
-        private ImageView pint1;
-
-        @FXML
-        private ImageView pint2;
     TranslateTransition tt1 = new TranslateTransition(Duration.seconds(2),pint1);
-        TranslateTransition tt2 = new TranslateTransition(Duration.seconds(2),sign);
+    TranslateTransition tt2 = new TranslateTransition(Duration.seconds(2),sign);
+    /**
+     * Initializes and plays splash screen animations.
+     * Transitions to the login page after all animations complete.
+     */
     public void initialize() {
         wink.setOpacity(0);
         sign.setVisible(true);
