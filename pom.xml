@@ -13,11 +13,12 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>5.10.2</junit.version>
     <javafx.version>17.0.6</javafx.version>
+    <mockito.version>5.12.0</mockito.version>
   </properties>
 
   <dependencies>
 
-    <!-- JavaFX modules all using same version -->
+    <!-- JavaFX modules -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -83,9 +84,7 @@
       <version>1.20.0</version>
     </dependency>
 
-
-
-    <!-- JUnit -->
+    <!-- JUnit 5 -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -97,6 +96,27 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Mockito -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+
     </dependency>
 
   </dependencies>
@@ -132,6 +152,16 @@
         <configuration>
           <source>23</source>
           <target>23</target>
+        </configuration>
+      </plugin>
+
+      <!-- JUnit Support -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.1.2</version>
+        <configuration>
+          <useModulePath>false</useModulePath>
         </configuration>
       </plugin>
     </plugins>

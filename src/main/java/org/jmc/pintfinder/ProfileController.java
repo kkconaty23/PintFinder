@@ -27,18 +27,20 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ProfileController implements Initializable {
-    @FXML
-    private Label logOutBtn;
+    // Views
     @FXML private ImageView profileBackBtn;
+    @FXML private ListView<String> pastReviews;
+
+    // Labels
+    @FXML private Label dateLabel;
+    @FXML private Label logOutBtn;
     @FXML private Label userFirstNameText;
     @FXML private Label lastBarReview;
     @FXML private Label numReviews;
-    @FXML private ListView<String> pastReviews;
-
-
-    @FXML
-    private Label dateLabel;
-
+    /**
+     * Controller for the user profile screen in the PintFinder application.
+     * Displays user information, reviews, and handles navigation actions.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadUserFirstName();
@@ -70,6 +72,9 @@ public class ProfileController implements Initializable {
         dateLabel.setText(formattedDate);
     }
 
+    /**
+     * Loads and displays the total number of reviews posted by the user.
+     */
     private void loadNumReviews() {
         String uid = SessionManager.getCurrentUserUid();
         if (uid == null) {
@@ -95,7 +100,9 @@ public class ProfileController implements Initializable {
             }
         });
     }
-
+    /**
+     * Loads and displays the name of the last bar reviewed by the user.
+     */
     private void loadLastBarReview() {
         String uid = SessionManager.getCurrentUserUid();
         if (uid == null) {
@@ -127,7 +134,9 @@ public class ProfileController implements Initializable {
             }
         });
     }
-
+    /**
+     * Loads the current user's first name from Firebase and sets it in the label.
+     */
     private void loadUserFirstName() {
         String uid = SessionManager.getCurrentUserUid();
         if (uid == null){
@@ -157,6 +166,9 @@ public class ProfileController implements Initializable {
             }
         });
     }
+    /**
+     * Fetches all past reviews submitted by the user and displays them in the list view.
+     */
     @FXML
     private void fetchCurrentUserReviews() {
         String uid = SessionManager.getCurrentUserUid();
@@ -201,6 +213,13 @@ public class ProfileController implements Initializable {
             }
         });
     }
+
+    /**
+     * Wraps text to a specified max line length, attempting to break on word boundaries.
+     * @param text the input string
+     * @param maxLineLength maximum characters per line
+     * @return wrapped string with line breaks
+     */
     public static String wrapTextSmart(String text, int maxLineLength) {
         if (text == null || text.isEmpty()) return "";
 
@@ -223,6 +242,12 @@ public class ProfileController implements Initializable {
 
         return wrapped.toString();
     }
+
+    /**
+     * Navigates the user back to the homepage from the profile screen.
+     * @param event mouse click event from the back button
+     * @throws IOException if the FXML file fails to load
+     */
     @FXML void bringToHomepage(MouseEvent event) throws IOException {
 
         FXMLLoader fxmlProfileLoader = new FXMLLoader(Login.class.getResource("homePage.fxml"));
@@ -241,6 +266,11 @@ public class ProfileController implements Initializable {
         currentStage.close();
 
     }
+    /**
+     * Logs the user out, shows a confirmation alert, and redirects to the login screen.
+     * @param event mouse click event from the logout label
+     * @throws IOException if the login screen fails to load
+     */
     @FXML
     void returnToLogin(MouseEvent event) throws IOException {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

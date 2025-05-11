@@ -40,15 +40,8 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
-            <Button id="forgotPassBtn" layoutX="10.0" layoutY="170.0" mnemonicParsing="false" text="Forgot Passowrd?" underline="true">
-               <font>
-                  <Font size="10.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></Button>
             <Separator layoutX="96.0" layoutY="175.0" orientation="VERTICAL" prefHeight="12.0" prefWidth="15.0" />
-            <Button fx:id="createAcctBtn" layoutX="157.0" layoutY="170.0" mnemonicParsing="false" onAction="#moveToCreateAccountPage" prefHeight="21.0" prefWidth="55.0" text="Sign Up" underline="true">
+            <Button fx:id="createAcctBtn" layoutX="128.0" layoutY="170.0" mnemonicParsing="false" onAction="#moveToCreateAccountPage" prefHeight="21.0" prefWidth="55.0" text="Sign Up" underline="true">
                <font>
                   <Font size="10.0" />
                </font>
@@ -56,7 +49,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label layoutX="107.0" layoutY="173.0" text="No Account?">
+            <Label layoutX="21.0" layoutY="173.0" prefHeight="15.0" prefWidth="144.0" text="No Account?">
                <font>
                   <Font size="10.0" />
                </font>

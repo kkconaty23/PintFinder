@@ -19,46 +19,30 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ *  Controller Class for the createAccount.fxml
+ *  Handles form validation, account creation, and navigation to the login page.
+ */
 public class CreateAccountController {
-    @FXML
-    public Button loginBtn;
 
-    @FXML
-    private Label welcomeText;
+    // Buttons
+    @FXML public Button loginBtn;
+    @FXML private Button signUpBtn;
 
-    @FXML
-    private Button signUpBtn;
+    // CheckBox
+    @FXML private CheckBox checkBox;
 
-    @FXML
-    private TextField emailID;
+    // TextFields & PasswordFields
+    @FXML private TextField lastNameID;
+    @FXML private TextField firstNameID;
+    @FXML private TextField emailID;
+    @FXML private PasswordField confirmPasswordID;
+    @FXML private PasswordField passwordID;
 
-    @FXML
-    private Button forgotBtn;
-
-    @FXML
-    private PasswordField passwordID;
-
-    @FXML
-    private Button signInBtn;
-
-    @FXML
-    private CheckBox checkBox;
-
-    @FXML
-    private Label warningLabel;
-
-    @FXML
-    private TextField lastNameID;
-
-    @FXML
-    private TextField firstNameID;
-
-    @FXML
-    private PasswordField confirmPasswordID;
-
-
-
-
+    /**
+     * Initializes the form and adds listeners to enable the sign-up button
+     * only when all fields are filled out
+     */
     public void initialize() {
         signUpBtn.setOpacity(.3);
         signUpBtn.setDisable(true);
@@ -67,18 +51,17 @@ public class CreateAccountController {
         confirmPasswordID.textProperty().addListener((observable, oldValue, newValue) -> checkFields());
         firstNameID.textProperty().addListener((observable, oldValue, newValue) -> checkFields());
         lastNameID.textProperty().addListener((observable, oldValue, newValue) -> checkFields());
-
-
     }
 
+    /**
+     * Enables or disables the sign-up button based on whether all required fields are filled.
+     */
     private void checkFields() {
         boolean fieldsFilled = !emailID.getText().isEmpty() &&
                 !passwordID.getText().isEmpty() &&
                 !confirmPasswordID.getText().isEmpty() &&
                 !firstNameID.getText().isEmpty() &&
                 !lastNameID.getText().isEmpty();
-
-
         if (fieldsFilled) {
             signUpBtn.setOpacity(1);
             signUpBtn.setDisable(false);
@@ -87,7 +70,11 @@ public class CreateAccountController {
             signUpBtn.setDisable(true);
         }
     }
-
+    /**
+     * Navigates the user back to the login page.
+     *
+     * @param event The action event triggered by clicking the "Login" button.
+     */
     @FXML
     void moveToLoginPage(ActionEvent event) {
         try {
@@ -132,9 +119,6 @@ public class CreateAccountController {
         String password = passwordID.getText();
         String fname = firstNameID.getText();
         String lname = lastNameID.getText();
-
-
-
 
         if(! checkBox.isSelected()){
             Alert alert = new Alert(Alert.AlertType.WARNING);
