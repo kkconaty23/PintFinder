@@ -60,9 +60,10 @@ public class LoginController implements Initializable {
 
 
     /**
-     * query database and matches emails and passwords
+     * Handles sign-in logic when the user clicks the \"Sign In\" button.
+     * Validates fields and checks the provided credentials against Firebase Realtime Database.
      *
-     * @param actionEvent
+     * @param actionEvent the event triggered by clicking the sign-in button
      */
     public void signInBtnClick(ActionEvent actionEvent) {
         String email = emailID.getText();
@@ -152,10 +153,10 @@ public class LoginController implements Initializable {
 
 
     /**
-     * loads the create account page
+     * Transitions the user to the account creation screen.
      *
-     * @param event
-     * @throws IOException
+     * @param event the action event triggered by clicking \"Create Account\"
+     * @throws IOException if the FXML resource is missing or fails to load
      */
     @FXML
     void moveToCreateAccountPage(ActionEvent event) throws IOException {
@@ -172,6 +173,12 @@ public class LoginController implements Initializable {
         currentStage.close();
     }
 
+    /**
+     * Initializes the controller and binds the ENTER key to trigger sign-in.
+     *
+     * @param url not used
+     * @param resourceBundle not used
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         passwordID.setOnKeyPressed(event -> {

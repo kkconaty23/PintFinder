@@ -41,64 +41,27 @@ import java.util.stream.IntStream;
 import static javafx.scene.transform.Rotate.X_AXIS;
 
 public class HomePageController {
-    @FXML
-    public Button createAcctBtn;
 
-    @FXML
-    private Label accountbtn;
-
-    @FXML
-    private Label welcomeText;
-
-    @FXML
-    private TextField emailID;
-
-    @FXML
-    private Button forgotBtn;
-
-    @FXML
-    private PasswordField passwordID;
-
-    @FXML
-    private Button signInBtn;
-
-    @FXML
-    private CheckBox checkBox;
-
-    @FXML
-    private Label warningLabel;
-
-    @FXML
-    private WebView mapView;
+    @FXML private WebView mapView;
 
     //    for animation
-    @FXML
-    private RotateTransition rotate;
+    @FXML private RotateTransition rotate;
 
     //    for animation
-    @FXML
-    private Timeline timeline;
+    @FXML private Timeline timeline;
 
     //    for animation
-    @FXML
-    private DropShadow shadow;
+    @FXML private DropShadow shadow;
 
-    @FXML
-    private Pane profileBtn;
+    @FXML private Pane profileBtn;
 
-    @FXML
-    private Label titleLabel;
-    @FXML
-    private Label descriptionLabel;
+    @FXML private Label titleLabel;
+    @FXML private Label descriptionLabel;
 
-    @FXML
-    private VBox reviewList;
-    @FXML
-    private TextArea reviewInput;
-    @FXML
-    private Slider ratingCombo;
-    @FXML
-    private Label comboLabel;
+    @FXML private VBox reviewList;
+    @FXML private TextArea reviewInput;
+    @FXML private Slider ratingCombo;
+    @FXML private Label comboLabel;
 
     private final Map<String, List<String>> locationReviews = new HashMap<>();
     private final Map<String, List<Double>> locationRatings = new HashMap<>();
