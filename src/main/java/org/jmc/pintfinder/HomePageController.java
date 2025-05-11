@@ -39,7 +39,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static javafx.scene.transform.Rotate.X_AXIS;
-
+/**
+ * Controller for the main homepage of the PintFinder application.
+ * Manages bar interactions, review system, animations, and Firebase integration.
+ */
 public class HomePageController {
 
     @FXML private WebView mapView;
@@ -53,15 +56,17 @@ public class HomePageController {
     //    for animation
     @FXML private DropShadow shadow;
 
-    @FXML private Pane profileBtn;
 
+    // Labels
     @FXML private Label titleLabel;
     @FXML private Label descriptionLabel;
+    @FXML private Label comboLabel;
+    @FXML private Label averageOverlay;
+    @FXML private Label barOfTheDayName;
 
     @FXML private VBox reviewList;
     @FXML private TextArea reviewInput;
     @FXML private Slider ratingCombo;
-    @FXML private Label comboLabel;
 
     private final Map<String, List<String>> locationReviews = new HashMap<>();
     private final Map<String, List<Double>> locationRatings = new HashMap<>();
@@ -69,15 +74,15 @@ public class HomePageController {
 
     @FXML
     private Rectangle ratingIndicator;
-    @FXML
-    private Label averageOverlay;
+
     @FXML
     private Button submitReview;
 
     private List<Bar> barList = new ArrayList<>();
 
-    @FXML private Label barOfTheDayName;
+    // Panes
     @FXML private Pane barOfTheDay;
+    @FXML private Pane profileBtn;
     private Bar barOfTheDayData;
     private WebEngine webEngine;
 
@@ -357,7 +362,10 @@ public class HomePageController {
         // Reset slider to default
         ratingCombo.setValue(5.0);
     }
-
+    /**
+     * Triggers the swinging animation and drop shadow on hover of the bar sign.
+     * @param event Mouse event from entering the sign area
+     */
     @FXML
     public void signAnimationStart(MouseEvent event) {
         Pane pane = (Pane) event.getSource();
@@ -401,7 +409,10 @@ public class HomePageController {
         timeline.play();
         rotate.play();
     }
-
+    /**
+     * Resets the sign animation and shadow effects when mouse leaves the element.
+     * @param event Mouse event from leaving the sign area
+     */
     @FXML
     public void signAnimationEnd(MouseEvent event) {
         Pane pane = (Pane) event.getSource();
@@ -426,7 +437,11 @@ public class HomePageController {
         rotate.play();
 
     }
-
+    /**
+     * Navigates to the user’s profile page from the homepage.
+     * @param event Mouse event from clicking profile button
+     * @throws IOException if the profile FXML fails to load
+     */
     @FXML
     void bringToAccount(MouseEvent event) throws IOException {
 
@@ -447,7 +462,9 @@ public class HomePageController {
 
     }
 
-
+    /**
+     * Handles the review submission: updates bar ratings and stores review in Firebase.
+     */
     @FXML
     private void handleSubmitReview() {
         String text = reviewInput.getText().trim();
@@ -539,7 +556,10 @@ public class HomePageController {
             });
         }
     }
-
+    /**
+     * Updates the average rating color and text based on all ratings for a location.
+     * @param locationName the name of the bar location
+     */
     private void updateAverageRating(String locationName) {
         List<Double> ratings = locationRatings.getOrDefault(locationName, new ArrayList<>());
 
@@ -566,6 +586,11 @@ public class HomePageController {
         averageOverlay.setText(String.format("%.1f", avg));
 
     }
+    /**
+     * Calculates the hex color value based on a 0–1 rating ratio.
+     * @param ratio a decimal between 0 and 1
+     * @return a hex color string
+     */
     private String calculateColor(double ratio) {
         // Clamp ratio to 0-1
         ratio = Math.max(0, Math.min(ratio, 1));
@@ -608,6 +633,13 @@ public class HomePageController {
         }
 
     }
+
+    /**
+     * Creates a visual card for a top-rated bar.
+     * @param bar the bar and its rating
+     * @param index rank index in the top list
+     * @return a styled TextFlow containing the bar info
+     */
     private TextFlow createBarCard(BarWithRating bar, int index) {
         String fullBarText = String.format("%.1f", bar.rating) + " | " + bar.name;
         Text textNode = new Text(fullBarText);
@@ -625,7 +657,10 @@ public class HomePageController {
 
         return textFlow;
     }
-
+    /**
+     * Fetches bar ratings and displays the top 10 rated bars.
+     * @param event mouse event triggering the fetch
+     */
     @FXML
     private void fetchAndDisplayTopBars(MouseEvent event) {
 
@@ -673,6 +708,11 @@ public class HomePageController {
             this.rating = rating;
         }
     }
+
+    /**
+     * Displays the list of top 10 bars in the review list area.
+     * @param bars list of top-rated bars
+     */
     private void displayTopBars(List<BarWithRating> bars) {
         reviewList.getChildren().clear(); // Clear sidebar
 
@@ -689,7 +729,9 @@ public class HomePageController {
         }
 
     }
-
+    /**
+     * Loads the current Bar of the Day, or picks a new one if expired.
+     */
     private void loadBarOfTheDay() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("barOfTheDay");
 
@@ -719,6 +761,9 @@ public class HomePageController {
             }
         });
     }
+    /**
+     * Randomly selects a new bar to be the Bar of the Day and updates Firebase.
+     */
     private void pickNewBarOfTheDay() {
         DatabaseReference barsRef = FirebaseDatabase.getInstance().getReference("bars");
 
@@ -747,7 +792,12 @@ public class HomePageController {
             public void onCancelled(DatabaseError error) {}
         });
     }
-
+    /**
+     * Wraps text at word boundaries for display in UI.
+     * @param text the string to wrap
+     * @param maxLineLength max characters per line
+     * @return line-broken string
+     */
     public static String wrapTextSmart(String text, int maxLineLength) {
         if (text == null || text.isEmpty()) return "";
 
@@ -770,7 +820,10 @@ public class HomePageController {
 
         return wrapped.toString();
     }
-
+    /**
+     * Fetches the Bar of the Day's details from Firebase and updates UI.
+     * @param barId the Firebase ID of the selected bar
+     */
     private void fetchBarOfTheDayDetails(String barId) {
         DatabaseReference barRef = FirebaseDatabase.getInstance().getReference("bars").child(barId);
 
@@ -792,6 +845,10 @@ public class HomePageController {
             public void onCancelled(DatabaseError error) {}
         });
     }
+    /**
+     * Handles click on the Bar of the Day and centers the map on it.
+     * @param event mouse click event
+     */
     @FXML
     void onBarOfTheDayClicked(MouseEvent event) {
         if (barOfTheDayData != null && webEngine != null) {
