@@ -73,7 +73,7 @@
    ```bash
    git clone https://github.com/kkconaty23/PintFinder.git
    cd PintFinder
-
+2. **Run the build**
 ## Contributors
 
 
