@@ -10,9 +10,14 @@
 1. [Features](#features)  
 2. [Architecture & Tech Stack](#architecture--tech-stack)  
 3. [Prerequisites](#prerequisites)  
-4. [Setup & Installation](#setup--installation)
-5. [Intended Users](#intended-users)
-6. [How It Works](#how-it-works)
+4. [Setup & Installation](#setup--installation)  
+5. [Intended Users](#intended-users)  
+6. [How It Works](#how-it-works)  
+   - [Splash Screen](#splash-screen)  
+   - [Login Page](#login-window)  
+   - [Create Account Page](#create-account-page)  
+   - [Home Page](#home-page)  
+   - [Profile Page](#profile-page)  
 7. [Contributing](#contributors)    
 
 
