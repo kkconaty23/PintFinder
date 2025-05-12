@@ -1,3 +1,4 @@
+
 # PintFinder
 
 **PintFinder** is a Java/JavaFX desktop application that helps users discover, rate, and review Guinness (and other pints) at their favorite bars. Pints are plotted on an interactive map using Leaflet, and all user-generated data is stored in Firebase.
@@ -74,6 +75,14 @@
    git clone https://github.com/kkconaty23/PintFinder.git
    cd PintFinder
 2. **Run the build**
+
+
+## How it works
+
+## Login Window
+![login](https://github.com/user-attachments/assets/03d7c903-e610-4b46-a2f2-206e0b434019)
+Our login page that requires a email and password that is pulled from our firebase database in order to sign you in to your personal account
+
 ## Contributors
 
 
